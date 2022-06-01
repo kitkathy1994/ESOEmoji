@@ -1,6 +1,6 @@
 local ee = ESOEmoji
 
-ee.emojiModifiers = {
+ee.emojiModifiers = { -- Modifiers are added to the end of the previous emoji character
 	["FE0F"] = "",
 	["1F3FB"] = "",
 	["1F3FC"] = "",
@@ -9,12 +9,43 @@ ee.emojiModifiers = {
 	["1F3FF"] = "",
 }
 
+ee.emojiZWJs = { -- Zero Width Joiners combine the previous emoji with the next emoji
+	["200B"] = "",
+	["200C"] = "",
+	["200D"] = "",
+	["FEFF"] = "",
+}
+
+ee.emojiRILs = { -- These Regional Indicator Letters need special treatment to build flags
+	["1F1E6"] = "A",
+	["1F1E7"] = "B",
+	["1F1E8"] = "C",
+	["1F1E9"] = "D",
+	["1F1EA"] = "E",
+	["1F1EB"] = "F",
+	["1F1EC"] = "G",
+	["1F1ED"] = "H",
+	["1F1EE"] = "I",
+	["1F1EF"] = "J",
+	["1F1F0"] = "K",
+	["1F1F1"] = "L",
+	["1F1F2"] = "M",
+	["1F1F3"] = "N",
+	["1F1F4"] = "O",
+	["1F1F5"] = "P",
+	["1F1F6"] = "Q",
+	["1F1F7"] = "R",
+	["1F1F8"] = "S",
+	["1F1F9"] = "T",
+	["1F1FA"] = "U",
+	["1F1FB"] = "V",
+	["1F1FC"] = "W",
+	["1F1FD"] = "X",
+	["1F1FE"] = "Y",
+	["1F1FF"] = "Z",
+}
+
 ee.emojiMap = {
-	-- ZWJs
-	["200B"] = {texture = ""},
-	["200C"] = {texture = ""},
-	["200D"] = {texture = ""},
-	["FEFF"] = {texture = ""},
 	-- Standard Emoji
 	["0023-20E3"] = {texture = "0023-FE0F-20E3.dds"},
 	["002A-20E3"] = {texture = "002A-FE0F-20E3.dds"},

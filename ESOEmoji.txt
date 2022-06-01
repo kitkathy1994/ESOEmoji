@@ -12,7 +12,7 @@
 
 ## Title: ESO Emoji
 ## APIVersion: 101033
-## Version: 0.3.11
+## Version: 0.3.23
 ## AddOnVersion: 1
 ## Description: Emoji! In your own game! What are you going to do?
 ## Author: |c800020@BosmeriPride|r

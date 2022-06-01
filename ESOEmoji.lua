@@ -3,6 +3,7 @@
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ESOEmoji = {}
 local ee = ESOEmoji
+ee.version = "v0.3.23"
 ee.name = "ESOEmoji"
 ee.previousText = nil
 ee.emojiPath = "ESOEmoji/icons/openmoji-72x72-colour-dds/"
@@ -17,8 +18,15 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	UTILITY FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function ee.DisplayVersion()
+	d("ESO Emoji version: " .. ee.version)
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function CheckByte(myByte) -- TODO: I can prob optimise runtime of this (I was sleep deprived when I wrote this and I forgot how)
 	if myByte <= 255 then -- make sure its at most 8 bits
+		if BitRShift(myByte, 6) == 2 then
+			return 0
+		end
 		if BitRShift(myByte, 7) == 0 then
 			return 1
 		end
@@ -38,7 +46,7 @@ local function CheckByte(myByte) -- TODO: I can prob optimise runtime of this (I
 			return 6
 		end
 	end
-	return 0
+	return -1
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function BitRShift(number, n)
@@ -237,7 +245,7 @@ function ee:Edit(rawMessage)
 	local eFound = {}
 	local eFoundZWJ = {}
 	local it = 1
-	
+	local mergeNext = false
 	while (it <= #itString) -- Use While loop instead of for loop for dynamic increment
 	do
 		bytes = {}
@@ -250,19 +258,23 @@ function ee:Edit(rawMessage)
 		uCode = Bytes2Unicode(bytes)
 		
 		-- If uCode is present in emojiMap table, then it is an emoji
-		if ee.emojiMap[uCode] or ee.emojiModifiers[uCode] then
+		if ee.emojiMap[uCode] or ee.emojiModifiers[uCode] or ee.emojiZWJs[uCode] or ee.emojiRILs[uCode] then
 			local bytesStr = ""
 			for i = 1, #bytes do
 				bytesStr = bytesStr .. string.char(bytes[i])
 			end
 			
-			if ee.emojiModifiers[uCode] then
+			if (ee.emojiModifiers[uCode] or (mergeNext and ee.emojiRILs[uCode])) and #eFound >= 1 then
 				-- combine modifiers
 				eFound[#eFound] = {eCode = eFound[#eFound].eCode .. "-" .. uCode, eBytes = eFound[#eFound].eBytes .. bytesStr}
 			else
 				eFound[#eFound + 1] = {eCode = uCode, eBytes = bytesStr}
 			end
+			if ee.emojiRILs[uCode] then
+				mergeNext = not mergeNext
+			end
 		end
+		
 		-- Dynamic loop increment to skip bytes already accounted for
 		if nBytes == 0 then
 			it = it + 1
@@ -271,9 +283,9 @@ function ee:Edit(rawMessage)
 		end
 	end
 	-- combine ZWJs
-	local mergeNext = false
+	mergeNext = false
 	for i = 1, #eFound do
-		if eFound[i].eCode == "200D" or mergeNext then -- TODO: should apply to 200B, 200C and FEFF as well
+		if ee.emojiZWJs[eFound[i].eCode] or mergeNext then -- TODO: should apply to 200B, 200C and FEFF as well
 			if mergeNext then
 				mergeNext = false
 			else
@@ -288,8 +300,9 @@ function ee:Edit(rawMessage)
 	-- If final list contains emoji, edit raw message to have icons
 	if #eFoundZWJ >= 1 then
 		for i = 1, #eFoundZWJ do
-			if ee.emojiMap[eFoundZWJ[i].eCode] then -- If, for whatever reason, the final combo doesn't have an icon, skip it
-				textureLink = "|t28:28:" .. ee.emojiPath .. ee.emojiMap[eFoundZWJ[i].eCode].texture .. "|t"
+			local noFE0F,_ = eFoundZWJ[i].eCode:gsub("[%-][F][E][0][F]", "") -- Remove FE0Fs from final eCode (eBytes don't matter)
+			if ee.emojiMap[noFE0F] then -- If, for whatever reason, the final combo doesn't have an icon, skip it
+				textureLink = "|t28:28:" .. ee.emojiPath .. ee.emojiMap[noFE0F].texture .. "|t"
 				editedMessage,_ = editedMessage:gsub(eFoundZWJ[i].eBytes, textureLink)
 			end
 		end
@@ -364,7 +377,7 @@ EVENT_MANAGER:RegisterForEvent(ee.name, EVENT_ADD_ON_LOADED, ee.OnAddOnLoaded)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	  SLASH COMMANDS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- None! Maybe in the future? Who knows....
+SLASH_COMMANDS["/ee_version"] = ee.DisplayVersion
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	////////////////////////////////////////////////////////////////////////////////////////// INITIALIZE FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
