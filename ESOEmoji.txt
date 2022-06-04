@@ -19,3 +19,4 @@
 
 ESOEmoji.lua
 EmojiMap.lua
+Shortcodes.lua
