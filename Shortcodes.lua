@@ -1,7 +1,14 @@
 -- File was auto generated using the emoji-name-map npm package
 
 local ee = ESOEmoji
-local shortcodes = {
+
+local customShortcodes = { -- These will be used to turn :blah: into a blah emoji
+	["gh_pop"] = {unicode = ee.Pop(102)},
+	["rw_pop"] = {unicode = ee.Pop(103)},
+}
+
+
+ee.emojiSCs = {
 	["100"] = {unicode = "1F4AF"},
 	["1234"] = {unicode = "1F522"},
 	["grinning"] = {unicode = "1F600"},
@@ -1574,4 +1581,4 @@ local shortcodes = {
 	["pirate_flag"] = {unicode = "1F3F4-200D-2620-FE0F"},
 }
 
-ZO_ShallowTableCopy(shortcodes, ee.emojiSCs)
+ZO_ShallowTableCopy(customShortcodes, ee.emojiSCs)
