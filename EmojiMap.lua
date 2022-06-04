@@ -1,5 +1,17 @@
 local ee = ESOEmoji
 
+ee.emojiAutoMap = {
+	["<3"] = {unicode = "2764"},
+	[":)"] = {unicode = "1F642"},
+	[":-)"] = {unicode = "1F642"},
+	["(:"] = {unicode = "1F642"},
+	["(-:"] = {unicode = "1F642"},
+	[">:("] = {unicode = "1F620"},
+	[">:-("] = {unicode = "1F620"},
+	["):<"] = {unicode = "1F620"},
+	[")-:<"] = {unicode = "1F620"},
+}
+
 ee.emojiModifiers = { -- Modifiers are added to the end of the previous emoji character
 	["FE0F"] = "",
 	["1F3FB"] = "",
@@ -3962,4 +3974,11 @@ ee.emojiMap = {
 	["E381"] = {texture = "E381.dds"},
 	["F000"] = {texture = "F000.dds"},
 	["F8FF"] = {texture = "F8FF.dds"},
+}
+
+ee.emojiSCs = { -- These will be used to turn :blah: into a blah emoji
+	["heart"] = {unicode = "2764"},
+	["wink"] = {unicode = "1F609"},
+	["gh_pop"] = {unicode = ee.Pop(102)},
+	["rw_pop"] = {unicode = ee.Pop(103)},
 }

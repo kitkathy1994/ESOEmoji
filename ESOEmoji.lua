@@ -3,10 +3,13 @@
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ESOEmoji = {}
 local ee = ESOEmoji
-ee.version = "v0.3.23"
+ee.version = "v0.4.0-Alpha"
 ee.name = "ESOEmoji"
 ee.previousText = nil
 ee.emojiPath = "ESOEmoji/icons/openmoji-72x72-colour-dds/"
+ee.emojiTESEnabled = true
+ee.emojiStandardEnabled = true
+ee.emojiAutoEnabled = true
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	ON ADD-ON LOADED	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -21,6 +24,49 @@ end
 function ee.DisplayVersion()
 	d("ESO Emoji version: " .. ee.version)
 end
+
+function ee.Pop(num)
+	local popDisplay = ""
+	local campaign = nil
+	local pop = {
+		[0] = "esoui/art/campaign/campaignbrowser_lowpop.dds",
+		[1] = "esoui/art/campaign/campaignbrowser_medpop.dds",
+		[2] = "esoui/art/campaign/campaignbrowser_hipop.dds",
+		[3] = "esoui/art/campaign/campaignbrowser_fullpop.dds",
+	}
+	local AD = {
+		["colour"] = "FFD700", -- gold colour
+		["icon"] = "|t28:28:esoui/art/campaign/overview_allianceicon_aldmeri.dds|t",
+		["text"] = "",
+	}
+	local EP = {
+		["colour"] = "FF2400", -- red colour
+		["icon"] = "|t28:28:esoui/art/campaign/overview_allianceicon_ebonheart.dds|t",
+		["text"] = "",
+	}
+	local DC = {
+		["colour"] = "0096FF", -- blue colour
+		["icon"] = "|t28:28:esoui/art/campaign/overview_allianceicon_daggefall.dds|t",
+		["text"] = "",
+	}
+	
+	QueryCampaignSelectionData()
+	for i = 1, GetNumSelectionCampaigns() do
+		if GetSelectionCampaignId(i) == num then -- campaign id 103 is ravenwatch, 102 is greyhost
+			campaign = i
+		end
+	end
+	AD.text = "|c" .. AD.colour .. "|t28:28:" .. pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_ALDMERI_DOMINION)] .. ":inheritcolor|t|r"
+	EP.text = "|c" .. EP.colour .. "|t28:28:" .. pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_EBONHEART_PACT)] .. ":inheritcolor|t|r"
+	DC.text = "|c" .. DC.colour .. "|t28:28:" .. pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_DAGGERFALL_COVENANT)] .. ":inheritcolor|t|r"
+	
+	popDisplay = AD.icon .. AD.text .. EP.icon .. EP.text .. DC.icon .. DC.text
+	return popDisplay
+end -- |cFF2400test|r
+-- |cFFD700|t28:28:esoui/art/campaign/overview_allianceicon_aldmeri.dds:inheritcolor|t|r
+-- |c8a0303|t28:28:esoui/art/campaign/overview_allianceicon_ebonheart.dds:inheritcolor|t|r
+-- |c000080|t28:28:esoui/art/campaign/overview_allianceicon_daggefall.dds:inheritcolor|t|r
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function CheckByte(myByte) -- TODO: I can prob optimise runtime of this (I was sleep deprived when I wrote this and I forgot how)
 	if myByte <= 255 then -- make sure its at most 8 bits
@@ -113,7 +159,7 @@ local function Hex2Dec(number)
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function Bytes2Unicode(bytes)
-	t = {}
+	local t = {}
 	local n = #bytes
 	local uCode = "U+"
 	
@@ -178,6 +224,9 @@ local function Unicode2Bytes(uCode)
 	local result = ""
 
 	local decUCode = Hex2Dec(uCode)
+	if decUCode == nil then
+		return uCode
+	end
 	if decUCode >= 0 and decUCode < 128 then
 		nBytes = 1
 	elseif decUCode >= 128 and decUCode < 2048 then
@@ -238,14 +287,26 @@ end
 --	//////////////////////////////////////////////////////////////////////////////////////////	STANDARD FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function ee:Edit(rawMessage)
-	local bytes = {}
-	local itString = tostring(rawMessage)
 	local editedMessage = rawMessage
+	
+	---- Shortcut emoji test (has to run before the other emoji stuff)
+	local shortcut = ""
+	for shortcut in string.gmatch(editedMessage, "[%:]([^%:%s]+)[%:]") do
+		if ee.emojiSCs[shortcut] then
+			editedMessage,_ = editedMessage:gsub("[%:]" .. shortcut .. "[%:]", Unicode2Bytes(ee.emojiSCs[shortcut].unicode))
+		end
+	end
+	---- test end
+	
+	
+	local itString = tostring(editedMessage)
+	local bytes = {}
 	local uCode = nil
 	local eFound = {}
 	local eFoundZWJ = {}
 	local it = 1
 	local mergeNext = false
+		
 	while (it <= #itString) -- Use While loop instead of for loop for dynamic increment
 	do
 		bytes = {}
@@ -307,6 +368,7 @@ function ee:Edit(rawMessage)
 			end
 		end
 	end
+	
 	return editedMessage
 end 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -333,13 +395,14 @@ function ee:UndoEdit(message)
 	end
 	return unEditedMessage
 end
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	HIJACKER FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function Hijack_MessageFormatter()
 	local original = CHAT_ROUTER.FormatAndAddChatMessage
 	CHAT_ROUTER.FormatAndAddChatMessage = function(self, eventCode, channelType, fromName, messageText, isCustomerService, fromDisplayName)
-		if messageText ~= nil then
+		if type(messageText) == "string" then
 			editedMessage = ee:Edit(messageText)
 		else
 			editedMessage = messageText
@@ -378,6 +441,7 @@ EVENT_MANAGER:RegisterForEvent(ee.name, EVENT_ADD_ON_LOADED, ee.OnAddOnLoaded)
 --	//////////////////////////////////////////////////////////////////////////////////////////	  SLASH COMMANDS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 SLASH_COMMANDS["/ee_version"] = ee.DisplayVersion
+SLASH_COMMANDS["/ee_test"] = ee.test
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	////////////////////////////////////////////////////////////////////////////////////////// INITIALIZE FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -394,6 +458,6 @@ function ee:Initialize()
 	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_ADD_ON_LOADED)
 	
 	Init_MainChat()
-	Init_TextInput()
+	--Init_TextInput()
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

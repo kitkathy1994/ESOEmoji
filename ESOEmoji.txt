@@ -12,9 +12,9 @@
 
 ## Title: ESO Emoji
 ## APIVersion: 101033
-## Version: 0.3.23
+## Version: 0.4.0
 ## AddOnVersion: 1
-## Description: Emoji! In your own game! What are you going to do?
+## Description: [ALPHA VERSION] Emoji! In your own game! What are you going to do?
 ## Author: |c800020@BosmeriPride|r
 
 ESOEmoji.lua
