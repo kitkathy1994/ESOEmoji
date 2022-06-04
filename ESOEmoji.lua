@@ -288,12 +288,18 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function ee:Edit(rawMessage)
 	local editedMessage = rawMessage
+	local uCode = ""
 	
 	---- Shortcut emoji test (has to run before the other emoji stuff)
 	local shortcut = ""
 	for shortcut in string.gmatch(editedMessage, "[%:]([^%:%s]+)[%:]") do
 		if ee.emojiSCs[shortcut] then
-			editedMessage,_ = editedMessage:gsub("[%:]" .. shortcut .. "[%:]", Unicode2Bytes(ee.emojiSCs[shortcut].unicode))
+			local result = ""
+			for uCode in string.gmatch(ee.emojiSCs[shortcut].unicode, "([%u%1%d]+)") do
+				--Encode
+				result = result .. Unicode2Bytes(uCode)
+			end
+			editedMessage,_ = editedMessage:gsub("[%:]" .. shortcut .. "[%:]", result)
 		end
 	end
 	---- test end
@@ -301,7 +307,6 @@ function ee:Edit(rawMessage)
 	
 	local itString = tostring(editedMessage)
 	local bytes = {}
-	local uCode = nil
 	local eFound = {}
 	local eFoundZWJ = {}
 	local it = 1
