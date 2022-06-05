@@ -289,17 +289,18 @@ end
 function ee:Edit(rawMessage)
 	local editedMessage = rawMessage
 	local uCode = ""
+	local textureLink = ""
 	
-	---- Shortcut emoji test (has to run before the other emoji stuff)
-	local shortcut = ""
-	for shortcut in string.gmatch(editedMessage, "[%:]([^%:%s]+)[%:]") do
-		if ee.emojiSCs[shortcut] then
-			local result = ""
-			for uCode in string.gmatch(ee.emojiSCs[shortcut].unicode, "([%u%1%d]+)") do
-				--Encode
-				result = result .. Unicode2Bytes(uCode)
+	---- Shortcode emoji test (has to run before the other emoji stuff)
+	local shortcode = ""
+	for shortcode in string.gmatch(editedMessage, "[%:]([^%:%s]+)[%:]") do
+		if ee.emojiSCs[shortcode] then
+			if ee.emojiSCs[shortcode].unicode then
+				textureLink = "|t28:28:" .. ee.emojiPath .. ee.emojiMap[ee.emojiSCs[shortcode].unicode].texture .. "|t"
+				editedMessage,_ = editedMessage:gsub("[%:]" .. shortcode .. "[%:]", textureLink)
+			elseif ee.emojiSCs[shortcode].func then -- Special shortcode, therefore "unicode" is actually a function returning a string
+				editedMessage,_ = editedMessage:gsub("[%:]" .. shortcode .. "[%:]", ee.emojiSCs[shortcode].func)
 			end
-			editedMessage,_ = editedMessage:gsub("[%:]" .. shortcut .. "[%:]", result)
 		end
 	end
 	---- test end

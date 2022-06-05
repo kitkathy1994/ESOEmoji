@@ -3,8 +3,8 @@
 local ee = ESOEmoji
 
 local customShortcodes = { -- These will be used to turn :blah: into a blah emoji
-	["gh_pop"] = {unicode = ee.Pop(102)},
-	["rw_pop"] = {unicode = ee.Pop(103)},
+	["gh_pop"] = {func = ee.Pop(102)},
+	["rw_pop"] = {func = ee.Pop(103)},
 }
 
 
@@ -26,7 +26,7 @@ ee.emojiSCs = {
 	["blush"] = {unicode = "1F60A"},
 	["slightly_smiling_face"] = {unicode = "1F642"},
 	["upside_down_face"] = {unicode = "1F643"},
-	["relaxed"] = {unicode = "263A-FE0F"},
+	["relaxed"] = {unicode = "263A"},
 	["yum"] = {unicode = "1F60B"},
 	["relieved"] = {unicode = "1F60C"},
 	["heart_eyes"] = {unicode = "1F60D"},
@@ -173,7 +173,7 @@ ee.emojiSCs = {
 	["adult"] = {unicode = "1F9D1"},
 	["man"] = {unicode = "1F468"},
 	["woman"] = {unicode = "1F469"},
-	["blonde_woman"] = {unicode = "1F471-200D-2640-FE0F"},
+	["blonde_woman"] = {unicode = "1F471-200D-2640"},
 	["blonde_man"] = {unicode = "1F471"},
 	["bearded_person"] = {unicode = "1F9D4"},
 	["older_adult"] = {unicode = "1F9D3"},
@@ -181,18 +181,18 @@ ee.emojiSCs = {
 	["older_woman"] = {unicode = "1F475"},
 	["man_with_gua_pi_mao"] = {unicode = "1F472"},
 	["woman_with_headscarf"] = {unicode = "1F9D5"},
-	["woman_with_turban"] = {unicode = "1F473-200D-2640-FE0F"},
+	["woman_with_turban"] = {unicode = "1F473-200D-2640"},
 	["man_with_turban"] = {unicode = "1F473"},
-	["policewoman"] = {unicode = "1F46E-200D-2640-FE0F"},
+	["policewoman"] = {unicode = "1F46E-200D-2640"},
 	["policeman"] = {unicode = "1F46E"},
-	["construction_worker_woman"] = {unicode = "1F477-200D-2640-FE0F"},
+	["construction_worker_woman"] = {unicode = "1F477-200D-2640"},
 	["construction_worker_man"] = {unicode = "1F477"},
-	["guardswoman"] = {unicode = "1F482-200D-2640-FE0F"},
+	["guardswoman"] = {unicode = "1F482-200D-2640"},
 	["guardsman"] = {unicode = "1F482"},
-	["female_detective"] = {unicode = "1F575-FE0F-200D-2640-FE0F"},
+	["female_detective"] = {unicode = "1F575-200D-2640"},
 	["male_detective"] = {unicode = "1F575"},
-	["woman_health_worker"] = {unicode = "1F469-200D-2695-FE0F"},
-	["man_health_worker"] = {unicode = "1F468-200D-2695-FE0F"},
+	["woman_health_worker"] = {unicode = "1F469-200D-2695"},
+	["man_health_worker"] = {unicode = "1F468-200D-2695"},
 	["woman_farmer"] = {unicode = "1F469-200D-1F33E"},
 	["man_farmer"] = {unicode = "1F468-200D-1F33E"},
 	["woman_cook"] = {unicode = "1F469-200D-1F373"},
@@ -217,32 +217,32 @@ ee.emojiSCs = {
 	["man_artist"] = {unicode = "1F468-200D-1F3A8"},
 	["woman_firefighter"] = {unicode = "1F469-200D-1F692"},
 	["man_firefighter"] = {unicode = "1F468-200D-1F692"},
-	["woman_pilot"] = {unicode = "1F469-200D-2708-FE0F"},
-	["man_pilot"] = {unicode = "1F468-200D-2708-FE0F"},
+	["woman_pilot"] = {unicode = "1F469-200D-2708"},
+	["man_pilot"] = {unicode = "1F468-200D-2708"},
 	["woman_astronaut"] = {unicode = "1F469-200D-1F680"},
 	["man_astronaut"] = {unicode = "1F468-200D-1F680"},
-	["woman_judge"] = {unicode = "1F469-200D-2696-FE0F"},
-	["man_judge"] = {unicode = "1F468-200D-2696-FE0F"},
-	["woman_superhero"] = {unicode = "1F9B8-200D-2640-FE0F"},
-	["man_superhero"] = {unicode = "1F9B8-200D-2642-FE0F"},
-	["woman_supervillain"] = {unicode = "1F9B9-200D-2640-FE0F"},
-	["man_supervillain"] = {unicode = "1F9B9-200D-2642-FE0F"},
+	["woman_judge"] = {unicode = "1F469-200D-2696"},
+	["man_judge"] = {unicode = "1F468-200D-2696"},
+	["woman_superhero"] = {unicode = "1F9B8-200D-2640"},
+	["man_superhero"] = {unicode = "1F9B8-200D-2642"},
+	["woman_supervillain"] = {unicode = "1F9B9-200D-2640"},
+	["man_supervillain"] = {unicode = "1F9B9-200D-2642"},
 	["mrs_claus"] = {unicode = "1F936"},
 	["santa"] = {unicode = "1F385"},
-	["sorceress"] = {unicode = "1F9D9-200D-2640-FE0F"},
-	["wizard"] = {unicode = "1F9D9-200D-2642-FE0F"},
-	["woman_elf"] = {unicode = "1F9DD-200D-2640-FE0F"},
-	["man_elf"] = {unicode = "1F9DD-200D-2642-FE0F"},
-	["woman_vampire"] = {unicode = "1F9DB-200D-2640-FE0F"},
-	["man_vampire"] = {unicode = "1F9DB-200D-2642-FE0F"},
-	["woman_zombie"] = {unicode = "1F9DF-200D-2640-FE0F"},
-	["man_zombie"] = {unicode = "1F9DF-200D-2642-FE0F"},
-	["woman_genie"] = {unicode = "1F9DE-200D-2640-FE0F"},
-	["man_genie"] = {unicode = "1F9DE-200D-2642-FE0F"},
-	["mermaid"] = {unicode = "1F9DC-200D-2640-FE0F"},
-	["merman"] = {unicode = "1F9DC-200D-2642-FE0F"},
-	["woman_fairy"] = {unicode = "1F9DA-200D-2640-FE0F"},
-	["man_fairy"] = {unicode = "1F9DA-200D-2642-FE0F"},
+	["sorceress"] = {unicode = "1F9D9-200D-2640"},
+	["wizard"] = {unicode = "1F9D9-200D-2642"},
+	["woman_elf"] = {unicode = "1F9DD-200D-2640"},
+	["man_elf"] = {unicode = "1F9DD-200D-2642"},
+	["woman_vampire"] = {unicode = "1F9DB-200D-2640"},
+	["man_vampire"] = {unicode = "1F9DB-200D-2642"},
+	["woman_zombie"] = {unicode = "1F9DF-200D-2640"},
+	["man_zombie"] = {unicode = "1F9DF-200D-2642"},
+	["woman_genie"] = {unicode = "1F9DE-200D-2640"},
+	["man_genie"] = {unicode = "1F9DE-200D-2642"},
+	["mermaid"] = {unicode = "1F9DC-200D-2640"},
+	["merman"] = {unicode = "1F9DC-200D-2642"},
+	["woman_fairy"] = {unicode = "1F9DA-200D-2640"},
+	["man_fairy"] = {unicode = "1F9DA-200D-2642"},
 	["angel"] = {unicode = "1F47C"},
 	["pregnant_woman"] = {unicode = "1F930"},
 	["breastfeeding"] = {unicode = "1F931"},
@@ -250,47 +250,47 @@ ee.emojiSCs = {
 	["prince"] = {unicode = "1F934"},
 	["bride_with_veil"] = {unicode = "1F470"},
 	["man_in_tuxedo"] = {unicode = "1F935"},
-	["running_woman"] = {unicode = "1F3C3-200D-2640-FE0F"},
+	["running_woman"] = {unicode = "1F3C3-200D-2640"},
 	["running_man"] = {unicode = "1F3C3"},
-	["walking_woman"] = {unicode = "1F6B6-200D-2640-FE0F"},
+	["walking_woman"] = {unicode = "1F6B6-200D-2640"},
 	["walking_man"] = {unicode = "1F6B6"},
 	["dancer"] = {unicode = "1F483"},
 	["man_dancing"] = {unicode = "1F57A"},
 	["dancing_women"] = {unicode = "1F46F"},
-	["dancing_men"] = {unicode = "1F46F-200D-2642-FE0F"},
+	["dancing_men"] = {unicode = "1F46F-200D-2642"},
 	["couple"] = {unicode = "1F46B"},
 	["two_men_holding_hands"] = {unicode = "1F46C"},
 	["two_women_holding_hands"] = {unicode = "1F46D"},
-	["bowing_woman"] = {unicode = "1F647-200D-2640-FE0F"},
+	["bowing_woman"] = {unicode = "1F647-200D-2640"},
 	["bowing_man"] = {unicode = "1F647"},
-	["man_facepalming"] = {unicode = "1F926-200D-2642-FE0F"},
-	["woman_facepalming"] = {unicode = "1F926-200D-2640-FE0F"},
+	["man_facepalming"] = {unicode = "1F926-200D-2642"},
+	["woman_facepalming"] = {unicode = "1F926-200D-2640"},
 	["woman_shrugging"] = {unicode = "1F937"},
-	["man_shrugging"] = {unicode = "1F937-200D-2642-FE0F"},
+	["man_shrugging"] = {unicode = "1F937-200D-2642"},
 	["tipping_hand_woman"] = {unicode = "1F481"},
-	["tipping_hand_man"] = {unicode = "1F481-200D-2642-FE0F"},
+	["tipping_hand_man"] = {unicode = "1F481-200D-2642"},
 	["no_good_woman"] = {unicode = "1F645"},
-	["no_good_man"] = {unicode = "1F645-200D-2642-FE0F"},
+	["no_good_man"] = {unicode = "1F645-200D-2642"},
 	["ok_woman"] = {unicode = "1F646"},
-	["ok_man"] = {unicode = "1F646-200D-2642-FE0F"},
+	["ok_man"] = {unicode = "1F646-200D-2642"},
 	["raising_hand_woman"] = {unicode = "1F64B"},
-	["raising_hand_man"] = {unicode = "1F64B-200D-2642-FE0F"},
+	["raising_hand_man"] = {unicode = "1F64B-200D-2642"},
 	["pouting_woman"] = {unicode = "1F64E"},
-	["pouting_man"] = {unicode = "1F64E-200D-2642-FE0F"},
+	["pouting_man"] = {unicode = "1F64E-200D-2642"},
 	["frowning_woman"] = {unicode = "1F64D"},
-	["frowning_man"] = {unicode = "1F64D-200D-2642-FE0F"},
+	["frowning_man"] = {unicode = "1F64D-200D-2642"},
 	["haircut_woman"] = {unicode = "1F487"},
-	["haircut_man"] = {unicode = "1F487-200D-2642-FE0F"},
+	["haircut_man"] = {unicode = "1F487-200D-2642"},
 	["massage_woman"] = {unicode = "1F486"},
-	["massage_man"] = {unicode = "1F486-200D-2642-FE0F"},
-	["woman_in_steamy_room"] = {unicode = "1F9D6-200D-2640-FE0F"},
-	["man_in_steamy_room"] = {unicode = "1F9D6-200D-2642-FE0F"},
+	["massage_man"] = {unicode = "1F486-200D-2642"},
+	["woman_in_steamy_room"] = {unicode = "1F9D6-200D-2640"},
+	["man_in_steamy_room"] = {unicode = "1F9D6-200D-2642"},
 	["couple_with_heart_woman_man"] = {unicode = "1F491"},
-	["couple_with_heart_woman_woman"] = {unicode = "1F469-200D-2764-FE0F-200D-1F469"},
-	["couple_with_heart_man_man"] = {unicode = "1F468-200D-2764-FE0F-200D-1F468"},
+	["couple_with_heart_woman_woman"] = {unicode = "1F469-200D-2764-200D-1F469"},
+	["couple_with_heart_man_man"] = {unicode = "1F468-200D-2764-200D-1F468"},
 	["couplekiss_man_woman"] = {unicode = "1F48F"},
-	["couplekiss_woman_woman"] = {unicode = "1F469-200D-2764-FE0F-200D-1F48B-200D-1F469"},
-	["couplekiss_man_man"] = {unicode = "1F468-200D-2764-FE0F-200D-1F48B-200D-1F468"},
+	["couplekiss_woman_woman"] = {unicode = "1F469-200D-2764-200D-1F48B-200D-1F469"},
+	["couplekiss_man_man"] = {unicode = "1F468-200D-2764-200D-1F48B-200D-1F468"},
 	["family_man_woman_boy"] = {unicode = "1F46A"},
 	["family_man_woman_girl"] = {unicode = "1F468-200D-1F469-200D-1F467"},
 	["family_man_woman_girl_boy"] = {unicode = "1F468-200D-1F469-200D-1F467-200D-1F466"},
@@ -509,19 +509,19 @@ ee.emojiSCs = {
 	["dizzy"] = {unicode = "1F4AB"},
 	["sparkles"] = {unicode = "2728"},
 	["comet"] = {unicode = "2604"},
-	["sunny"] = {unicode = "2600-FE0F"},
+	["sunny"] = {unicode = "2600"},
 	["sun_behind_small_cloud"] = {unicode = "1F324"},
 	["partly_sunny"] = {unicode = "26C5"},
 	["sun_behind_large_cloud"] = {unicode = "1F325"},
 	["sun_behind_rain_cloud"] = {unicode = "1F326"},
-	["cloud"] = {unicode = "2601-FE0F"},
+	["cloud"] = {unicode = "2601"},
 	["cloud_with_rain"] = {unicode = "1F327"},
 	["cloud_with_lightning_and_rain"] = {unicode = "26C8"},
 	["cloud_with_lightning"] = {unicode = "1F329"},
 	["zap"] = {unicode = "26A1"},
 	["fire"] = {unicode = "1F525"},
 	["boom"] = {unicode = "1F4A5"},
-	["snowflake"] = {unicode = "2744-FE0F"},
+	["snowflake"] = {unicode = "2744"},
 	["cloud_with_snow"] = {unicode = "1F328"},
 	["snowman"] = {unicode = "26C4"},
 	["snowman_with_snow"] = {unicode = "2603"},
@@ -650,7 +650,7 @@ ee.emojiSCs = {
 	["flying_disc"] = {unicode = "1F94F"},
 	["8ball"] = {unicode = "1F3B1"},
 	["golf"] = {unicode = "26F3"},
-	["golfing_woman"] = {unicode = "1F3CC-FE0F-200D-2640-FE0F"},
+	["golfing_woman"] = {unicode = "1F3CC-200D-2640"},
 	["golfing_man"] = {unicode = "1F3CC"},
 	["ping_pong"] = {unicode = "1F3D3"},
 	["badminton"] = {unicode = "1F3F8"},
@@ -663,12 +663,12 @@ ee.emojiSCs = {
 	["skier"] = {unicode = "26F7"},
 	["snowboarder"] = {unicode = "1F3C2"},
 	["person_fencing"] = {unicode = "1F93A"},
-	["women_wrestling"] = {unicode = "1F93C-200D-2640-FE0F"},
-	["men_wrestling"] = {unicode = "1F93C-200D-2642-FE0F"},
-	["woman_cartwheeling"] = {unicode = "1F938-200D-2640-FE0F"},
-	["man_cartwheeling"] = {unicode = "1F938-200D-2642-FE0F"},
-	["woman_playing_handball"] = {unicode = "1F93E-200D-2640-FE0F"},
-	["man_playing_handball"] = {unicode = "1F93E-200D-2642-FE0F"},
+	["women_wrestling"] = {unicode = "1F93C-200D-2640"},
+	["men_wrestling"] = {unicode = "1F93C-200D-2642"},
+	["woman_cartwheeling"] = {unicode = "1F938-200D-2640"},
+	["man_cartwheeling"] = {unicode = "1F938-200D-2642"},
+	["woman_playing_handball"] = {unicode = "1F93E-200D-2640"},
+	["man_playing_handball"] = {unicode = "1F93E-200D-2642"},
 	["ice_skate"] = {unicode = "26F8"},
 	["curling_stone"] = {unicode = "1F94C"},
 	["skateboard"] = {unicode = "1F6F9"},
@@ -677,26 +677,26 @@ ee.emojiSCs = {
 	["fishing_pole_and_fish"] = {unicode = "1F3A3"},
 	["boxing_glove"] = {unicode = "1F94A"},
 	["martial_arts_uniform"] = {unicode = "1F94B"},
-	["rowing_woman"] = {unicode = "1F6A3-200D-2640-FE0F"},
+	["rowing_woman"] = {unicode = "1F6A3-200D-2640"},
 	["rowing_man"] = {unicode = "1F6A3"},
-	["climbing_woman"] = {unicode = "1F9D7-200D-2640-FE0F"},
-	["climbing_man"] = {unicode = "1F9D7-200D-2642-FE0F"},
-	["swimming_woman"] = {unicode = "1F3CA-200D-2640-FE0F"},
+	["climbing_woman"] = {unicode = "1F9D7-200D-2640"},
+	["climbing_man"] = {unicode = "1F9D7-200D-2642"},
+	["swimming_woman"] = {unicode = "1F3CA-200D-2640"},
 	["swimming_man"] = {unicode = "1F3CA"},
-	["woman_playing_water_polo"] = {unicode = "1F93D-200D-2640-FE0F"},
-	["man_playing_water_polo"] = {unicode = "1F93D-200D-2642-FE0F"},
-	["woman_in_lotus_position"] = {unicode = "1F9D8-200D-2640-FE0F"},
-	["man_in_lotus_position"] = {unicode = "1F9D8-200D-2642-FE0F"},
-	["surfing_woman"] = {unicode = "1F3C4-200D-2640-FE0F"},
+	["woman_playing_water_polo"] = {unicode = "1F93D-200D-2640"},
+	["man_playing_water_polo"] = {unicode = "1F93D-200D-2642"},
+	["woman_in_lotus_position"] = {unicode = "1F9D8-200D-2640"},
+	["man_in_lotus_position"] = {unicode = "1F9D8-200D-2642"},
+	["surfing_woman"] = {unicode = "1F3C4-200D-2640"},
 	["surfing_man"] = {unicode = "1F3C4"},
 	["bath"] = {unicode = "1F6C0"},
-	["basketball_woman"] = {unicode = "26F9-FE0F-200D-2640-FE0F"},
+	["basketball_woman"] = {unicode = "26F9-200D-2640"},
 	["basketball_man"] = {unicode = "26F9"},
-	["weight_lifting_woman"] = {unicode = "1F3CB-FE0F-200D-2640-FE0F"},
+	["weight_lifting_woman"] = {unicode = "1F3CB-200D-2640"},
 	["weight_lifting_man"] = {unicode = "1F3CB"},
-	["biking_woman"] = {unicode = "1F6B4-200D-2640-FE0F"},
+	["biking_woman"] = {unicode = "1F6B4-200D-2640"},
 	["biking_man"] = {unicode = "1F6B4"},
-	["mountain_biking_woman"] = {unicode = "1F6B5-200D-2640-FE0F"},
+	["mountain_biking_woman"] = {unicode = "1F6B5-200D-2640"},
 	["mountain_biking_man"] = {unicode = "1F6B5"},
 	["horse_racing"] = {unicode = "1F3C7"},
 	["business_suit_levitating"] = {unicode = "1F574"},
@@ -714,8 +714,8 @@ ee.emojiSCs = {
 	["performing_arts"] = {unicode = "1F3AD"},
 	["art"] = {unicode = "1F3A8"},
 	["circus_tent"] = {unicode = "1F3AA"},
-	["woman_juggling"] = {unicode = "1F939-200D-2640-FE0F"},
-	["man_juggling"] = {unicode = "1F939-200D-2642-FE0F"},
+	["woman_juggling"] = {unicode = "1F939-200D-2640"},
+	["man_juggling"] = {unicode = "1F939-200D-2642"},
 	["microphone"] = {unicode = "1F3A4"},
 	["headphones"] = {unicode = "1F3A7"},
 	["musical_score"] = {unicode = "1F3BC"},
@@ -774,7 +774,7 @@ ee.emojiSCs = {
 	["flying_saucer"] = {unicode = "1F6F8"},
 	["helicopter"] = {unicode = "1F681"},
 	["small_airplane"] = {unicode = "1F6E9"},
-	["airplane"] = {unicode = "2708-FE0F"},
+	["airplane"] = {unicode = "2708"},
 	["flight_departure"] = {unicode = "1F6EB"},
 	["flight_arrival"] = {unicode = "1F6EC"},
 	["sailboat"] = {unicode = "26F5"},
@@ -876,7 +876,7 @@ ee.emojiSCs = {
 	["film_projector"] = {unicode = "1F4FD"},
 	["film_strip"] = {unicode = "1F39E"},
 	["telephone_receiver"] = {unicode = "1F4DE"},
-	["phone"] = {unicode = "260E-FE0F"},
+	["phone"] = {unicode = "260E"},
 	["pager"] = {unicode = "1F4DF"},
 	["fax"] = {unicode = "1F4E0"},
 	["tv"] = {unicode = "1F4FA"},
@@ -983,7 +983,7 @@ ee.emojiSCs = {
 	["crossed_flags"] = {unicode = "1F38C"},
 	["izakaya_lantern"] = {unicode = "1F3EE"},
 	["red_envelope"] = {unicode = "1F9E7"},
-	["email"] = {unicode = "2709-FE0F"},
+	["email"] = {unicode = "2709"},
 	["envelope_with_arrow"] = {unicode = "1F4E9"},
 	["incoming_envelope"] = {unicode = "1F4E8"},
 	["e-mail"] = {unicode = "1F4E7"},
@@ -1032,7 +1032,7 @@ ee.emojiSCs = {
 	["link"] = {unicode = "1F517"},
 	["paperclip"] = {unicode = "1F4CE"},
 	["paperclips"] = {unicode = "1F587"},
-	["scissors"] = {unicode = "2702-FE0F"},
+	["scissors"] = {unicode = "2702"},
 	["triangular_ruler"] = {unicode = "1F4D0"},
 	["straight_ruler"] = {unicode = "1F4CF"},
 	["abacus"] = {unicode = "1F9EE"},
@@ -1041,21 +1041,21 @@ ee.emojiSCs = {
 	["triangular_flag_on_post"] = {unicode = "1F6A9"},
 	["white_flag"] = {unicode = "1F3F3"},
 	["black_flag"] = {unicode = "1F3F4"},
-	["rainbow_flag"] = {unicode = "1F3F3-FE0F-200D-1F308"},
+	["rainbow_flag"] = {unicode = "1F3F3-200D-1F308"},
 	["closed_lock_with_key"] = {unicode = "1F510"},
 	["lock"] = {unicode = "1F512"},
 	["unlock"] = {unicode = "1F513"},
 	["lock_with_ink_pen"] = {unicode = "1F50F"},
 	["pen"] = {unicode = "1F58A"},
 	["fountain_pen"] = {unicode = "1F58B"},
-	["black_nib"] = {unicode = "2712-FE0F"},
+	["black_nib"] = {unicode = "2712"},
 	["memo"] = {unicode = "1F4DD"},
-	["pencil2"] = {unicode = "270F-FE0F"},
+	["pencil2"] = {unicode = "270F"},
 	["crayon"] = {unicode = "1F58D"},
 	["paintbrush"] = {unicode = "1F58C"},
 	["mag"] = {unicode = "1F50D"},
 	["mag_right"] = {unicode = "1F50E"},
-	["heart"] = {unicode = "2764-FE0F"},
+	["heart"] = {unicode = "2764"},
 	["orange_heart"] = {unicode = "1F9E1"},
 	["yellow_heart"] = {unicode = "1F49B"},
 	["green_heart"] = {unicode = "1F49A"},
@@ -1108,22 +1108,22 @@ ee.emojiSCs = {
 	["u7121"] = {unicode = "1F21A"},
 	["u7533"] = {unicode = "1F238"},
 	["u55b6"] = {unicode = "1F23A"},
-	["u6708"] = {unicode = "1F237-FE0F"},
-	["eight_pointed_black_star"] = {unicode = "2734-FE0F"},
+	["u6708"] = {unicode = "1F237"},
+	["eight_pointed_black_star"] = {unicode = "2734"},
 	["vs"] = {unicode = "1F19A"},
 	["accept"] = {unicode = "1F251"},
 	["white_flower"] = {unicode = "1F4AE"},
 	["ideograph_advantage"] = {unicode = "1F250"},
-	["secret"] = {unicode = "3299-FE0F"},
-	["congratulations"] = {unicode = "3297-FE0F"},
+	["secret"] = {unicode = "3299"},
+	["congratulations"] = {unicode = "3297"},
 	["u5408"] = {unicode = "1F234"},
 	["u6e80"] = {unicode = "1F235"},
 	["u7981"] = {unicode = "1F232"},
-	["a"] = {unicode = "1F170-FE0F"},
-	["b"] = {unicode = "1F171-FE0F"},
+	["a"] = {unicode = "1F170"},
+	["b"] = {unicode = "1F171"},
 	["ab"] = {unicode = "1F18E"},
 	["cl"] = {unicode = "1F191"},
-	["o2"] = {unicode = "1F17E-FE0F"},
+	["o2"] = {unicode = "1F17E"},
 	["sos"] = {unicode = "1F198"},
 	["no_entry"] = {unicode = "26D4"},
 	["name_badge"] = {unicode = "1F4DB"},
@@ -1132,7 +1132,7 @@ ee.emojiSCs = {
 	["o"] = {unicode = "2B55"},
 	["stop_sign"] = {unicode = "1F6D1"},
 	["anger"] = {unicode = "1F4A2"},
-	["hotsprings"] = {unicode = "2668-FE0F"},
+	["hotsprings"] = {unicode = "2668"},
 	["no_pedestrians"] = {unicode = "1F6B7"},
 	["do_not_litter"] = {unicode = "1F6AF"},
 	["no_bicycles"] = {unicode = "1F6B3"},
@@ -1143,30 +1143,30 @@ ee.emojiSCs = {
 	["grey_exclamation"] = {unicode = "2755"},
 	["question"] = {unicode = "2753"},
 	["grey_question"] = {unicode = "2754"},
-	["bangbang"] = {unicode = "203C-FE0F"},
-	["interrobang"] = {unicode = "2049-FE0F"},
+	["bangbang"] = {unicode = "203C"},
+	["interrobang"] = {unicode = "2049"},
 	["low_brightness"] = {unicode = "1F505"},
 	["high_brightness"] = {unicode = "1F506"},
 	["trident"] = {unicode = "1F531"},
 	["fleur_de_lis"] = {unicode = "269C"},
-	["part_alternation_mark"] = {unicode = "303D-FE0F"},
-	["warning"] = {unicode = "26A0-FE0F"},
+	["part_alternation_mark"] = {unicode = "303D"},
+	["warning"] = {unicode = "26A0"},
 	["children_crossing"] = {unicode = "1F6B8"},
 	["beginner"] = {unicode = "1F530"},
-	["recycle"] = {unicode = "267B-FE0F"},
+	["recycle"] = {unicode = "267B"},
 	["u6307"] = {unicode = "1F22F"},
 	["chart"] = {unicode = "1F4B9"},
-	["sparkle"] = {unicode = "2747-FE0F"},
-	["eight_spoked_asterisk"] = {unicode = "2733-FE0F"},
+	["sparkle"] = {unicode = "2747"},
+	["eight_spoked_asterisk"] = {unicode = "2733"},
 	["negative_squared_cross_mark"] = {unicode = "274E"},
 	["white_check_mark"] = {unicode = "2705"},
 	["diamond_shape_with_a_dot_inside"] = {unicode = "1F4A0"},
 	["cyclone"] = {unicode = "1F300"},
 	["loop"] = {unicode = "27BF"},
 	["globe_with_meridians"] = {unicode = "1F310"},
-	["m"] = {unicode = "24C2-FE0F"},
+	["m"] = {unicode = "24C2"},
 	["atm"] = {unicode = "1F3E7"},
-	["sa"] = {unicode = "1F202-FE0F"},
+	["sa"] = {unicode = "1F202"},
 	["passport_control"] = {unicode = "1F6C2"},
 	["customs"] = {unicode = "1F6C3"},
 	["baggage_claim"] = {unicode = "1F6C4"},
@@ -1174,7 +1174,7 @@ ee.emojiSCs = {
 	["wheelchair"] = {unicode = "267F"},
 	["no_smoking"] = {unicode = "1F6AD"},
 	["wc"] = {unicode = "1F6BE"},
-	["parking"] = {unicode = "1F17F-FE0F"},
+	["parking"] = {unicode = "1F17F"},
 	["potable_water"] = {unicode = "1F6B0"},
 	["mens"] = {unicode = "1F6B9"},
 	["womens"] = {unicode = "1F6BA"},
@@ -1190,20 +1190,20 @@ ee.emojiSCs = {
 	["cool"] = {unicode = "1F192"},
 	["new"] = {unicode = "1F195"},
 	["free"] = {unicode = "1F193"},
-	["zero"] = {unicode = "30-FE0F-20E3"},
-	["one"] = {unicode = "31-FE0F-20E3"},
-	["two"] = {unicode = "32-FE0F-20E3"},
-	["three"] = {unicode = "33-FE0F-20E3"},
-	["four"] = {unicode = "34-FE0F-20E3"},
-	["five"] = {unicode = "35-FE0F-20E3"},
-	["six"] = {unicode = "36-FE0F-20E3"},
-	["seven"] = {unicode = "37-FE0F-20E3"},
-	["eight"] = {unicode = "38-FE0F-20E3"},
-	["nine"] = {unicode = "39-FE0F-20E3"},
+	["zero"] = {unicode = "30-20E3"},
+	["one"] = {unicode = "31-20E3"},
+	["two"] = {unicode = "32-20E3"},
+	["three"] = {unicode = "33-20E3"},
+	["four"] = {unicode = "34-20E3"},
+	["five"] = {unicode = "35-20E3"},
+	["six"] = {unicode = "36-20E3"},
+	["seven"] = {unicode = "37-20E3"},
+	["eight"] = {unicode = "38-20E3"},
+	["nine"] = {unicode = "39-20E3"},
 	["keycap_ten"] = {unicode = "1F51F"},
 	["asterisk"] = {unicode = "2A-20E3"},
-	["eject_button"] = {unicode = "23CF-FE0F"},
-	["arrow_forward"] = {unicode = "25B6-FE0F"},
+	["eject_button"] = {unicode = "23CF"},
+	["arrow_forward"] = {unicode = "25B6"},
 	["pause_button"] = {unicode = "23F8"},
 	["next_track_button"] = {unicode = "23ED"},
 	["stop_button"] = {unicode = "23F9"},
@@ -1215,54 +1215,54 @@ ee.emojiSCs = {
 	["twisted_rightwards_arrows"] = {unicode = "1F500"},
 	["repeat"] = {unicode = "1F501"},
 	["repeat_one"] = {unicode = "1F502"},
-	["arrow_backward"] = {unicode = "25C0-FE0F"},
+	["arrow_backward"] = {unicode = "25C0"},
 	["arrow_up_small"] = {unicode = "1F53C"},
 	["arrow_down_small"] = {unicode = "1F53D"},
 	["arrow_double_up"] = {unicode = "23EB"},
 	["arrow_double_down"] = {unicode = "23EC"},
-	["arrow_right"] = {unicode = "27A1-FE0F"},
-	["arrow_left"] = {unicode = "2B05-FE0F"},
-	["arrow_up"] = {unicode = "2B06-FE0F"},
-	["arrow_down"] = {unicode = "2B07-FE0F"},
-	["arrow_upper_right"] = {unicode = "2197-FE0F"},
-	["arrow_lower_right"] = {unicode = "2198-FE0F"},
-	["arrow_lower_left"] = {unicode = "2199-FE0F"},
-	["arrow_upper_left"] = {unicode = "2196-FE0F"},
-	["arrow_up_down"] = {unicode = "2195-FE0F"},
-	["left_right_arrow"] = {unicode = "2194-FE0F"},
+	["arrow_right"] = {unicode = "27A1"},
+	["arrow_left"] = {unicode = "2B05"},
+	["arrow_up"] = {unicode = "2B06"},
+	["arrow_down"] = {unicode = "2B07"},
+	["arrow_upper_right"] = {unicode = "2197"},
+	["arrow_lower_right"] = {unicode = "2198"},
+	["arrow_lower_left"] = {unicode = "2199"},
+	["arrow_upper_left"] = {unicode = "2196"},
+	["arrow_up_down"] = {unicode = "2195"},
+	["left_right_arrow"] = {unicode = "2194"},
 	["arrows_counterclockwise"] = {unicode = "1F504"},
-	["arrow_right_hook"] = {unicode = "21AA-FE0F"},
-	["leftwards_arrow_with_hook"] = {unicode = "21A9-FE0F"},
-	["arrow_heading_up"] = {unicode = "2934-FE0F"},
-	["arrow_heading_down"] = {unicode = "2935-FE0F"},
-	["hash"] = {unicode = "23-FE0F-20E3"},
-	["information_source"] = {unicode = "2139-FE0F"},
+	["arrow_right_hook"] = {unicode = "21AA"},
+	["leftwards_arrow_with_hook"] = {unicode = "21A9"},
+	["arrow_heading_up"] = {unicode = "2934"},
+	["arrow_heading_down"] = {unicode = "2935"},
+	["hash"] = {unicode = "23-20E3"},
+	["information_source"] = {unicode = "2139"},
 	["abc"] = {unicode = "1F524"},
 	["abcd"] = {unicode = "1F521"},
 	["capital_abcd"] = {unicode = "1F520"},
 	["symbols"] = {unicode = "1F523"},
 	["musical_note"] = {unicode = "1F3B5"},
 	["notes"] = {unicode = "1F3B6"},
-	["wavy_dash"] = {unicode = "3030-FE0F"},
+	["wavy_dash"] = {unicode = "3030"},
 	["curly_loop"] = {unicode = "27B0"},
-	["heavy_check_mark"] = {unicode = "2714-FE0F"},
+	["heavy_check_mark"] = {unicode = "2714"},
 	["arrows_clockwise"] = {unicode = "1F503"},
 	["heavy_plus_sign"] = {unicode = "2795"},
 	["heavy_minus_sign"] = {unicode = "2796"},
 	["heavy_division_sign"] = {unicode = "2797"},
-	["heavy_multiplication_x"] = {unicode = "2716-FE0F"},
+	["heavy_multiplication_x"] = {unicode = "2716"},
 	["infinity"] = {unicode = "267E"},
 	["heavy_dollar_sign"] = {unicode = "1F4B2"},
 	["currency_exchange"] = {unicode = "1F4B1"},
-	["copyright"] = {unicode = "A9-FE0F"},
-	["registered"] = {unicode = "AE-FE0F"},
-	["tm"] = {unicode = "2122-FE0F"},
+	["copyright"] = {unicode = "A9"},
+	["registered"] = {unicode = "AE"},
+	["tm"] = {unicode = "2122"},
 	["end"] = {unicode = "1F51A"},
 	["back"] = {unicode = "1F519"},
 	["on"] = {unicode = "1F51B"},
 	["top"] = {unicode = "1F51D"},
 	["soon"] = {unicode = "1F51C"},
-	["ballot_box_with_check"] = {unicode = "2611-FE0F"},
+	["ballot_box_with_check"] = {unicode = "2611"},
 	["radio_button"] = {unicode = "1F518"},
 	["white_circle"] = {unicode = "26AA"},
 	["black_circle"] = {unicode = "26AB"},
@@ -1273,13 +1273,13 @@ ee.emojiSCs = {
 	["large_orange_diamond"] = {unicode = "1F536"},
 	["large_blue_diamond"] = {unicode = "1F537"},
 	["small_red_triangle"] = {unicode = "1F53A"},
-	["black_small_square"] = {unicode = "25AA-FE0F"},
-	["white_small_square"] = {unicode = "25AB-FE0F"},
+	["black_small_square"] = {unicode = "25AA"},
+	["white_small_square"] = {unicode = "25AB"},
 	["black_large_square"] = {unicode = "2B1B"},
 	["white_large_square"] = {unicode = "2B1C"},
 	["small_red_triangle_down"] = {unicode = "1F53B"},
-	["black_medium_square"] = {unicode = "25FC-FE0F"},
-	["white_medium_square"] = {unicode = "25FB-FE0F"},
+	["black_medium_square"] = {unicode = "25FC"},
+	["white_medium_square"] = {unicode = "25FB"},
 	["black_medium_small_square"] = {unicode = "25FE"},
 	["white_medium_small_square"] = {unicode = "25FD"},
 	["black_square_button"] = {unicode = "1F532"},
@@ -1294,10 +1294,10 @@ ee.emojiSCs = {
 	["no_bell"] = {unicode = "1F515"},
 	["black_joker"] = {unicode = "1F0CF"},
 	["mahjong"] = {unicode = "1F004"},
-	["spades"] = {unicode = "2660-FE0F"},
-	["clubs"] = {unicode = "2663-FE0F"},
-	["hearts"] = {unicode = "2665-FE0F"},
-	["diamonds"] = {unicode = "2666-FE0F"},
+	["spades"] = {unicode = "2660"},
+	["clubs"] = {unicode = "2663"},
+	["hearts"] = {unicode = "2665"},
+	["diamonds"] = {unicode = "2666"},
 	["flower_playing_cards"] = {unicode = "1F3B4"},
 	["thought_balloon"] = {unicode = "1F4AD"},
 	["right_anger_bubble"] = {unicode = "1F5EF"},
@@ -1327,258 +1327,260 @@ ee.emojiSCs = {
 	["clock1030"] = {unicode = "1F565"},
 	["clock1130"] = {unicode = "1F566"},
 	["clock1230"] = {unicode = "1F567"},
-	["afghanistan"] = {unicode = "1F1E6-1F1EB"},
-	["aland_islands"] = {unicode = "1F1E6-1F1FD"},
-	["albania"] = {unicode = "1F1E6-1F1F1"},
-	["algeria"] = {unicode = "1F1E9-1F1FF"},
-	["american_samoa"] = {unicode = "1F1E6-1F1F8"},
-	["andorra"] = {unicode = "1F1E6-1F1E9"},
-	["angola"] = {unicode = "1F1E6-1F1F4"},
-	["anguilla"] = {unicode = "1F1E6-1F1EE"},
-	["antarctica"] = {unicode = "1F1E6-1F1F6"},
-	["antigua_barbuda"] = {unicode = "1F1E6-1F1EC"},
-	["argentina"] = {unicode = "1F1E6-1F1F7"},
-	["armenia"] = {unicode = "1F1E6-1F1F2"},
-	["aruba"] = {unicode = "1F1E6-1F1FC"},
-	["australia"] = {unicode = "1F1E6-1F1FA"},
-	["austria"] = {unicode = "1F1E6-1F1F9"},
-	["azerbaijan"] = {unicode = "1F1E6-1F1FF"},
-	["bahamas"] = {unicode = "1F1E7-1F1F8"},
-	["bahrain"] = {unicode = "1F1E7-1F1ED"},
-	["bangladesh"] = {unicode = "1F1E7-1F1E9"},
-	["barbados"] = {unicode = "1F1E7-1F1E7"},
-	["belarus"] = {unicode = "1F1E7-1F1FE"},
-	["belgium"] = {unicode = "1F1E7-1F1EA"},
-	["belize"] = {unicode = "1F1E7-1F1FF"},
-	["benin"] = {unicode = "1F1E7-1F1EF"},
-	["bermuda"] = {unicode = "1F1E7-1F1F2"},
-	["bhutan"] = {unicode = "1F1E7-1F1F9"},
-	["bolivia"] = {unicode = "1F1E7-1F1F4"},
-	["caribbean_netherlands"] = {unicode = "1F1E7-1F1F6"},
-	["bosnia_herzegovina"] = {unicode = "1F1E7-1F1E6"},
-	["botswana"] = {unicode = "1F1E7-1F1FC"},
-	["brazil"] = {unicode = "1F1E7-1F1F7"},
-	["british_indian_ocean_territory"] = {unicode = "1F1EE-1F1F4"},
-	["british_virgin_islands"] = {unicode = "1F1FB-1F1EC"},
-	["brunei"] = {unicode = "1F1E7-1F1F3"},
-	["bulgaria"] = {unicode = "1F1E7-1F1EC"},
-	["burkina_faso"] = {unicode = "1F1E7-1F1EB"},
-	["burundi"] = {unicode = "1F1E7-1F1EE"},
-	["cape_verde"] = {unicode = "1F1E8-1F1FB"},
-	["cambodia"] = {unicode = "1F1F0-1F1ED"},
-	["cameroon"] = {unicode = "1F1E8-1F1F2"},
-	["canada"] = {unicode = "1F1E8-1F1E6"},
-	["canary_islands"] = {unicode = "1F1EE-1F1E8"},
-	["cayman_islands"] = {unicode = "1F1F0-1F1FE"},
-	["central_african_republic"] = {unicode = "1F1E8-1F1EB"},
-	["chad"] = {unicode = "1F1F9-1F1E9"},
-	["chile"] = {unicode = "1F1E8-1F1F1"},
-	["cn"] = {unicode = "1F1E8-1F1F3"},
-	["christmas_island"] = {unicode = "1F1E8-1F1FD"},
-	["cocos_islands"] = {unicode = "1F1E8-1F1E8"},
-	["colombia"] = {unicode = "1F1E8-1F1F4"},
-	["comoros"] = {unicode = "1F1F0-1F1F2"},
-	["congo_brazzaville"] = {unicode = "1F1E8-1F1EC"},
-	["congo_kinshasa"] = {unicode = "1F1E8-1F1E9"},
-	["cook_islands"] = {unicode = "1F1E8-1F1F0"},
-	["costa_rica"] = {unicode = "1F1E8-1F1F7"},
-	["croatia"] = {unicode = "1F1ED-1F1F7"},
-	["cuba"] = {unicode = "1F1E8-1F1FA"},
-	["curacao"] = {unicode = "1F1E8-1F1FC"},
-	["cyprus"] = {unicode = "1F1E8-1F1FE"},
-	["czech_republic"] = {unicode = "1F1E8-1F1FF"},
-	["denmark"] = {unicode = "1F1E9-1F1F0"},
-	["djibouti"] = {unicode = "1F1E9-1F1EF"},
-	["dominica"] = {unicode = "1F1E9-1F1F2"},
-	["dominican_republic"] = {unicode = "1F1E9-1F1F4"},
-	["ecuador"] = {unicode = "1F1EA-1F1E8"},
-	["egypt"] = {unicode = "1F1EA-1F1EC"},
-	["el_salvador"] = {unicode = "1F1F8-1F1FB"},
-	["equatorial_guinea"] = {unicode = "1F1EC-1F1F6"},
-	["eritrea"] = {unicode = "1F1EA-1F1F7"},
-	["estonia"] = {unicode = "1F1EA-1F1EA"},
-	["ethiopia"] = {unicode = "1F1EA-1F1F9"},
-	["eu"] = {unicode = "1F1EA-1F1FA"},
-	["falkland_islands"] = {unicode = "1F1EB-1F1F0"},
-	["faroe_islands"] = {unicode = "1F1EB-1F1F4"},
-	["fiji"] = {unicode = "1F1EB-1F1EF"},
-	["finland"] = {unicode = "1F1EB-1F1EE"},
-	["fr"] = {unicode = "1F1EB-1F1F7"},
-	["french_guiana"] = {unicode = "1F1EC-1F1EB"},
-	["french_polynesia"] = {unicode = "1F1F5-1F1EB"},
-	["french_southern_territories"] = {unicode = "1F1F9-1F1EB"},
-	["gabon"] = {unicode = "1F1EC-1F1E6"},
-	["gambia"] = {unicode = "1F1EC-1F1F2"},
-	["georgia"] = {unicode = "1F1EC-1F1EA"},
-	["de"] = {unicode = "1F1E9-1F1EA"},
-	["ghana"] = {unicode = "1F1EC-1F1ED"},
-	["gibraltar"] = {unicode = "1F1EC-1F1EE"},
-	["greece"] = {unicode = "1F1EC-1F1F7"},
-	["greenland"] = {unicode = "1F1EC-1F1F1"},
-	["grenada"] = {unicode = "1F1EC-1F1E9"},
-	["guadeloupe"] = {unicode = "1F1EC-1F1F5"},
-	["guam"] = {unicode = "1F1EC-1F1FA"},
-	["guatemala"] = {unicode = "1F1EC-1F1F9"},
-	["guernsey"] = {unicode = "1F1EC-1F1EC"},
-	["guinea"] = {unicode = "1F1EC-1F1F3"},
-	["guinea_bissau"] = {unicode = "1F1EC-1F1FC"},
-	["guyana"] = {unicode = "1F1EC-1F1FE"},
-	["haiti"] = {unicode = "1F1ED-1F1F9"},
-	["honduras"] = {unicode = "1F1ED-1F1F3"},
-	["hong_kong"] = {unicode = "1F1ED-1F1F0"},
-	["hungary"] = {unicode = "1F1ED-1F1FA"},
-	["iceland"] = {unicode = "1F1EE-1F1F8"},
-	["india"] = {unicode = "1F1EE-1F1F3"},
-	["indonesia"] = {unicode = "1F1EE-1F1E9"},
-	["iran"] = {unicode = "1F1EE-1F1F7"},
-	["iraq"] = {unicode = "1F1EE-1F1F6"},
-	["ireland"] = {unicode = "1F1EE-1F1EA"},
-	["isle_of_man"] = {unicode = "1F1EE-1F1F2"},
-	["israel"] = {unicode = "1F1EE-1F1F1"},
-	["it"] = {unicode = "1F1EE-1F1F9"},
-	["cote_divoire"] = {unicode = "1F1E8-1F1EE"},
-	["jamaica"] = {unicode = "1F1EF-1F1F2"},
-	["jp"] = {unicode = "1F1EF-1F1F5"},
-	["jersey"] = {unicode = "1F1EF-1F1EA"},
-	["jordan"] = {unicode = "1F1EF-1F1F4"},
-	["kazakhstan"] = {unicode = "1F1F0-1F1FF"},
-	["kenya"] = {unicode = "1F1F0-1F1EA"},
-	["kiribati"] = {unicode = "1F1F0-1F1EE"},
-	["kosovo"] = {unicode = "1F1FD-1F1F0"},
-	["kuwait"] = {unicode = "1F1F0-1F1FC"},
-	["kyrgyzstan"] = {unicode = "1F1F0-1F1EC"},
-	["laos"] = {unicode = "1F1F1-1F1E6"},
-	["latvia"] = {unicode = "1F1F1-1F1FB"},
-	["lebanon"] = {unicode = "1F1F1-1F1E7"},
-	["lesotho"] = {unicode = "1F1F1-1F1F8"},
-	["liberia"] = {unicode = "1F1F1-1F1F7"},
-	["libya"] = {unicode = "1F1F1-1F1FE"},
-	["liechtenstein"] = {unicode = "1F1F1-1F1EE"},
-	["lithuania"] = {unicode = "1F1F1-1F1F9"},
-	["luxembourg"] = {unicode = "1F1F1-1F1FA"},
-	["macau"] = {unicode = "1F1F2-1F1F4"},
-	["macedonia"] = {unicode = "1F1F2-1F1F0"},
-	["madagascar"] = {unicode = "1F1F2-1F1EC"},
-	["malawi"] = {unicode = "1F1F2-1F1FC"},
-	["malaysia"] = {unicode = "1F1F2-1F1FE"},
-	["maldives"] = {unicode = "1F1F2-1F1FB"},
-	["mali"] = {unicode = "1F1F2-1F1F1"},
-	["malta"] = {unicode = "1F1F2-1F1F9"},
-	["marshall_islands"] = {unicode = "1F1F2-1F1ED"},
-	["martinique"] = {unicode = "1F1F2-1F1F6"},
-	["mauritania"] = {unicode = "1F1F2-1F1F7"},
-	["mauritius"] = {unicode = "1F1F2-1F1FA"},
-	["mayotte"] = {unicode = "1F1FE-1F1F9"},
-	["mexico"] = {unicode = "1F1F2-1F1FD"},
-	["micronesia"] = {unicode = "1F1EB-1F1F2"},
-	["moldova"] = {unicode = "1F1F2-1F1E9"},
-	["monaco"] = {unicode = "1F1F2-1F1E8"},
-	["mongolia"] = {unicode = "1F1F2-1F1F3"},
-	["montenegro"] = {unicode = "1F1F2-1F1EA"},
-	["montserrat"] = {unicode = "1F1F2-1F1F8"},
-	["morocco"] = {unicode = "1F1F2-1F1E6"},
-	["mozambique"] = {unicode = "1F1F2-1F1FF"},
-	["myanmar"] = {unicode = "1F1F2-1F1F2"},
-	["namibia"] = {unicode = "1F1F3-1F1E6"},
-	["nauru"] = {unicode = "1F1F3-1F1F7"},
-	["nepal"] = {unicode = "1F1F3-1F1F5"},
-	["netherlands"] = {unicode = "1F1F3-1F1F1"},
-	["new_caledonia"] = {unicode = "1F1F3-1F1E8"},
-	["new_zealand"] = {unicode = "1F1F3-1F1FF"},
-	["nicaragua"] = {unicode = "1F1F3-1F1EE"},
-	["niger"] = {unicode = "1F1F3-1F1EA"},
-	["nigeria"] = {unicode = "1F1F3-1F1EC"},
-	["niue"] = {unicode = "1F1F3-1F1FA"},
-	["norfolk_island"] = {unicode = "1F1F3-1F1EB"},
-	["northern_mariana_islands"] = {unicode = "1F1F2-1F1F5"},
-	["north_korea"] = {unicode = "1F1F0-1F1F5"},
-	["norway"] = {unicode = "1F1F3-1F1F4"},
-	["oman"] = {unicode = "1F1F4-1F1F2"},
-	["pakistan"] = {unicode = "1F1F5-1F1F0"},
-	["palau"] = {unicode = "1F1F5-1F1FC"},
-	["palestinian_territories"] = {unicode = "1F1F5-1F1F8"},
-	["panama"] = {unicode = "1F1F5-1F1E6"},
-	["papua_new_guinea"] = {unicode = "1F1F5-1F1EC"},
-	["paraguay"] = {unicode = "1F1F5-1F1FE"},
-	["peru"] = {unicode = "1F1F5-1F1EA"},
-	["philippines"] = {unicode = "1F1F5-1F1ED"},
-	["pitcairn_islands"] = {unicode = "1F1F5-1F1F3"},
-	["poland"] = {unicode = "1F1F5-1F1F1"},
-	["portugal"] = {unicode = "1F1F5-1F1F9"},
-	["puerto_rico"] = {unicode = "1F1F5-1F1F7"},
-	["qatar"] = {unicode = "1F1F6-1F1E6"},
-	["reunion"] = {unicode = "1F1F7-1F1EA"},
-	["romania"] = {unicode = "1F1F7-1F1F4"},
-	["ru"] = {unicode = "1F1F7-1F1FA"},
-	["rwanda"] = {unicode = "1F1F7-1F1FC"},
-	["st_barthelemy"] = {unicode = "1F1E7-1F1F1"},
-	["st_helena"] = {unicode = "1F1F8-1F1ED"},
-	["st_kitts_nevis"] = {unicode = "1F1F0-1F1F3"},
-	["st_lucia"] = {unicode = "1F1F1-1F1E8"},
-	["st_pierre_miquelon"] = {unicode = "1F1F5-1F1F2"},
-	["st_vincent_grenadines"] = {unicode = "1F1FB-1F1E8"},
-	["samoa"] = {unicode = "1F1FC-1F1F8"},
-	["san_marino"] = {unicode = "1F1F8-1F1F2"},
-	["sao_tome_principe"] = {unicode = "1F1F8-1F1F9"},
-	["saudi_arabia"] = {unicode = "1F1F8-1F1E6"},
-	["senegal"] = {unicode = "1F1F8-1F1F3"},
-	["serbia"] = {unicode = "1F1F7-1F1F8"},
-	["seychelles"] = {unicode = "1F1F8-1F1E8"},
-	["sierra_leone"] = {unicode = "1F1F8-1F1F1"},
-	["singapore"] = {unicode = "1F1F8-1F1EC"},
-	["sint_maarten"] = {unicode = "1F1F8-1F1FD"},
-	["slovakia"] = {unicode = "1F1F8-1F1F0"},
-	["slovenia"] = {unicode = "1F1F8-1F1EE"},
-	["solomon_islands"] = {unicode = "1F1F8-1F1E7"},
-	["somalia"] = {unicode = "1F1F8-1F1F4"},
-	["south_africa"] = {unicode = "1F1FF-1F1E6"},
-	["south_georgia_south_sandwich_islands"] = {unicode = "1F1EC-1F1F8"},
-	["kr"] = {unicode = "1F1F0-1F1F7"},
-	["south_sudan"] = {unicode = "1F1F8-1F1F8"},
-	["es"] = {unicode = "1F1EA-1F1F8"},
-	["sri_lanka"] = {unicode = "1F1F1-1F1F0"},
-	["sudan"] = {unicode = "1F1F8-1F1E9"},
-	["suriname"] = {unicode = "1F1F8-1F1F7"},
-	["swaziland"] = {unicode = "1F1F8-1F1FF"},
-	["sweden"] = {unicode = "1F1F8-1F1EA"},
-	["switzerland"] = {unicode = "1F1E8-1F1ED"},
-	["syria"] = {unicode = "1F1F8-1F1FE"},
-	["taiwan"] = {unicode = "1F1F9-1F1FC"},
-	["tajikistan"] = {unicode = "1F1F9-1F1EF"},
-	["tanzania"] = {unicode = "1F1F9-1F1FF"},
-	["thailand"] = {unicode = "1F1F9-1F1ED"},
-	["timor_leste"] = {unicode = "1F1F9-1F1F1"},
-	["togo"] = {unicode = "1F1F9-1F1EC"},
-	["tokelau"] = {unicode = "1F1F9-1F1F0"},
-	["tonga"] = {unicode = "1F1F9-1F1F4"},
-	["trinidad_tobago"] = {unicode = "1F1F9-1F1F9"},
-	["tunisia"] = {unicode = "1F1F9-1F1F3"},
-	["tr"] = {unicode = "1F1F9-1F1F7"},
-	["turkmenistan"] = {unicode = "1F1F9-1F1F2"},
-	["turks_caicos_islands"] = {unicode = "1F1F9-1F1E8"},
-	["tuvalu"] = {unicode = "1F1F9-1F1FB"},
-	["uganda"] = {unicode = "1F1FA-1F1EC"},
-	["ukraine"] = {unicode = "1F1FA-1F1E6"},
-	["united_arab_emirates"] = {unicode = "1F1E6-1F1EA"},
-	["uk"] = {unicode = "1F1EC-1F1E7"},
-	["england"] = {unicode = "1F3F4-E0067-E0062-E0065-E006E-E0067-E007F"},
-	["scotland"] = {unicode = "1F3F4-E0067-E0062-E0073-E0063-E0074-E007F"},
-	["wales"] = {unicode = "1F3F4-E0067-E0062-E0077-E006C-E0073-E007F"},
-	["us"] = {unicode = "1F1FA-1F1F8"},
-	["us_virgin_islands"] = {unicode = "1F1FB-1F1EE"},
-	["uruguay"] = {unicode = "1F1FA-1F1FE"},
-	["uzbekistan"] = {unicode = "1F1FA-1F1FF"},
-	["vanuatu"] = {unicode = "1F1FB-1F1FA"},
-	["vatican_city"] = {unicode = "1F1FB-1F1E6"},
-	["venezuela"] = {unicode = "1F1FB-1F1EA"},
-	["vietnam"] = {unicode = "1F1FB-1F1F3"},
-	["wallis_futuna"] = {unicode = "1F1FC-1F1EB"},
-	["western_sahara"] = {unicode = "1F1EA-1F1ED"},
-	["yemen"] = {unicode = "1F1FE-1F1EA"},
-	["zambia"] = {unicode = "1F1FF-1F1F2"},
-	["zimbabwe"] = {unicode = "1F1FF-1F1FC"},
-	["united_nations"] = {unicode = "1F1FA-1F1F3"},
-	["pirate_flag"] = {unicode = "1F3F4-200D-2620-FE0F"},
+	["pirate_flag"] = {unicode = "1F3F4-200D-2620"},
+	
+	-- Country flags
+	["flag_af"] = {unicode = "1F1E6-1F1EB"},						-- Afghanistan
+	["flag_ax"] = {unicode = "1F1E6-1F1FD"},						-- Aland Islands
+	["flag_al"] = {unicode = "1F1E6-1F1F1"},						-- Albania
+	["flag_dz"] = {unicode = "1F1E9-1F1FF"},						-- Algeria
+	["flag_as"] = {unicode = "1F1E6-1F1F8"},						-- American Samoa
+	["flag_ad"] = {unicode = "1F1E6-1F1E9"},						-- Andorra
+	["flag_ao"] = {unicode = "1F1E6-1F1F4"},						-- Angola
+	["flag_ai"] = {unicode = "1F1E6-1F1EE"},						-- Anguilla
+	["flag_aq"] = {unicode = "1F1E6-1F1F6"},						-- Antarctica
+	["flag_ag"] = {unicode = "1F1E6-1F1EC"},						-- Antigua and Barbuda
+	["flag_ar"] = {unicode = "1F1E6-1F1F7"},						-- Argentina
+	["flag_am"] = {unicode = "1F1E6-1F1F2"},						-- Armenia
+	["flag_aw"] = {unicode = "1F1E6-1F1FC"},						-- Aruba
+	["flag_au"] = {unicode = "1F1E6-1F1FA"},						-- Australia
+	["flag_at"] = {unicode = "1F1E6-1F1F9"},						-- Austria
+	["flag_az"] = {unicode = "1F1E6-1F1FF"},						-- Azerbaijan
+	["flag_bs"] = {unicode = "1F1E7-1F1F8"},						-- Bahamas
+	["flag_bh"] = {unicode = "1F1E7-1F1ED"},						-- Bahrain
+	["flag_bd"] = {unicode = "1F1E7-1F1E9"},						-- Bangladesh
+	["flag_bb"] = {unicode = "1F1E7-1F1E7"},						-- Barbados
+	["flag_by"] = {unicode = "1F1E7-1F1FE"},						-- Belarus
+	["flag_be"] = {unicode = "1F1E7-1F1EA"},						-- Belgium
+	["flag_bz"] = {unicode = "1F1E7-1F1FF"},						-- Belize
+	["flag_bj"] = {unicode = "1F1E7-1F1EF"},						-- Benin
+	["flag_bm"] = {unicode = "1F1E7-1F1F2"},						-- Bermuda
+	["flag_bt"] = {unicode = "1F1E7-1F1F9"},						-- Bhutan
+	["flag_bo"] = {unicode = "1F1E7-1F1F4"},						-- Bolivia
+	["flag_bq"] = {unicode = "1F1E7-1F1F6"},						-- Caribbean Netherlands
+	["flag_ba"] = {unicode = "1F1E7-1F1E6"},						-- Bosnia Herzegovina
+	["flag_bw"] = {unicode = "1F1E7-1F1FC"},						-- Botswana
+	["flag_br"] = {unicode = "1F1E7-1F1F7"},						-- Brazil
+	["flag_io"] = {unicode = "1F1EE-1F1F4"},						-- British Indian Ocean Territory
+	["flag_vg"] = {unicode = "1F1FB-1F1EC"},						-- British Virgin Islands
+	["flag_bn"] = {unicode = "1F1E7-1F1F3"},						-- Brunei
+	["flag_bg"] = {unicode = "1F1E7-1F1EC"},						-- Bulgaria
+	["flag_bf"] = {unicode = "1F1E7-1F1EB"},						-- Burkina Faso
+	["flag_bi"] = {unicode = "1F1E7-1F1EE"},						-- Burundi
+	["flag_cv"] = {unicode = "1F1E8-1F1FB"},						-- Cape Verde
+	["flag_kh"] = {unicode = "1F1F0-1F1ED"},						-- Cambodia
+	["flag_cm"] = {unicode = "1F1E8-1F1F2"},						-- Cameroon
+	["flag_ca"] = {unicode = "1F1E8-1F1E6"},						-- Canada
+	["flag_ic"] = {unicode = "1F1EE-1F1E8"},						-- Canary Islands
+	["flag_ky"] = {unicode = "1F1F0-1F1FE"},						-- Cayman Islands
+	["flag_cf"] = {unicode = "1F1E8-1F1EB"},						-- Central African Republic
+	["flag_td"] = {unicode = "1F1F9-1F1E9"},						-- Chad
+	["flag_cl"] = {unicode = "1F1E8-1F1F1"},						-- Chile
+	["flag_cn"] = {unicode = "1F1E8-1F1F3"},						-- China
+	["flag_cx"] = {unicode = "1F1E8-1F1FD"},						-- Christmas Island
+	["flag_cc"] = {unicode = "1F1E8-1F1E8"},						-- Cocos Islands
+	["flag_co"] = {unicode = "1F1E8-1F1F4"},						-- Colombia
+	["flag_km"] = {unicode = "1F1F0-1F1F2"},						-- Comoros
+	["flag_cg"] = {unicode = "1F1E8-1F1EC"},						-- Congo Brazzaville
+	["flag_cd"] = {unicode = "1F1E8-1F1E9"},						-- Congo Kinshasa
+	["flag_ck"] = {unicode = "1F1E8-1F1F0"},						-- Cook Islands
+	["flag_cr"] = {unicode = "1F1E8-1F1F7"},						-- Costa Rica
+	["flag_hr"] = {unicode = "1F1ED-1F1F7"},						-- Croatia
+	["flag_cu"] = {unicode = "1F1E8-1F1FA"},						-- Cuba
+	["flag_cw"] = {unicode = "1F1E8-1F1FC"},						-- Curacao
+	["flag_cy"] = {unicode = "1F1E8-1F1FE"},						-- Cyprus
+	["flag_cz"] = {unicode = "1F1E8-1F1FF"},						-- Czech Republic
+	["flag_dk"] = {unicode = "1F1E9-1F1F0"},						-- Denmark
+	["flag_dj"] = {unicode = "1F1E9-1F1EF"},						-- Djibouti
+	["flag_dm"] = {unicode = "1F1E9-1F1F2"},						-- Dominica
+	["flag_do"] = {unicode = "1F1E9-1F1F4"},						-- Dominican Republic
+	["flag_ec"] = {unicode = "1F1EA-1F1E8"},						-- Ecuador
+	["flag_eg"] = {unicode = "1F1EA-1F1EC"},						-- Egypt
+	["flag_sv"] = {unicode = "1F1F8-1F1FB"},						-- El Salvador
+	["flag_gq"] = {unicode = "1F1EC-1F1F6"},						-- Equatorial Guinea
+	["flag_er"] = {unicode = "1F1EA-1F1F7"},						-- Eritrea
+	["flag_ee"] = {unicode = "1F1EA-1F1EA"},						-- Estonia
+	["flag_et"] = {unicode = "1F1EA-1F1F9"},						-- Ethiopia
+	["flag_eu"] = {unicode = "1F1EA-1F1FA"},						-- European Union
+	["flag_fk"] = {unicode = "1F1EB-1F1F0"},						-- Falkland Islands
+	["flag_fo"] = {unicode = "1F1EB-1F1F4"},						-- Faroe Islands
+	["flag_fj"] = {unicode = "1F1EB-1F1EF"},						-- Fiji
+	["flag_fi"] = {unicode = "1F1EB-1F1EE"},						-- Finland
+	["flag_fr"] = {unicode = "1F1EB-1F1F7"},						-- France
+	["flag_gf"] = {unicode = "1F1EC-1F1EB"},						-- French Guiana
+	["flag_pf"] = {unicode = "1F1F5-1F1EB"},						-- French Polynesia
+	["flag_tf"] = {unicode = "1F1F9-1F1EB"},						-- French Southern Territories
+	["flag_ga"] = {unicode = "1F1EC-1F1E6"},						-- Gabon
+	["flag_gm"] = {unicode = "1F1EC-1F1F2"},						-- Gambia
+	["flag_ge"] = {unicode = "1F1EC-1F1EA"},						-- Georgia
+	["flag_de"] = {unicode = "1F1E9-1F1EA"},						-- Germany
+	["flag_gh"] = {unicode = "1F1EC-1F1ED"},						-- Ghana
+	["flag_gi"] = {unicode = "1F1EC-1F1EE"},						-- Gibraltar
+	["flag_gr"] = {unicode = "1F1EC-1F1F7"},						-- Greece
+	["flag_gl"] = {unicode = "1F1EC-1F1F1"},						-- Greenland
+	["flag_gd"] = {unicode = "1F1EC-1F1E9"},						-- Grenada
+	["flag_gp"] = {unicode = "1F1EC-1F1F5"},						-- Guadeloupe
+	["flag_gu"] = {unicode = "1F1EC-1F1FA"},						-- Guam
+	["flag_gt"] = {unicode = "1F1EC-1F1F9"},						-- Guatemala
+	["flag_gg"] = {unicode = "1F1EC-1F1EC"},						-- Guernsey
+	["flag_gn"] = {unicode = "1F1EC-1F1F3"},						-- Guinea
+	["flag_gw"] = {unicode = "1F1EC-1F1FC"},						-- Guinea Bissau
+	["flag_gy"] = {unicode = "1F1EC-1F1FE"},						-- Guyana
+	["flag_ht"] = {unicode = "1F1ED-1F1F9"},						-- Haiti
+	["flag_hn"] = {unicode = "1F1ED-1F1F3"},						-- Honduras
+	["flag_hk"] = {unicode = "1F1ED-1F1F0"},						-- Hong Kong
+	["flag_hu"] = {unicode = "1F1ED-1F1FA"},						-- Hungary
+	["flag_is"] = {unicode = "1F1EE-1F1F8"},						-- Iceland
+	["flag_in"] = {unicode = "1F1EE-1F1F3"},						-- India
+	["flag_id"] = {unicode = "1F1EE-1F1E9"},						-- Indonesia
+	["flag_ir"] = {unicode = "1F1EE-1F1F7"},						-- Iran
+	["flag_iq"] = {unicode = "1F1EE-1F1F6"},						-- Iraq
+	["flag_ie"] = {unicode = "1F1EE-1F1EA"},						-- Ireland
+	["flag_im"] = {unicode = "1F1EE-1F1F2"},						-- Isle of Man
+	["flag_il"] = {unicode = "1F1EE-1F1F1"},						-- Israel
+	["flag_it"] = {unicode = "1F1EE-1F1F9"},						-- Italy
+	["flag_ci"] = {unicode = "1F1E8-1F1EE"},						-- Cote d'Ivoire
+	["flag_jm"] = {unicode = "1F1EF-1F1F2"},						-- Jamaica
+	["flag_jp"] = {unicode = "1F1EF-1F1F5"},						-- Japan
+	["flag_je"] = {unicode = "1F1EF-1F1EA"},						-- Jersey
+	["flag_jo"] = {unicode = "1F1EF-1F1F4"},						-- Jordan
+	["flag_kz"] = {unicode = "1F1F0-1F1FF"},						-- Kazakhstan
+	["flag_ke"] = {unicode = "1F1F0-1F1EA"},						-- Kenya
+	["flag_ki"] = {unicode = "1F1F0-1F1EE"},						-- Kiribati
+	["flag_kx"] = {unicode = "1F1FD-1F1F0"},						-- Kosovo
+	["flag_kw"] = {unicode = "1F1F0-1F1FC"},						-- Kuwait
+	["flag_kg"] = {unicode = "1F1F0-1F1EC"},						-- Kyrgyzstan
+	["flag_la"] = {unicode = "1F1F1-1F1E6"},						-- Laos
+	["flag_lv"] = {unicode = "1F1F1-1F1FB"},						-- Latvia
+	["flag_lb"] = {unicode = "1F1F1-1F1E7"},						-- Lebanon
+	["flag_ls"] = {unicode = "1F1F1-1F1F8"},						-- Lesotho
+	["flag_lr"] = {unicode = "1F1F1-1F1F7"},						-- Liberia
+	["flag_ly"] = {unicode = "1F1F1-1F1FE"},						-- Libya
+	["flag_li"] = {unicode = "1F1F1-1F1EE"},						-- Liechtenstein
+	["flag_lt"] = {unicode = "1F1F1-1F1F9"},						-- Lithuania
+	["flag_lu"] = {unicode = "1F1F1-1F1FA"},						-- Luxembourg
+	["flag_mo"] = {unicode = "1F1F2-1F1F4"},						-- Macau
+	["flag_mk"] = {unicode = "1F1F2-1F1F0"},						-- Macedonia
+	["flag_mg"] = {unicode = "1F1F2-1F1EC"},						-- Madagascar
+	["flag_mw"] = {unicode = "1F1F2-1F1FC"},						-- Malawi
+	["flag_my"] = {unicode = "1F1F2-1F1FE"},						-- Malaysia
+	["flag_mv"] = {unicode = "1F1F2-1F1FB"},						-- Maldives
+	["flag_ml"] = {unicode = "1F1F2-1F1F1"},						-- Mali
+	["flag_mt"] = {unicode = "1F1F2-1F1F9"},						-- Malta
+	["flag_mh"] = {unicode = "1F1F2-1F1ED"},						-- Marshall Islands
+	["flag_mq"] = {unicode = "1F1F2-1F1F6"},						-- Martinique
+	["flag_mr"] = {unicode = "1F1F2-1F1F7"},						-- Mauritania
+	["flag_mu"] = {unicode = "1F1F2-1F1FA"},						-- Mauritius
+	["flag_yt"] = {unicode = "1F1FE-1F1F9"},						-- Mayottte
+	["flag_mx"] = {unicode = "1F1F2-1F1FD"},						-- Mexico
+	["flag_fm"] = {unicode = "1F1EB-1F1F2"},						-- Micronesia
+	["flag_md"] = {unicode = "1F1F2-1F1E9"},						-- Moldova
+	["flag_mc"] = {unicode = "1F1F2-1F1E8"},						-- Monaco
+	["flag_mn"] = {unicode = "1F1F2-1F1F3"},						-- Mongolia
+	["flag_me"] = {unicode = "1F1F2-1F1EA"},						-- Montenegro
+	["flag_ms"] = {unicode = "1F1F2-1F1F8"},						-- Montserrat
+	["flag_ma"] = {unicode = "1F1F2-1F1E6"},						-- Morocco
+	["flag_mz"] = {unicode = "1F1F2-1F1FF"},						-- Mozambique
+	["flag_mm"] = {unicode = "1F1F2-1F1F2"},						-- Myanmar
+	["flag_na"] = {unicode = "1F1F3-1F1E6"},						-- Namibia
+	["flag_nr"] = {unicode = "1F1F3-1F1F7"},						-- Nauru
+	["flag_np"] = {unicode = "1F1F3-1F1F5"},						-- Nepal
+	["flag_nl"] = {unicode = "1F1F3-1F1F1"},						-- Netherlands
+	["flag_nc"] = {unicode = "1F1F3-1F1E8"},						-- New Caledonia
+	["flag_nz"] = {unicode = "1F1F3-1F1FF"},						-- New Zealand
+	["flag_ni"] = {unicode = "1F1F3-1F1EE"},						-- Nicaragua
+	["flag_ne"] = {unicode = "1F1F3-1F1EA"},						-- Niger
+	["flag_ng"] = {unicode = "1F1F3-1F1EC"},						-- Nigeria
+	["flag_nu"] = {unicode = "1F1F3-1F1FA"},						-- Niue
+	["flag_nf"] = {unicode = "1F1F3-1F1EB"},						-- Norfolk Island
+	["flag_mp"] = {unicode = "1F1F2-1F1F5"},						-- Northern Mariana Islands
+	["flag_kp"] = {unicode = "1F1F0-1F1F5"},						-- North Korea
+	["flag_no"] = {unicode = "1F1F3-1F1F4"},						-- Norway
+	["flag_om"] = {unicode = "1F1F4-1F1F2"},						-- Oman
+	["flag_pk"] = {unicode = "1F1F5-1F1F0"},						-- Pakistan
+	["flag_pw"] = {unicode = "1F1F5-1F1FC"},						-- Palau
+	["flag_ps"] = {unicode = "1F1F5-1F1F8"},						-- Palestinian Territories
+	["flag_pa"] = {unicode = "1F1F5-1F1E6"},						-- Panama
+	["flag_pg"] = {unicode = "1F1F5-1F1EC"},						-- Papua New Guinea
+	["flag_py"] = {unicode = "1F1F5-1F1FE"},						-- Paraguay
+	["flag_pe"] = {unicode = "1F1F5-1F1EA"},						-- Peru
+	["flag_ph"] = {unicode = "1F1F5-1F1ED"},						-- Philippines
+	["flag_pn"] = {unicode = "1F1F5-1F1F3"},						-- Pitcairn Islands
+	["flag_pl"] = {unicode = "1F1F5-1F1F1"},						-- Poland
+	["flag_pt"] = {unicode = "1F1F5-1F1F9"},						-- Portugal
+	["flag_pr"] = {unicode = "1F1F5-1F1F7"},						-- Puerto Rico
+	["flag_qa"] = {unicode = "1F1F6-1F1E6"},						-- Qatar
+	["flag_re"] = {unicode = "1F1F7-1F1EA"},						-- Reunion
+	["flag_ro"] = {unicode = "1F1F7-1F1F4"},						-- Romania
+	["flag_ru"] = {unicode = "1F1F7-1F1FA"},						-- Russia
+	["flag_rw"] = {unicode = "1F1F7-1F1FC"},						-- Rwanda
+	["flag_bl"] = {unicode = "1F1E7-1F1F1"},						-- St Barthelemy
+	["flag_sh"] = {unicode = "1F1F8-1F1ED"},						-- St Helena
+	["flag_kn"] = {unicode = "1F1F0-1F1F3"},						-- St Kitts and Nevis
+	["flag_lc"] = {unicode = "1F1F1-1F1E8"},						-- St Lucia
+	["flag_pm"] = {unicode = "1F1F5-1F1F2"},						-- St Pierre and Miquelon
+	["flag_vc"] = {unicode = "1F1FB-1F1E8"},						-- St Vicent and the Grenadines
+	["flag_ws"] = {unicode = "1F1FC-1F1F8"},						-- Samoa
+	["flag_sm"] = {unicode = "1F1F8-1F1F2"},						-- San Marino
+	["flag_st"] = {unicode = "1F1F8-1F1F9"},						-- Sao Tome e Principe
+	["flag_sa"] = {unicode = "1F1F8-1F1E6"},						-- Saudi Arabia
+	["flag_sn"] = {unicode = "1F1F8-1F1F3"},						-- Senegal
+	["flag_rs"] = {unicode = "1F1F7-1F1F8"},						-- Serbia
+	["flag_sc"] = {unicode = "1F1F8-1F1E8"},						-- Seychelles
+	["flag_sl"] = {unicode = "1F1F8-1F1F1"},						-- Sierra Leone
+	["flag_sg"] = {unicode = "1F1F8-1F1EC"},						-- Singapore
+	["flag_sx"] = {unicode = "1F1F8-1F1FD"},						-- Sint Maarten
+	["flag_sk"] = {unicode = "1F1F8-1F1F0"},						-- Slovakia
+	["flag_si"] = {unicode = "1F1F8-1F1EE"},						-- Slovenia
+	["flag_sb"] = {unicode = "1F1F8-1F1E7"},						-- Solomon Islands
+	["flag_so"] = {unicode = "1F1F8-1F1F4"},						-- Somalia
+	["flag_za"] = {unicode = "1F1FF-1F1E6"},						-- South Africa
+	["flag_gs"] = {unicode = "1F1EC-1F1F8"},						-- South Georgia South Sandwich Islands
+	["flag_kr"] = {unicode = "1F1F0-1F1F7"},						-- Korea
+	["flag_ss"] = {unicode = "1F1F8-1F1F8"},						-- South Sudan
+	["flag_es"] = {unicode = "1F1EA-1F1F8"},						-- Spain
+	["flag_lk"] = {unicode = "1F1F1-1F1F0"},						-- Sri Lanka
+	["flag_sd"] = {unicode = "1F1F8-1F1E9"},						-- Sudan
+	["flag_sr"] = {unicode = "1F1F8-1F1F7"},						-- Suriname
+	["flag_sz"] = {unicode = "1F1F8-1F1FF"},						-- Swaziland
+	["flag_se"] = {unicode = "1F1F8-1F1EA"},						-- Sweden
+	["flag_ch"] = {unicode = "1F1E8-1F1ED"},						-- Switzerland
+	["flag_sy"] = {unicode = "1F1F8-1F1FE"},						-- Syria
+	["flag_tw"] = {unicode = "1F1F9-1F1FC"},						-- Taiwan
+	["flag_tj"] = {unicode = "1F1F9-1F1EF"},						-- Tajikistan
+	["flag_tz"] = {unicode = "1F1F9-1F1FF"},						-- Tanzania
+	["flag_th"] = {unicode = "1F1F9-1F1ED"},						-- Thailand
+	["flag_tl"] = {unicode = "1F1F9-1F1F1"},						-- Timor Leste
+	["flag_tg"] = {unicode = "1F1F9-1F1EC"},						-- Togo
+	["flag_tk"] = {unicode = "1F1F9-1F1F0"},						-- Tokelau
+	["flag_to"] = {unicode = "1F1F9-1F1F4"},						-- Tonga
+	["flag_tt"] = {unicode = "1F1F9-1F1F9"},						-- Trinidad and Tobago
+	["flag_tn"] = {unicode = "1F1F9-1F1F3"},						-- Tunisia
+	["flag_tr"] = {unicode = "1F1F9-1F1F7"},						-- Turkey
+	["flag_tm"] = {unicode = "1F1F9-1F1F2"},						-- Turkmenistan
+	["flag_tc"] = {unicode = "1F1F9-1F1E8"},						-- Turks and Caicos Islands
+	["flag_tv"] = {unicode = "1F1F9-1F1FB"},						-- Tuvalu
+	["flag_ug"] = {unicode = "1F1FA-1F1EC"},						-- Uganda
+	["flag_ua"] = {unicode = "1F1FA-1F1E6"},						-- Ukraine
+	["flag_ae"] = {unicode = "1F1E6-1F1EA"},						-- United Arab Emirates
+	["flag_uk"] = {unicode = "1F1EC-1F1E7"},						-- United Kingdom
+	--["england"] = {unicode = "1F3F4-E0067-E0062-E0065-E006E-E0067-E007F"},						-- England (not supported)
+	--["scotland"] = {unicode = "1F3F4-E0067-E0062-E0073-E0063-E0074-E007F"},						-- Scotland (not supported)
+	--["wales"] = {unicode = "1F3F4-E0067-E0062-E0077-E006C-E0073-E007F"},						-- Wales (not supported)
+	["flag_us"] = {unicode = "1F1FA-1F1F8"},						-- United States
+	["flag_vi"] = {unicode = "1F1FB-1F1EE"},						-- US Virgin Islands
+	["flag_uy"] = {unicode = "1F1FA-1F1FE"},						-- Uruguay
+	["flag_uz"] = {unicode = "1F1FA-1F1FF"},						-- Uzbekistan
+	["flag_vu"] = {unicode = "1F1FB-1F1FA"},						-- Vanuatu
+	["flag_va"] = {unicode = "1F1FB-1F1E6"},						-- Vatican City
+	["flag_ve"] = {unicode = "1F1FB-1F1EA"},						-- Venezuela
+	["flag_vn"] = {unicode = "1F1FB-1F1F3"},						-- Vietnam
+	["flag_wf"] = {unicode = "1F1FC-1F1EB"},						-- Wallis and Futuna
+	["flag_eh"] = {unicode = "1F1EA-1F1ED"},						-- Western Sahara
+	["flag_ye"] = {unicode = "1F1FE-1F1EA"},						-- Yemen
+	["flag_zm"] = {unicode = "1F1FF-1F1F2"},						-- Zambia
+	["flag_zw"] = {unicode = "1F1FF-1F1FC"},						-- Zimbabwe
+	["flag_un"] = {unicode = "1F1FA-1F1F3"},						-- United Nations
 }
 
 ZO_ShallowTableCopy(customShortcodes, ee.emojiSCs)
