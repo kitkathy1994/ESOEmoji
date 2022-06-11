@@ -1,0 +1,15 @@
+<GuiXml>
+  <Controls>
+    <TopLevelControl name="displayText">
+      <Dimensions x="500" y="25" />
+      <Anchor point="BOTTOM" relativeTo="GuiRoot" relativePoint="CENTER" offsetY="-20" />
+ 
+      <Controls>
+        <EditBox name="$(parent)Box" width="500" height="25" font="ZoFontEditChat" inheritAlpha="true" color="FF0000"
+            wrapMode="TRUNCATE" verticalAlignment="TOP" horizontalAlignment="CENTER" text="Fighting!">
+          <Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" />
+        </EditBox>
+      </Controls>
+    </TopLevelControl>
+  </Controls>
+</GuiXml>

@@ -6,10 +6,14 @@ local ee = ESOEmoji
 ee.version = "v0.4.0-Alpha"
 ee.name = "ESOEmoji"
 ee.previousText = nil
+ee.previousColour = nil
+ee.emojiSize = 28
 ee.emojiPath = "ESOEmoji/icons/openmoji-72x72-colour-dds/"
 ee.emojiTESEnabled = true
 ee.emojiStandardEnabled = true
 ee.emojiAutoEnabled = true
+ee.textBox = nil
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	ON ADD-ON LOADED	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -21,8 +25,61 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	UTILITY FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function ee.GetTextureLinkIcon(icon, location, size, colour)
+	local path = ""
+	if location == 0 then -- Base game
+		path = icon
+	elseif location == 1 then -- Immersive custom icons
+		path = "ESOEmoji/icons/Immersive-dds/" .. icon
+	end
+	
+	local textureLink = "|t" .. tostring(ee.emojiSize) .. ":" .. tostring(ee.emojiSize) .. ":" .. path
+	if size ~= nil then
+		textureLink = "|t" .. tostring(size) .. ":" .. tostring(size) .. ":" .. path
+	end
+	if colour == nil then
+		textureLink = textureLink .. "|t"
+	else
+		textureLink = "|c" .. colour .. textureLink .. ":inheritcolor|t|r"
+	end
+	
+	return textureLink
+end
+
 function ee.DisplayVersion()
 	d("ESO Emoji version: " .. ee.version)
+end
+
+function ee.test(extra)
+	--local textEntry = KEYBOARD_CHAT_SYSTEM:GetControl()
+	--local channelLabel = textEntry:GetNamedChild("Label")
+	--ee.previousColour = channelLabel.GetColour()
+	--d(ee.previousColour)
+	
+--	local links = {}
+--	extra = tostring(extra)
+--	local text = {}
+--	local noLinkText = ""
+--	local link = ""
+--	local linkend = ""
+--	for link in string.gmatch(extra, "[%|][hH][%a%d%:]+[%|][hH][%|][hH]") do
+--		links[#links+1] = link
+--	end
+--	noLinkText = extra:gsub("[%|][hH][%a%d%:]+[%|][hH][%|][hH]", "")
+--	d(noLinkText)
+--	d(links)
+	
+--	local links = {}
+--	local frag = string.match(extra, "[%|][hH][%a%d%:]+[%|][hH][%|][hH]")
+--	d(frag)
+--	local i = 1
+--	repeat
+--		local s, e = string.find(extra, "[%|][hH][%a%d%:]+[%|][hH][%|][hH]", i)
+--		links[#links+1] = {sval = s, eval = e}
+--		i = tonumber(e)
+--	until sval == nil or eval == nil
+--	d(links)
+	
 end
 
 function ee.Pop(num)
@@ -36,18 +93,18 @@ function ee.Pop(num)
 	}
 	local AD = {
 		["colour"] = "FFD700", -- gold colour
-		["icon"] = "|t28:28:esoui/art/campaign/overview_allianceicon_aldmeri.dds|t",
-		["text"] = "",
+		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_aldmeri.dds", 0),--ee.emojiSCs["ad"].func,
+		["pop"] = "",
 	}
 	local EP = {
 		["colour"] = "FF2400", -- red colour
-		["icon"] = "|t28:28:esoui/art/campaign/overview_allianceicon_ebonheart.dds|t",
-		["text"] = "",
+		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_ebonheart.dds", 0),--ee.emojiSCs["ep"].func,
+		["pop"] = "",
 	}
 	local DC = {
 		["colour"] = "0096FF", -- blue colour
-		["icon"] = "|t28:28:esoui/art/campaign/overview_allianceicon_daggefall.dds|t",
-		["text"] = "",
+		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_daggerfall.dds", 0),--ee.emojiSCs["dc"].func,
+		["pop"] = "",
 	}
 	
 	QueryCampaignSelectionData()
@@ -56,16 +113,26 @@ function ee.Pop(num)
 			campaign = i
 		end
 	end
-	AD.text = "|c" .. AD.colour .. "|t28:28:" .. pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_ALDMERI_DOMINION)] .. ":inheritcolor|t|r"
-	EP.text = "|c" .. EP.colour .. "|t28:28:" .. pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_EBONHEART_PACT)] .. ":inheritcolor|t|r"
-	DC.text = "|c" .. DC.colour .. "|t28:28:" .. pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_DAGGERFALL_COVENANT)] .. ":inheritcolor|t|r"
 	
-	popDisplay = AD.icon .. AD.text .. EP.icon .. EP.text .. DC.icon .. DC.text
+	local temp = pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_ALDMERI_DOMINION)]
+	AD.pop = ee.GetTextureLinkIcon(temp, 1, nil, AD.colour)
+	temp = pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_EBONHEART_PACT)]
+	EP.pop = ee.GetTextureLinkIcon(temp, 1, nil, EP.colour)
+	temp = pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_DAGGERFALL_COVENANT)]
+	DC.pop = ee.GetTextureLinkIcon(temp, 1, nil, DC.colour)
+	
+	popDisplay = AD.icon .. AD.pop .. EP.icon .. EP.pop .. DC.icon .. DC.pop
 	return popDisplay
-end -- |cFF2400test|r
+end -- |cFFD700|t150%:150%:esoui/art/campaign/campaignbrowser_fullpop.dds:inheritcolor|t|r
 -- |cFFD700|t28:28:esoui/art/campaign/overview_allianceicon_aldmeri.dds:inheritcolor|t|r
 -- |c8a0303|t28:28:esoui/art/campaign/overview_allianceicon_ebonheart.dds:inheritcolor|t|r
 -- |c000080|t28:28:esoui/art/campaign/overview_allianceicon_daggefall.dds:inheritcolor|t|r
+
+-- |t100%:300%:ESOEmoji/icons/Immersive-dds/magdk.dds|t
+
+-- |t28:28:esoui/art/ava/ava_keepstatus_icon_food_aldmeri.dds|t
+
+-- |t20:20:esoui/art/campaign/gamepad/gp_overview_allianceicon_aldmeri.dds|t
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function CheckByte(myByte) -- TODO: I can prob optimise runtime of this (I was sleep deprived when I wrote this and I forgot how)
@@ -296,9 +363,9 @@ function ee:Edit(rawMessage)
 	for shortcode in string.gmatch(editedMessage, "[%:]([^%:%s]+)[%:]") do
 		if ee.emojiSCs[shortcode] then
 			if ee.emojiSCs[shortcode].unicode then
-				textureLink = "|t28:28:" .. ee.emojiPath .. ee.emojiMap[ee.emojiSCs[shortcode].unicode].texture .. "|t"
+				textureLink = "|t" .. tostring(ee.emojiSize) .. ":" .. tostring(ee.emojiSize) .. ":" .. ee.emojiPath .. ee.emojiMap[ee.emojiSCs[shortcode].unicode].texture .. "|t"
 				editedMessage,_ = editedMessage:gsub("[%:]" .. shortcode .. "[%:]", textureLink)
-			elseif ee.emojiSCs[shortcode].func then -- Special shortcode, therefore "unicode" is actually a function returning a string
+			elseif ee.emojiSCs[shortcode].func then -- Special shortcode, therefore it actually has a function returning a string
 				editedMessage,_ = editedMessage:gsub("[%:]" .. shortcode .. "[%:]", ee.emojiSCs[shortcode].func)
 			end
 		end
@@ -369,7 +436,7 @@ function ee:Edit(rawMessage)
 		for i = 1, #eFoundZWJ do
 			local noFE0F,_ = eFoundZWJ[i].eCode:gsub("[%-][F][E][0][F]", "") -- Remove FE0Fs from final eCode (eBytes don't matter)
 			if ee.emojiMap[noFE0F] then -- If, for whatever reason, the final combo doesn't have an icon, skip it
-				textureLink = "|t28:28:" .. ee.emojiPath .. ee.emojiMap[noFE0F].texture .. "|t"
+				textureLink = "|t" .. tostring(ee.emojiSize) .. ":" .. tostring(ee.emojiSize) .. ":" .. ee.emojiPath .. ee.emojiMap[noFE0F].texture .. "|t"
 				editedMessage,_ = editedMessage:gsub(eFoundZWJ[i].eBytes, textureLink)
 			end
 		end
@@ -429,13 +496,14 @@ local function Hijack_OnTextChanged()
 	local originalHandler = originalControl:GetHandler("OnTextChanged")
 	
 	originalControl:SetHandler("OnTextChanged", function(...)
-		local oldCursorPos = originalControl:GetCursorPosition()
-		local rawText = originalControl:GetText()
-		if ee:Edit(rawText) ~= ee.previousText then
-			ee.previousText = ee:Edit(rawText)
-			originalControl:SetText(ee.previousText)
-			originalControl:SetCursorPosition(oldCursorPos)
-		end
+	--	local oldCursorPos = originalControl:GetCursorPosition()
+	--	local rawText = originalControl:GetText()
+	--	if ee:Edit(rawText) ~= ee.previousText then
+	--		ee.previousText = ee:Edit(rawText)
+	--		originalControl:SetText(ee.previousText)
+	--		originalControl:SetCursorPosition(oldCursorPos)
+	--	end
+		ee.textBox:SetText(ee:Edit(originalControl:GetText()))
 		originalHandler(...)
 	end)
 end
@@ -457,13 +525,53 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function Init_TextInput()
 	Hijack_OnTextChanged()
-	Hijack_GetText()
+	--Hijack_GetText()
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function ee:Initialize()
 	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_ADD_ON_LOADED)
 	
 	Init_MainChat()
-	--Init_TextInput()
+	
+	local originalControl = KEYBOARD_CHAT_SYSTEM:GetEditControl()
+	ee.textBox = displayTextBox
+	ee.textBox.GetCursorPosition = originalControl.GetCursorPosition
+	ee.textBox:SetHeight(originalControl:GetParent():GetHeight())
+	ee.textBox:SetWidth(originalControl:GetParent():GetWidth())
+	ee.textBox:SetAnchor(TOPLEFT, originalControl, TOPLEFT, 0, 25)
+	ee.textBox:SetMaxInputChars(1000)
+	ee.textBox:SetAllowMarkupType(ALLOW_MARKUP_TYPE_ALL) -- Format links and stuff!!
+	ee.textBox:SetExcludeFromResizeToFitExtents(true)
+	
+	local o_SetFont = originalControl.SetFont
+	originalControl.SetFont = function(self, ...)
+		ee.textBox:SetFont(...)
+		o_SetFont(self, ...)
+	end
+	
+	local o_SetColour = originalControl.SetColor
+	originalControl.SetColor = function(self, ...)
+		ee.textBox:SetColor(...)
+		o_SetColour(self, ...)
+	end
+	
+	local o_SetHeight = originalControl.SetHeight
+	originalControl.SetHeight = function(self, ...)
+		ee.textBox:SetHeight(...)
+		o_SetHeight(self, ...)
+	end
+	local o_SetWidth = originalControl.SetWidth
+	originalControl.SetWidth = function(self, ...)
+		ee.textBox:SetWidth(...)
+		o_SetWidth(self, ...)
+	end
+	
+	local o_SetDimensions = originalControl.SetDimensions
+	originalControl.SetDimensions = function(self, ...)
+		ee.textBox:SetDimensions(...)
+		o_SetDimensions(self, ...)
+	end
+	
+	Init_TextInput()
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

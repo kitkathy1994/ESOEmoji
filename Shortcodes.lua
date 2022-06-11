@@ -3,8 +3,56 @@
 local ee = ESOEmoji
 
 local customShortcodes = { -- These will be used to turn :blah: into a blah emoji
+	-- alliance war
+	-- campaign pop
 	["gh_pop"] = {func = ee.Pop(102)},
 	["rw_pop"] = {func = ee.Pop(103)},
+	-- alliances
+	["ad"] = {func = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_aldmeri.dds", 0, 25)},
+	["ep"] = {func = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_ebonheart.dds", 0, 25)},
+	["dc"] = {func = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_daggerfall.dds", 0, 25)},
+	["ad_c"] = {func = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_aldmeri.dds", 0, 25, "FFD700")},
+	["ep_c"] = {func = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_ebonheart.dds", 0, 25, "FF2400")},
+	["dc_c"] = {func = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_daggerfall.dds", 0, 25, "0096FF")},
+	-- buildings
+	["keep"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_keepsummary_up.dds", 0)},
+	["castle"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_keepsummary_up.dds", 0)},
+	["fort"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_keepsummary_up.dds", 0)},
+	["mine"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_oremine_up.dds", 0)},
+	["farm"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_foodfarm_up.dds", 0)},
+	["lumber"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_woodmill_up.dds", 0)},
+	["lm"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_woodmill_up.dds", 0)},
+	
+	-- characters
+	-- classes
+	-- dk
+	["magdk"] = {func = ee.GetTextureLinkIcon("magdk.dds", 1, 28)},
+	["stamdk"] = {func = ee.GetTextureLinkIcon("stamdk.dds", 1, 28)},
+	-- templar
+	["magplar"] = {func = ee.GetTextureLinkIcon("magplar.dds", 1, 28)},
+	["stamplar"] = {func = ee.GetTextureLinkIcon("stamplar.dds", 1, 28)},
+	-- nightblade
+	["magblade"] = {func = ee.GetTextureLinkIcon("magblade.dds", 1, 28)},
+	["stamblade"] = {func = ee.GetTextureLinkIcon("stamblade.dds", 1, 28)},
+	-- sorc
+	["magsorc"] = {func = ee.GetTextureLinkIcon("magsorc.dds", 1, 28)},
+	["stamsorc"] = {func = ee.GetTextureLinkIcon("stamsorc.dds", 1, 28)},
+	-- warden
+	["magden"] = {func = ee.GetTextureLinkIcon("magden.dds", 1, 28)},
+	["stamden"] = {func = ee.GetTextureLinkIcon("stamden.dds", 1, 28)},
+	-- necro
+	["magcro"] = {func = ee.GetTextureLinkIcon("magcro.dds", 1, 28)},
+	["stamcro"] = {func = ee.GetTextureLinkIcon("stamcro.dds", 1, 28)},
+	-- curses
+	["vampire"] = {func = ee.GetTextureLinkIcon("vampire.dds", 1, 28)},
+	["werewolf"] = {func = ee.GetTextureLinkIcon("werewolf.dds", 1, 28)},
+	-- cp
+	["cp"] = {func = ee.GetTextureLinkIcon("esoui/art/champion/champion_icon.dds", 0, 20)},
+	
+	-- Items
+	-- gold
+	["g"] = {func = ee.GetTextureLinkIcon("esoui/art/loot/icon_goldcoin_pressed.dds", 0)},
+	["gold"] = {func = ee.GetTextureLinkIcon("esoui/art/loot/icon_goldcoin_pressed.dds", 0)},
 }
 
 

@@ -20,3 +20,4 @@
 ESOEmoji.lua
 EmojiMap.lua
 Shortcodes.lua
+ESOEmoji.xml

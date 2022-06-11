@@ -57,8 +57,7 @@ ee.emojiRILs = { -- These Regional Indicator Letters need special treatment to b
 	["1F1FF"] = "Z",
 }
 
-ee.emojiMap = {
-	-- Standard Emoji
+ee.emojiMap = { -- Standard Emoji
 	["0023-20E3"] = {texture = "0023-FE0F-20E3.dds"},
 	["002A-20E3"] = {texture = "002A-FE0F-20E3.dds"},
 	["0030-20E3"] = {texture = "0030-FE0F-20E3.dds"},
