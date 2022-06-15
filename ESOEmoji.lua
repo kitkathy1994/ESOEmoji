@@ -504,6 +504,7 @@ local function Hijack_OnTextChanged()
 	--		originalControl:SetCursorPosition(oldCursorPos)
 	--	end
 		ee.textBox:SetText(ee:Edit(originalControl:GetText()))
+		ee.textBox:SetCursorPosition(originalControl:GetCursorPosition())
 		originalHandler(...)
 	end)
 end
@@ -536,12 +537,12 @@ function ee:Initialize()
 	local originalControl = KEYBOARD_CHAT_SYSTEM:GetEditControl()
 	ee.textBox = displayTextBox
 	ee.textBox.GetCursorPosition = originalControl.GetCursorPosition
-	ee.textBox:SetHeight(originalControl:GetParent():GetHeight())
-	ee.textBox:SetWidth(originalControl:GetParent():GetWidth())
+	ee.textBox:ClearAnchors()
 	ee.textBox:SetAnchor(TOPLEFT, originalControl, TOPLEFT, 0, 25)
+	ee.textBox:SetAnchor(BOTTOMRIGHT, originalControl, BOTTOMRIGHT, 0, 25)
 	ee.textBox:SetMaxInputChars(1000)
 	ee.textBox:SetAllowMarkupType(ALLOW_MARKUP_TYPE_ALL) -- Format links and stuff!!
-	ee.textBox:SetExcludeFromResizeToFitExtents(true)
+	ee.textBox:SetFont("$(CHAT_FONT)|$(KB_" .. GetChatFontSize() .. ")|shadow") -- Base font
 	
 	local o_SetFont = originalControl.SetFont
 	originalControl.SetFont = function(self, ...)
@@ -570,6 +571,12 @@ function ee:Initialize()
 	originalControl.SetDimensions = function(self, ...)
 		ee.textBox:SetDimensions(...)
 		o_SetDimensions(self, ...)
+	end
+	--
+	local o_SetCursorPos = originalControl.SetCursorPosition
+	originalControl.SetCursorPosition = function(self, ...)
+		ee.textBox:SetCursorPosition(...)
+		o_SetCursorPos(self, ...)
 	end
 	
 	Init_TextInput()

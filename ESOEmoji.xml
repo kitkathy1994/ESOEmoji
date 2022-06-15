@@ -5,9 +5,9 @@
       <Anchor point="BOTTOM" relativeTo="GuiRoot" relativePoint="CENTER" offsetY="-20" />
  
       <Controls>
-        <EditBox name="$(parent)Box" width="500" height="25" font="ZoFontEditChat" inheritAlpha="true" color="FF0000"
-            wrapMode="TRUNCATE" verticalAlignment="TOP" horizontalAlignment="CENTER" text="Fighting!">
-          <Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" />
+        <EditBox name="$(parent)Box" font="ZoFontEditChat">
+          <Anchor point="TOPLEFT" offsetX="4" offsetY="3"/>
+          <Anchor point="BOTTOMRIGHT" offsetX="-6" offsetY="-3"/>
         </EditBox>
       </Controls>
     </TopLevelControl>
