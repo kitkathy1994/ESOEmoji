@@ -5,10 +5,20 @@
       <Anchor point="BOTTOM" relativeTo="GuiRoot" relativePoint="CENTER" offsetY="-20" />
  
       <Controls>
-        <EditBox name="$(parent)Box" font="ZoFontEditChat">
-          <Anchor point="TOPLEFT" offsetX="4" offsetY="3"/>
-          <Anchor point="BOTTOMRIGHT" offsetX="-6" offsetY="-3"/>
-        </EditBox>
+        <Control name="$(parent)Entry">
+          <Dimensions y="30" />
+          <Controls>
+            <Label name="$(parent)Label" mouseEnabled="true" verticalAlignment="CENTER" font="ZoFontChat" text="Preview: ">
+              <Anchor point="TOPLEFT"/>
+              <Anchor point="BOTTOMLEFT"/>
+            </Label>
+
+            <EditBox name="$(parent)Box" font="ZoFontEditChat" verticalAlignment="CENTER" >
+              <Anchor point="TOPLEFT" relativeTo="$(parent)Label" relativePoint="TOPRIGHT" offsetX="6" offsetY="3" />
+              <Anchor point="BOTTOMRIGHT" offsetY="-3"/>
+            </EditBox>
+          </Controls>
+        </Control>
       </Controls>
     </TopLevelControl>
   </Controls>

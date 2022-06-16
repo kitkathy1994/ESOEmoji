@@ -496,15 +496,7 @@ local function Hijack_OnTextChanged()
 	local originalHandler = originalControl:GetHandler("OnTextChanged")
 	
 	originalControl:SetHandler("OnTextChanged", function(...)
-	--	local oldCursorPos = originalControl:GetCursorPosition()
-	--	local rawText = originalControl:GetText()
-	--	if ee:Edit(rawText) ~= ee.previousText then
-	--		ee.previousText = ee:Edit(rawText)
-	--		originalControl:SetText(ee.previousText)
-	--		originalControl:SetCursorPosition(oldCursorPos)
-	--	end
 		ee.textBox:SetText(ee:Edit(originalControl:GetText()))
-		ee.textBox:SetCursorPosition(originalControl:GetCursorPosition())
 		originalHandler(...)
 	end)
 end
@@ -528,6 +520,29 @@ local function Init_TextInput()
 	Hijack_OnTextChanged()
 	--Hijack_GetText()
 end
+
+
+local function setupAnchors()
+	local originalControl = KEYBOARD_CHAT_SYSTEM:GetEditControl()
+	local originalParent = originalControl:GetParent():GetParent()
+
+	ee.container:ClearAnchors()
+	ee.container:SetAnchor(TOPLEFT, originalParent, TOPLEFT, 0, -27.5)
+	ee.container:SetAnchor(BOTTOMRIGHT, originalParent, BOTTOMRIGHT, 0, -27.5)
+	ee.container:SetParent(originalParent)
+
+	local chatBuffer = ZO_KeyboardChatWindowTemplate1Buffer
+	local _,_,parentframe = chatBuffer:GetAnchor()
+	chatBuffer:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,0,-27.5,0)
+
+	ee.textBox:SetMaxInputChars(1000)
+	ee.textBox:SetAllowMarkupType(ALLOW_MARKUP_TYPE_ALL) -- Format links and stuff!!
+	ee.textBox:SetFont("$(CHAT_FONT)|$(KB_" .. GetChatFontSize() .. ")|shadow") -- Base font
+
+	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_PLAYER_ACTIVATED)
+end
+
+EVENT_MANAGER:RegisterForEvent(ee.name, EVENT_PLAYER_ACTIVATED, setupAnchors)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function ee:Initialize()
 	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_ADD_ON_LOADED)
@@ -535,32 +550,33 @@ function ee:Initialize()
 	Init_MainChat()
 	
 	local originalControl = KEYBOARD_CHAT_SYSTEM:GetEditControl()
-	ee.textBox = displayTextBox
-	ee.textBox.GetCursorPosition = originalControl.GetCursorPosition
-	ee.textBox:ClearAnchors()
-	ee.textBox:SetAnchor(TOPLEFT, originalControl, TOPLEFT, 0, 25)
-	ee.textBox:SetAnchor(BOTTOMRIGHT, originalControl, BOTTOMRIGHT, 0, 25)
-	ee.textBox:SetMaxInputChars(1000)
-	ee.textBox:SetAllowMarkupType(ALLOW_MARKUP_TYPE_ALL) -- Format links and stuff!!
-	ee.textBox:SetFont("$(CHAT_FONT)|$(KB_" .. GetChatFontSize() .. ")|shadow") -- Base font
-	
+
+	ee.textBox = displayTextEntryBox
+	ee.label = displayTextEntryLabel
+	ee.container = displayTextEntry
+
 	local o_SetFont = originalControl.SetFont
 	originalControl.SetFont = function(self, ...)
 		ee.textBox:SetFont(...)
+		ee.label:SetFont(...)
 		o_SetFont(self, ...)
 	end
 	
 	local o_SetColour = originalControl.SetColor
 	originalControl.SetColor = function(self, ...)
 		ee.textBox:SetColor(...)
+		ee.label:SetColor(...)
 		o_SetColour(self, ...)
 	end
 	
 	local o_SetHeight = originalControl.SetHeight
 	originalControl.SetHeight = function(self, ...)
 		ee.textBox:SetHeight(...)
+		ee.label:SetHeight(...)
 		o_SetHeight(self, ...)
 	end
+
+	--[[
 	local o_SetWidth = originalControl.SetWidth
 	originalControl.SetWidth = function(self, ...)
 		ee.textBox:SetWidth(...)
@@ -578,6 +594,7 @@ function ee:Initialize()
 		ee.textBox:SetCursorPosition(...)
 		o_SetCursorPos(self, ...)
 	end
+	--]]
 	
 	Init_TextInput()
 end
