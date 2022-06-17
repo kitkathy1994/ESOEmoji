@@ -57,8 +57,8 @@ local customShortcodes = { -- These will be used to turn :blah: into a blah emoj
 
 
 ee.emojiSCs = {
-	["100"] = {unicode = "1F4AF"},
-	["1234"] = {unicode = "1F522"},
+	["n100"] = {unicode = "1F4AF"},
+	["n1234"] = {unicode = "1F522"},
 	["grinning"] = {unicode = "1F600"},
 	["grimacing"] = {unicode = "1F62C"},
 	["grin"] = {unicode = "1F601"},

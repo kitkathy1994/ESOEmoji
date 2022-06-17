@@ -93,17 +93,17 @@ function ee.Pop(num)
 	}
 	local AD = {
 		["colour"] = "FFD700", -- gold colour
-		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_aldmeri.dds", 0),--ee.emojiSCs["ad"].func,
+		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_aldmeri.dds", 0, 25),--ee.emojiSCs["ad"].func,
 		["pop"] = "",
 	}
 	local EP = {
 		["colour"] = "FF2400", -- red colour
-		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_ebonheart.dds", 0),--ee.emojiSCs["ep"].func,
+		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_ebonheart.dds", 0, 25),--ee.emojiSCs["ep"].func,
 		["pop"] = "",
 	}
 	local DC = {
 		["colour"] = "0096FF", -- blue colour
-		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_daggerfall.dds", 0),--ee.emojiSCs["dc"].func,
+		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_daggerfall.dds", 0, 25),--ee.emojiSCs["dc"].func,
 		["pop"] = "",
 	}
 	
@@ -128,7 +128,8 @@ end -- |cFFD700|t150%:150%:esoui/art/campaign/campaignbrowser_fullpop.dds:inheri
 -- |c8a0303|t28:28:esoui/art/campaign/overview_allianceicon_ebonheart.dds:inheritcolor|t|r
 -- |c000080|t28:28:esoui/art/campaign/overview_allianceicon_daggefall.dds:inheritcolor|t|r
 
--- |t100%:300%:ESOEmoji/icons/Immersive-dds/magdk.dds|t
+-- |cFFD700|t28:28:ESOEmoji/icons/Immersive-dds/stamplar.dds:inheritcolor|t|r
+--|t28:28:ESOEmoji/icons/Immersive-dds/magplar.dds|t
 
 -- |t28:28:esoui/art/ava/ava_keepstatus_icon_food_aldmeri.dds|t
 
@@ -278,7 +279,7 @@ local function Bytes2Unicode(bytes)
 		uCode =  uCode .. t[i]
 	end
 	uCode,_ = uCode:gsub('^(U%+)[0]+', "U+") -- Remove any pesky leading zeros.
-	uCode,_ = uCode:gsub('^(U%+)', "") -- Remove the U+, might change this dependsing on how useful the U+ is.
+	uCode,_ = uCode:gsub('^(U%+)', "") -- Remove the U+, might change this depending on how useful the U+ is.
 	return uCode
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -350,30 +351,54 @@ local function Unicode2Bytes(uCode)
 	
 	return result
 end
+
+local function Num2Bool(num)
+	if num > 1 then
+		return -1
+	end
+	if num == 1 then
+		return true
+	elseif num == 0 then
+		return false
+	end
+end
+
+local function Bool2Num(bool)
+	if bool then
+		return 1
+	else
+		return 0
+	end
+end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	STANDARD FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-function ee:Edit(rawMessage)
-	local editedMessage = rawMessage
-	local uCode = ""
-	local textureLink = ""
-	
-	---- Shortcode emoji test (has to run before the other emoji stuff)
+local function editSC(message, ntype)
+	if ntype == 0 or ntype > 3 then
+		return message
+	end
 	local shortcode = ""
-	for shortcode in string.gmatch(editedMessage, "[%:]([^%:%s]+)[%:]") do
+	local editStandard =  Num2Bool(BitAnd(ntype, 1))
+	local editCustom =  Num2Bool(BitAnd(BitRShift(ntype, 1), 1))
+	
+	for shortcode in string.gmatch(message, "[%:]([^%:%s]+)[%:]") do
 		if ee.emojiSCs[shortcode] then
-			if ee.emojiSCs[shortcode].unicode then
-				textureLink = "|t" .. tostring(ee.emojiSize) .. ":" .. tostring(ee.emojiSize) .. ":" .. ee.emojiPath .. ee.emojiMap[ee.emojiSCs[shortcode].unicode].texture .. "|t"
-				editedMessage,_ = editedMessage:gsub("[%:]" .. shortcode .. "[%:]", textureLink)
-			elseif ee.emojiSCs[shortcode].func then -- Special shortcode, therefore it actually has a function returning a string
-				editedMessage,_ = editedMessage:gsub("[%:]" .. shortcode .. "[%:]", ee.emojiSCs[shortcode].func)
+			if ee.emojiSCs[shortcode].unicode and editStandard then
+				--textureLink = "|t" .. tostring(ee.emojiSize) .. ":" .. tostring(ee.emojiSize) .. ":" .. ee.emojiPath .. ee.emojiMap[ee.emojiSCs[shortcode].unicode].texture .. "|t"
+				--message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", textureLink)
+				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", Unicode2Bytes(ee.emojiSCs[shortcode].unicode))
+			elseif ee.emojiSCs[shortcode].func and editCustom then -- Special shortcode, therefore it actually has a function returning a string
+				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", ee.emojiSCs[shortcode].func)
 			end
 		end
 	end
-	---- test end
-	
-	
-	local itString = tostring(editedMessage)
+	return message
+end
+
+local function editStandard(message)
+	local uCode = ""
+	local textureLink = ""
+	local itString = tostring(message)
 	local bytes = {}
 	local eFound = {}
 	local eFoundZWJ = {}
@@ -437,10 +462,23 @@ function ee:Edit(rawMessage)
 			local noFE0F,_ = eFoundZWJ[i].eCode:gsub("[%-][F][E][0][F]", "") -- Remove FE0Fs from final eCode (eBytes don't matter)
 			if ee.emojiMap[noFE0F] then -- If, for whatever reason, the final combo doesn't have an icon, skip it
 				textureLink = "|t" .. tostring(ee.emojiSize) .. ":" .. tostring(ee.emojiSize) .. ":" .. ee.emojiPath .. ee.emojiMap[noFE0F].texture .. "|t"
-				editedMessage,_ = editedMessage:gsub(eFoundZWJ[i].eBytes, textureLink)
+				message,_ = message:gsub(eFoundZWJ[i].eBytes, textureLink)
 			end
 		end
 	end
+	
+	return message
+end
+
+function ee:Edit(rawMessage)
+	local editedMessage = rawMessage
+	
+	
+	---- Shortcode emoji test (has to run before the other emoji stuff)
+	editedMessage = editSC(editedMessage, 3)
+	---- test end
+	
+	editedMessage = editStandard(editedMessage)
 	
 	return editedMessage
 end 
