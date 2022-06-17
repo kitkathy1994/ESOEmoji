@@ -115,11 +115,11 @@ function ee.Pop(num)
 	end
 	
 	local temp = pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_ALDMERI_DOMINION)]
-	AD.pop = ee.GetTextureLinkIcon(temp, 1, nil, AD.colour)
+	AD.pop = ee.GetTextureLinkIcon(temp, 0, nil, AD.colour)
 	temp = pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_EBONHEART_PACT)]
-	EP.pop = ee.GetTextureLinkIcon(temp, 1, nil, EP.colour)
+	EP.pop = ee.GetTextureLinkIcon(temp, 0, nil, EP.colour)
 	temp = pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_DAGGERFALL_COVENANT)]
-	DC.pop = ee.GetTextureLinkIcon(temp, 1, nil, DC.colour)
+	DC.pop = ee.GetTextureLinkIcon(temp, 0, nil, DC.colour)
 	
 	popDisplay = AD.icon .. AD.pop .. EP.icon .. EP.pop .. DC.icon .. DC.pop
 	return popDisplay
