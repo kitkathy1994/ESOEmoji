@@ -569,9 +569,23 @@ local function setupAnchors()
 	ee.container:SetAnchor(BOTTOMRIGHT, originalParent, BOTTOMRIGHT, 0, -27.5)
 	ee.container:SetParent(originalParent)
 
+	--[[
 	local chatBuffer = ZO_KeyboardChatWindowTemplate1Buffer
 	local _,_,parentframe = chatBuffer:GetAnchor()
 	chatBuffer:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,0,-27.5,0)
+	]]
+
+
+  for j=1, #ZO_ChatWindow.container.windows do
+  	local chatBuffer = ZO_ChatWindow.container.windows[j]
+    local _,_,parentframe = chatBuffer:GetAnchor()
+		chatBuffer:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,0,-27.5,0)
+  end
+
+
+	local scrollbar = ZO_ChatWindowScrollbar
+	local _,a,parentframe,b,x,y,z = scrollbar:GetAnchor(1)
+	scrollbar:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,x,y-27.5,z)
 
 	ee.textBox:SetMaxInputChars(1000)
 	ee.textBox:SetAllowMarkupType(ALLOW_MARKUP_TYPE_ALL) -- Format links and stuff!!

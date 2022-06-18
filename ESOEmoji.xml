@@ -8,9 +8,30 @@
         <Control name="$(parent)Entry">
           <Dimensions y="30" />
           <Controls>
-            <Label name="$(parent)Label" mouseEnabled="true" verticalAlignment="CENTER" font="ZoFontChat" text="Preview: ">
-              <Anchor point="TOPLEFT"/>
-              <Anchor point="BOTTOMLEFT"/>
+
+            <Texture name="$(parent)Divider" textureFile="EsoUI/Art/Miscellaneous/horizontalDivider.dds">
+              <Dimensions y="4"/>
+              <Anchor point="BOTTOMLEFT" offsetY="-25" offsetX="-10" />
+              <Anchor point="BOTTOMRIGHT" offsetY="-25" offsetX="10"/>
+              <TextureCoords top="0" bottom="1" left="0.181640625" right="0.818359375"/>
+            </Texture>
+
+
+            <Button name="$(parent)Button" inherits="ZO_ButtonBehaviorClickSound" verticalAlignment="1">
+              <Dimensions x="26" y="26" />
+              <Anchor point="TOPLEFT" relativeTo="$(parent)Divider" relativePoint="BOTTOMLEFT"/>
+              <Textures normal="ESOEmoji/icons/openmoji-72x72-colour-dds/1F604.dds"
+                pressed="ESOEmoji/icons/openmoji-72x72-colour-dds/1F604.dds"
+                mouseOver="ESOEmoji/icons/openmoji-72x72-colour-dds/1F604.dds"
+                disabled="ESOEmoji/icons/openmoji-72x72-colour-dds/1F604.dds"/>
+              <OnClicked>
+                d("BUTOTN WAS PRESSEDED")
+              </OnClicked>
+            </Button>
+
+            <Label name="$(parent)Label" verticalAlignment="CENTER" font="ZoFontChat" text=":">
+              <Anchor point="TOPLEFT" relativeTo="$(parent)Button" relativePoint="TOPRIGHT"/>
+              <Anchor point="BOTTOMLEFT" relativeTo="$(parent)Button" relativePoint="BOTTOMRIGHT"/>
             </Label>
 
             <EditBox name="$(parent)Box" font="ZoFontEditChat" verticalAlignment="CENTER" >
