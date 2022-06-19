@@ -10,12 +10,13 @@
 ; Alike License 4.0 (CC BY-SA 4.0).
 ; Please read the full licence at http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 
-## Title: ESO Emoji
-## APIVersion: 101033
+## Title: ESO Emoji |t28:28:ESOEmoji/icons/misc/1F60D.dds|t
+## APIVersion: 101034
 ## Version: 0.4.0
 ## AddOnVersion: 1
 ## Description: [ALPHA VERSION] Emoji! In your own game! What are you going to do?
-## Author: |c800020@BosmeriPride|r
+## Author: |c800020@BosmeriPride|r and |c0DC1CF@M0R_Gaming|r
+## SavedVariables: EEVars
 
 ESOEmoji.lua
 EmojiMap.lua

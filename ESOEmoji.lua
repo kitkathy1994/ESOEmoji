@@ -11,8 +11,21 @@ ee.emojiSize = 28
 ee.emojiPath = "ESOEmoji/icons/openmoji-72x72-colour-dds/"
 ee.emojiTESEnabled = true
 ee.emojiStandardEnabled = true
-ee.emojiAutoEnabled = true
 ee.textBox = nil
+local vars = {} -- Settings
+local DefaultSettings = { -- Default
+	showChatBar = true,
+	previewString = true,
+	realtimeEdit = false,
+	emojiSettings = {
+		Size = 28,
+		Path = "ESOEmoji/icons/openmoji-72x72-colour-dds/",
+		SCEnabled = true,
+		CustomEnabled = true,
+		StandardEnabled = true,
+	},
+}
+
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	ON ADD-ON LOADED	//////////////////////////////////////////////////////////////////////////////////////////	--
@@ -25,6 +38,11 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	UTILITY FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function ee:GetVars()
+	return vars
+end
+
 function ee.GetTextureLinkIcon(icon, location, size, colour)
 	local path = ""
 	if location == 0 then -- Base game
@@ -32,7 +50,8 @@ function ee.GetTextureLinkIcon(icon, location, size, colour)
 	elseif location == 1 then -- Immersive custom icons
 		path = "ESOEmoji/icons/Immersive-dds/" .. icon
 	end
-	
+	d("testing")
+	--d(ee:GetVars())
 	local textureLink = "|t" .. tostring(ee.emojiSize) .. ":" .. tostring(ee.emojiSize) .. ":" .. path
 	if size ~= nil then
 		textureLink = "|t" .. tostring(size) .. ":" .. tostring(size) .. ":" .. path
@@ -45,6 +64,7 @@ function ee.GetTextureLinkIcon(icon, location, size, colour)
 	
 	return textureLink
 end
+
 
 function ee.DisplayVersion()
 	d("ESO Emoji version: " .. ee.version)
@@ -378,15 +398,21 @@ local function editSC(message, ntype)
 		return message
 	end
 	local shortcode = ""
+	local uCode
 	local editStandard =  Num2Bool(BitAnd(ntype, 1))
 	local editCustom =  Num2Bool(BitAnd(BitRShift(ntype, 1), 1))
 	
 	for shortcode in string.gmatch(message, "[%:]([^%:%s]+)[%:]") do
 		if ee.emojiSCs[shortcode] then
 			if ee.emojiSCs[shortcode].unicode and editStandard then
-				--textureLink = "|t" .. tostring(ee.emojiSize) .. ":" .. tostring(ee.emojiSize) .. ":" .. ee.emojiPath .. ee.emojiMap[ee.emojiSCs[shortcode].unicode].texture .. "|t"
+				--textureLink = "|t" .. tostring(vars.emojiSettings.Size) .. ":" .. tostring(vars.emojiSettings.Size) .. ":" .. vars.emojiSettings.Path .. ee.emojiMap[ee.emojiSCs[shortcode].unicode].texture .. "|t"
 				--message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", textureLink)
-				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", Unicode2Bytes(ee.emojiSCs[shortcode].unicode))
+				local result = ""
+				for uCode in string.gmatch(ee.emojiSCs[shortcode].unicode, "([%u%1%d]+)") do
+				--Encode
+					result = result .. Unicode2Bytes(uCode)
+				end
+				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", result)
 			elseif ee.emojiSCs[shortcode].func and editCustom then -- Special shortcode, therefore it actually has a function returning a string
 				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", ee.emojiSCs[shortcode].func)
 			end
@@ -461,7 +487,7 @@ local function editStandard(message)
 		for i = 1, #eFoundZWJ do
 			local noFE0F,_ = eFoundZWJ[i].eCode:gsub("[%-][F][E][0][F]", "") -- Remove FE0Fs from final eCode (eBytes don't matter)
 			if ee.emojiMap[noFE0F] then -- If, for whatever reason, the final combo doesn't have an icon, skip it
-				textureLink = "|t" .. tostring(ee.emojiSize) .. ":" .. tostring(ee.emojiSize) .. ":" .. ee.emojiPath .. ee.emojiMap[noFE0F].texture .. "|t"
+				textureLink = "|t" .. tostring(vars.emojiSettings.Size) .. ":" .. tostring(vars.emojiSettings.Size) .. ":" .. vars.emojiSettings.Path .. ee.emojiMap[noFE0F].texture .. "|t"
 				message,_ = message:gsub(eFoundZWJ[i].eBytes, textureLink)
 			end
 		end
@@ -475,7 +501,8 @@ function ee:Edit(rawMessage)
 	
 	
 	---- Shortcode emoji test (has to run before the other emoji stuff)
-	editedMessage = editSC(editedMessage, 3)
+	local settings = BitOr(BitLShift(Bool2Num(vars.emojiSettings.CustomEnabled),1), Bool2Num(vars.emojiSettings.SCEnabled))
+	editedMessage = editSC(editedMessage, settings)
 	---- test end
 	
 	editedMessage = editStandard(editedMessage)
@@ -485,7 +512,7 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function ee:UndoEdit(message)
 	local unEditedMessage = message
-	local path = ee.emojiPath
+	local path = vars.emojiSettings.Path
 	local emoji = ""
 	local n = 1
 	path,_ = path:gsub("%/", "%%%/")
@@ -598,6 +625,7 @@ EVENT_MANAGER:RegisterForEvent(ee.name, EVENT_PLAYER_ACTIVATED, setupAnchors)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function ee:Initialize()
 	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_ADD_ON_LOADED)
+	vars = ZO_SavedVars:NewAccountWide("EEVars", 1, nil, DefaultSettings)
 	
 	Init_MainChat()
 	
@@ -647,6 +675,8 @@ function ee:Initialize()
 		o_SetCursorPos(self, ...)
 	end
 	--]]
+	
+	
 	
 	Init_TextInput()
 end
