@@ -5,54 +5,239 @@ local ee = ESOEmoji
 local customShortcodes = { -- These will be used to turn :blah: into a blah emoji
 	-- alliance war
 	-- campaign pop
-	["gh_pop"] = {func = ee.Pop(102)},
-	["rw_pop"] = {func = ee.Pop(103)},
+--	["gh_pop"] = {func = ee.Pop(102)},
+--	["rw_pop"] = {func = ee.Pop(103)},
 	-- alliances
-	["ad"] = {func = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_aldmeri.dds", 0, 25)},
-	["ep"] = {func = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_ebonheart.dds", 0, 25)},
-	["dc"] = {func = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_daggerfall.dds", 0, 25)},
-	["ad_c"] = {func = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_aldmeri.dds", 0, 25, "FFD700")},
-	["ep_c"] = {func = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_ebonheart.dds", 0, 25, "FF2400")},
-	["dc_c"] = {func = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_daggerfall.dds", 0, 25, "0096FF")},
+	["ad"] = {
+		func = {
+			icon = "esoui/art/campaign/gamepad/gp_overview_allianceicon_aldmeri.dds",
+			location = 0,
+			size = 25,
+			colour = nil,
+		},
+	},
+	["ep"] = {
+		func = {
+			icon = "esoui/art/campaign/gamepad/gp_overview_allianceicon_ebonheart.dds",
+			location = 0,
+			size = 25,
+			colour = nil,
+		},
+	},
+	["dc"] = {
+		func = {
+			icon = "esoui/art/campaign/gamepad/gp_overview_allianceicon_daggerfall.dds",
+			location = 0,
+			size = 25,
+			colour = nil,
+		},
+	},
+	["ad_c"] = {
+		func = {
+			icon = "esoui/art/campaign/gamepad/gp_overview_allianceicon_aldmeri.dds",
+			location = 0,
+			size = 25,
+			colour = "FFD700",
+		},
+	},
+	["ep_c"] = {
+		func = {
+			icon = "esoui/art/campaign/gamepad/gp_overview_allianceicon_ebonheart.dds",
+			location = 0,
+			size = 25,
+			colour = "FF2400",
+		},
+	},
+	["dc_c"] = {
+		func = {
+			icon = "esoui/art/campaign/gamepad/gp_overview_allianceicon_daggerfall.dds",
+			location = 0,
+			size = 25,
+			colour = "0096FF",
+		},
+	},
 	-- buildings
-	["keep"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_keepsummary_up.dds", 0)},
-	["castle"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_keepsummary_up.dds", 0)},
-	["fort"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_keepsummary_up.dds", 0)},
-	["mine"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_oremine_up.dds", 0)},
-	["farm"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_foodfarm_up.dds", 0)},
-	["lumber"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_woodmill_up.dds", 0)},
-	["lm"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_woodmill_up.dds", 0)},
+	["keep"] = {
+		func = {
+			icon = "esoui/art/worldmap/map_ava_tabicon_keepsummary_up.dds",
+			location = 0,
+			size = nil,
+			colour = nil,
+		},
+	},
+	["castle"] = {
+		func = {
+			icon = "esoui/art/worldmap/map_ava_tabicon_keepsummary_up.dds",
+			location = 0,
+			size = nil,
+			colour = nil,
+		},
+	},
+	["fort"] = {
+		func = {
+			icon = "esoui/art/worldmap/map_ava_tabicon_keepsummary_up.dds",
+			location = 0,
+			size = nil,
+			colour = nil,
+		},
+	},
+--	["mine"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_oremine_up.dds", 0)},
+--	["farm"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_foodfarm_up.dds", 0)},
+--	["lumber"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_woodmill_up.dds", 0)},
+--	["lm"] = {func = ee.GetTextureLinkIcon("esoui/art/worldmap/map_ava_tabicon_woodmill_up.dds", 0)},
 	
 	-- characters
 	-- classes
 	-- dk
-	["magdk"] = {func = ee.GetTextureLinkIcon("magdk.dds", 1, 28)},
-	["stamdk"] = {func = ee.GetTextureLinkIcon("stamdk.dds", 1, 28)},
+	["magdk"] = {
+		func = {
+			icon = "magdk.dds",
+			location = 1,
+			size = 28,
+			colour = nil,
+		},
+	},
+	["stamdk"] = {
+		func = {
+			icon = "stamdk.dds",
+			location = 1,
+			size = 28,
+			colour = nil,
+		},
+	},
 	-- templar
-	["magplar"] = {func = ee.GetTextureLinkIcon("magplar.dds", 1, 28)},
-	["stamplar"] = {func = ee.GetTextureLinkIcon("stamplar.dds", 1, 28)},
+	["magplar"] = {
+		func = {
+			icon = "magplar.dds",
+			location = 1,
+			size = 28,
+			colour = nil,
+		},
+	},
+	["stamplar"] = {
+		func = {
+			icon = "stamplar.dds",
+			location = 1,
+			size = 28,
+			colour = nil,
+		},
+	},
 	-- nightblade
-	["magblade"] = {func = ee.GetTextureLinkIcon("magblade.dds", 1, 28)},
-	["stamblade"] = {func = ee.GetTextureLinkIcon("stamblade.dds", 1, 28)},
+	["magblade"] = {
+		func = {
+			icon = "magblade.dds",
+			location = 1,
+			size = 28,
+			colour = nil,
+		},
+	},
+	["stamblade"] = {
+		func = {
+			icon = "stamblade.dds",
+			location = 1,
+			size = 28,
+			colour = nil,
+		},
+	},
 	-- sorc
-	["magsorc"] = {func = ee.GetTextureLinkIcon("magsorc.dds", 1, 28)},
-	["stamsorc"] = {func = ee.GetTextureLinkIcon("stamsorc.dds", 1, 28)},
+	["magsorc"] = {
+		func = {
+			icon = "magsorc.dds",
+			location = 1,
+			size = 28,
+			colour = nil,
+		},
+	},
+	["stamsorc"] = {
+		func = {
+			icon = "stamsorc.dds",
+			location = 1,
+			size = 28,
+			colour = nil,
+		},
+	},
 	-- warden
-	["magden"] = {func = ee.GetTextureLinkIcon("magden.dds", 1, 28)},
-	["stamden"] = {func = ee.GetTextureLinkIcon("stamden.dds", 1, 28)},
+	["magden"] = {
+		func = {
+			icon = "magden.dds",
+			location = 1,
+			size = 28,
+			colour = nil,
+		},
+	},
+	["stamden"] = {
+		func = {
+			icon = "stamden.dds",
+			location = 1,
+			size = 28,
+			colour = nil,
+		},
+	},
 	-- necro
-	["magcro"] = {func = ee.GetTextureLinkIcon("magcro.dds", 1, 28)},
-	["stamcro"] = {func = ee.GetTextureLinkIcon("stamcro.dds", 1, 28)},
+	["magcro"] = {
+		func = {
+			icon = "magcro.dds",
+			location = 1,
+			size = 28,
+			colour = nil,
+		},
+	},
+	["stamcro"] = {
+		func = {
+			icon = "stamcro.dds",
+			location = 1,
+			size = 28,
+			colour = nil,
+		},
+	},
 	-- curses
-	["vampire"] = {func = ee.GetTextureLinkIcon("vampire.dds", 1, 28)},
-	["werewolf"] = {func = ee.GetTextureLinkIcon("werewolf.dds", 1, 28)},
+	["vampire"] = {
+		func = {
+			icon = "vampire.dds",
+			location = 1,
+			size = 28,
+			colour = nil,
+		},
+	},
+	["werewolf"] = {
+		func = {
+			icon = "werewolf.dds",
+			location = 1,
+			size = 28,
+			colour = nil,
+		},
+	},
 	-- cp
-	["cp"] = {func = ee.GetTextureLinkIcon("esoui/art/champion/champion_icon.dds", 0, 20)},
+	["cp"] = {
+		func = {
+			icon = "esoui/art/champion/champion_icon.dds",
+			location = 0,
+			size = 20,
+			colour = nil,
+		},
+	},
 	
 	-- Items
 	-- gold
-	["g"] = {func = ee.GetTextureLinkIcon("esoui/art/loot/icon_goldcoin_pressed.dds", 0)},
-	["gold"] = {func = ee.GetTextureLinkIcon("esoui/art/loot/icon_goldcoin_pressed.dds", 0)},
+	["g"] = {
+		func = {
+			icon = "esoui/art/loot/icon_goldcoin_pressed.dds",
+			location = 0,
+			size = nil,
+			colour = nil,
+		},
+	},
+	["gold"] = {
+		func = {
+			icon = "esoui/art/loot/icon_goldcoin_pressed.dds",
+			location = 0,
+			size = nil,
+			colour = nil,
+		},
+	},
+	-- |t28:28:ESOEmoji\icons\coins.dds|t
+	-- |t20:20:ESOEmoji\icons\Immersive-dds\gold_dark.dds|t
+	-- |t20:20:ESOEmoji\icons\Immersive-dds\gold_light.dds|t
 }
 
 

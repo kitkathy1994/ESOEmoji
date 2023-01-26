@@ -7,21 +7,17 @@ ee.version = "v0.4.0-Alpha"
 ee.name = "ESOEmoji"
 ee.previousText = nil
 ee.previousColour = nil
-ee.emojiSize = 28
-ee.emojiPath = "ESOEmoji/icons/openmoji-72x72-colour-dds/"
-ee.emojiTESEnabled = true
-ee.emojiStandardEnabled = true
 ee.textBox = nil
 local vars = {} -- Settings
 local DefaultSettings = { -- Default
 	showChatBar = true,
 	previewString = true,
-	realtimeEdit = false,
+	realtimeEdit = true,
 	emojiSettings = {
 		Size = 28,
 		Path = "ESOEmoji/icons/openmoji-72x72-colour-dds/",
 		SCEnabled = true,
-		CustomEnabled = true,
+		CustomEnabled = false,
 		StandardEnabled = true,
 	},
 }
@@ -50,11 +46,9 @@ function ee.GetTextureLinkIcon(icon, location, size, colour)
 	elseif location == 1 then -- Immersive custom icons
 		path = "ESOEmoji/icons/Immersive-dds/" .. icon
 	end
-	d("testing")
-	--d(ee:GetVars())
-	local textureLink = "|t" .. tostring(ee.emojiSize) .. ":" .. tostring(ee.emojiSize) .. ":" .. path
+	local textureLink = "|t" .. tostring(vars.emojiSettings.Size) .. ":" .. tostring(vars.emojiSettings.Size) .. ":" .. path
 	if size ~= nil then
-		textureLink = "|t" .. tostring(size) .. ":" .. tostring(size) .. ":" .. path
+		textureLink = "|t" .. tostring(math.floor(size/28*vars.emojiSettings.Size + 0.5)) .. ":" .. tostring(math.floor(size/28*vars.emojiSettings.Size + 0.5)) .. ":" .. path
 	end
 	if colour == nil then
 		textureLink = textureLink .. "|t"
@@ -99,7 +93,9 @@ function ee.test(extra)
 --		i = tonumber(e)
 --	until sval == nil or eval == nil
 --	d(links)
-	
+--	ee.GetVars().emojiSettings.Size = tonumber(extra)
+--	ee.GetVars().emojiSettings.CustomEnabled = false
+	ee.GetVars().realtimeEdit = true
 end
 
 function ee.Pop(num)
@@ -393,9 +389,9 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	STANDARD FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local function editSC(message, ntype)
-	if ntype == 0 or ntype > 3 then
-		return message
+local function editSC(message, ntype)	--ntype is a 2-bit binary number indicating whether shortcodes and custom emojis are enabled. example: 01 = Custom is disabled, shortcodes enabled
+	if ntype == 0 or ntype > 3 then		-- "but ma'am, can't you just use vars instead of sending a parameter?"
+		return message					-- yeap, and it probably should work that way, but I did it this way for some reason and I forgot what that reason was. I should probably change it to use vars
 	end
 	local shortcode = ""
 	local uCode
@@ -413,8 +409,8 @@ local function editSC(message, ntype)
 					result = result .. Unicode2Bytes(uCode)
 				end
 				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", result)
-			elseif ee.emojiSCs[shortcode].func and editCustom then -- Special shortcode, therefore it actually has a function returning a string
-				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", ee.emojiSCs[shortcode].func)
+			elseif ee.emojiSCs[shortcode].func and editCustom then -- Special shortcode, therefore it actually needs a function to return a string WIP
+				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", ee.GetTextureLinkIcon(ee.emojiSCs[shortcode].func.icon, ee.emojiSCs[shortcode].func.location, ee.emojiSCs[shortcode].func.size, ee.emojiSCs[shortcode].func.colour))
 			end
 		end
 	end
@@ -510,7 +506,7 @@ function ee:Edit(rawMessage)
 	return editedMessage
 end 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-function ee:UndoEdit(message)
+function ee:UndoEdit(message)			-- This does not yet work for custom emoji, only for standard
 	local unEditedMessage = message
 	local path = vars.emojiSettings.Path
 	local emoji = ""
@@ -561,7 +557,18 @@ local function Hijack_OnTextChanged()
 	local originalHandler = originalControl:GetHandler("OnTextChanged")
 	
 	originalControl:SetHandler("OnTextChanged", function(...)
-		ee.textBox:SetText(ee:Edit(originalControl:GetText()))
+		local editedMessage = ee:Edit(originalControl:GetText())
+		ee.textBox:SetText(editedMessage)		-- Edit preview
+		originalControl:SetText(editedMessage)	-- Edit text entry in realtime
+		
+		local count = 350						-- For every emoji texture link found, increase maximum text entry char number (since the texture links are massive, but the emoji sent only uses a few characters)
+		for emoji in string.gmatch(editedMessage, "%|[tT]%d-:%d-:.-|[tT]") do
+			count = count + 55
+		end
+		if count >= 1500 then
+			count = 1500
+		end
+		originalControl:SetMaxInputChars(count)
 		originalHandler(...)
 	end)
 end
@@ -583,7 +590,7 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function Init_TextInput()
 	Hijack_OnTextChanged()
-	--Hijack_GetText()
+	Hijack_GetText()
 end
 
 
@@ -675,9 +682,8 @@ function ee:Initialize()
 		o_SetCursorPos(self, ...)
 	end
 	--]]
-	
-	
-	
-	Init_TextInput()
+	if ee.GetVars().realtimeEdit then
+		Init_TextInput()
+	end
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
