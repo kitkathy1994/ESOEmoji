@@ -494,14 +494,39 @@ end
 
 function ee:Edit(rawMessage)
 	local editedMessage = rawMessage
+	local settings = BitOr(BitLShift(Bool2Num(vars.emojiSettings.CustomEnabled),1), Bool2Num(vars.emojiSettings.SCEnabled)) -- For shortcodes
+	
+	local rebuiltText = ""
+	local parseText = tostring(rawMessage)
+	local linkList = {}
+	
+	-- Filter links out of the message first for compatibility
+	if (string.match(parseText, "%|[hH]%d:.-%|[hH].-|[hH]")) then
+		-- There was a link present
+		for link in string.gmatch(parseText, "%|[hH]%d:.-%|[hH].-|[hH]") do
+			linkList[#linkList+1] = link
+			parseText,_ = parseText:gsub(link, "þ" .. tostring(#linkList) .. "þ")
+		end
+		
+		-- Do stuff here with the non link text
+		parseText = editSC(parseText, settings)	-- Shortcode emoji (has to run before the other emoji stuff)
+		parseText = editStandard(parseText)
+		
+		-- Rebuild string here
+		for link in string.gmatch(parseText, "%þ([%d]+)%þ") do
+			parseText,_ = parseText:gsub("þ" .. link .. "þ", linkList[tonumber(link)], 1)
+		end
+		rebuiltText = parseText
+	else
+		-- there was no link so we don't need to separate stuff
+		parseText = editSC(parseText, settings)	-- Shortcode emoji (has to run before the other emoji stuff)
+		parseText = editStandard(parseText)
+		rebuiltText = parseText
+	end
 	
 	
-	---- Shortcode emoji test (has to run before the other emoji stuff)
-	local settings = BitOr(BitLShift(Bool2Num(vars.emojiSettings.CustomEnabled),1), Bool2Num(vars.emojiSettings.SCEnabled))
-	editedMessage = editSC(editedMessage, settings)
-	---- test end
+	editedMessage = rebuiltText
 	
-	editedMessage = editStandard(editedMessage)
 	
 	return editedMessage
 end 
