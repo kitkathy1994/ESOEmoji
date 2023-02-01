@@ -583,17 +583,21 @@ local function Hijack_OnTextChanged()
 	
 	originalControl:SetHandler("OnTextChanged", function(...)
 		local editedMessage = ee:Edit(originalControl:GetText())
-		ee.textBox:SetText(editedMessage)		-- Edit preview
-		originalControl:SetText(editedMessage)	-- Edit text entry in realtime
+		ee.textBox:SetText(editedMessage)			-- Edit preview
 		
-		local count = 350						-- For every emoji texture link found, increase maximum text entry char number (since the texture links are massive, but the emoji sent only uses a few characters)
-		for emoji in string.gmatch(editedMessage, "%|[tT]%d-:%d-:.-|[tT]") do
-			count = count + 55
+		if ee.GetVars().realtimeEdit then			-- Only run this if user enabled realtimeEdit
+			originalControl:SetText(editedMessage)	-- Edit text entry in realtime
+		
+			local count = 350						-- For every emoji texture link found, increase maximum text entry char number (since the texture links are massive, but the emoji sent only uses a few characters)
+			for emoji in string.gmatch(editedMessage, "%|[tT]%d-:%d-:.-|[tT]") do
+				count = count + 55
+			end
+			if count >= 1500 then
+				count = 1500
+			end
+			originalControl:SetMaxInputChars(count)
 		end
-		if count >= 1500 then
-			count = 1500
-		end
-		originalControl:SetMaxInputChars(count)
+
 		originalHandler(...)
 	end)
 end
@@ -659,8 +663,6 @@ function ee:Initialize()
 	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_ADD_ON_LOADED)
 	vars = ZO_SavedVars:NewAccountWide("EEVars", 1, nil, DefaultSettings)
 	
-	Init_MainChat()
-	
 	local originalControl = KEYBOARD_CHAT_SYSTEM:GetEditControl()
 
 	ee.textBox = displayTextEntryBox
@@ -688,27 +690,10 @@ function ee:Initialize()
 		o_SetHeight(self, ...)
 	end
 
-	--[[
-	local o_SetWidth = originalControl.SetWidth
-	originalControl.SetWidth = function(self, ...)
-		ee.textBox:SetWidth(...)
-		o_SetWidth(self, ...)
-	end
-	
-	local o_SetDimensions = originalControl.SetDimensions
-	originalControl.SetDimensions = function(self, ...)
-		ee.textBox:SetDimensions(...)
-		o_SetDimensions(self, ...)
-	end
-	--
-	local o_SetCursorPos = originalControl.SetCursorPosition
-	originalControl.SetCursorPosition = function(self, ...)
-		ee.textBox:SetCursorPosition(...)
-		o_SetCursorPos(self, ...)
-	end
-	--]]
-	if ee.GetVars().realtimeEdit then
-		Init_TextInput()
-	end
+	-- Initialize submodules
+	Init_MainChat()		-- Main chat message editor
+	Init_TextInput()	-- Textbox entry message editor
+
+	ee.container:SetHidden(not ee.GetVars().showChatBar)
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
