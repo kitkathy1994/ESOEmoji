@@ -153,8 +153,8 @@ function sca:GetAutoCompletionResults(parseText)
 
     if (string.match(parseText, "%|[hH]%d:.-%|[hH].-|[hH]")) then --> Match out any guild or achieve links
         for link in string.gmatch(parseText, "%|[hH]%d:.-%|[hH].-|[hH]") do
-            linkList[#linkList+1] = link
-            parseText,_ = parseText:gsub(link, "þ" .. tostring(#linkList) .. "þ")
+            replacementString = string.format("%-"..#link.."s","")
+            parseText,_ = parseText:gsub(link, replacementString)
         end
     end
 
