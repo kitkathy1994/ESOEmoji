@@ -6,22 +6,15 @@ local sca = ee.SCAutocomplete
 local shortcodes = {}
 local shortcodeBytes = {}
 
-
-
-
+local matchedTextStart = nil
 
 -- This file utilizes alot of code from the esoui. Below are some of the major files used:
 -- https://github.com/esoui/esoui/blob/master/esoui/libraries/utility/zo_autocomplete.lua
 -- https://github.com/esoui/esoui/blob/master/esoui/ingame/slashcommands/slashcommandautocomplete.lua
 
-
-
-
-
 function ee.initauto()
     local vars = ee:GetVars()
 	for i,v in pairs(ee.emojiSCs) do
-		--ee.Unicode2Bytes
 		if v.unicode and ee.emojiMap[v.unicode] then -- skip various unicode icons such as copyright which dont have a texture
             local size = vars.emojiSettings.Size
             local path = vars.emojiSettings.Path
@@ -32,6 +25,7 @@ function ee.initauto()
             shortcodeBytes[text] = ee.Unicode2Bytes(v.unicode)
 		end
 	end
+    ee.asc = ee.SCAutocomplete:New(CHAT_SYSTEM.textEntry.editControl, nil, nil, nil, 8, AUTO_COMPLETION_AUTOMATIC_MODE, AUTO_COMPLETION_DONT_USE_ARROWS)
 end
 
 
@@ -50,7 +44,10 @@ function sca:Initialize(editControl, ...)
     self:SetKeepFocusOnCommit(true)
 
     local function OnAutoCompleteEntrySelected(selected, selectionMethod) -- EDIT THIS
-        editControl:SetText(shortcodeBytes[selected])
+        local replacementByte = shortcodeBytes[selected]
+        if matchedTextStart then
+            editControl:SetText(editControl:GetText():sub(1,matchedTextStart-1)..replacementByte)
+        end
     end
 
     self:RegisterCallback(ZO_AutoComplete.ON_ENTRY_SELECTED, OnAutoCompleteEntrySelected)
@@ -75,12 +72,6 @@ function sca:Initialize(editControl, ...)
             end
         end
     end)
---[[
-    local function OnEmoteSlashCommandsUpdated()
-        self:InvalidateSlashCommandCache()
-    end
-    PLAYER_EMOTE_MANAGER:RegisterCallback("EmoteSlashCommandsUpdated", OnEmoteSlashCommandsUpdated)
---]]
 end
 
 function sca:InvalidateSlashCommandCache()
@@ -100,7 +91,10 @@ function sca:ApplyAutoCompletionResults(...)
         for i=1, numResults do
             local name = select(i, ...)
             AddMenuItem(shortcodes[name], function()
-                self.editControl:SetText(shortcodeBytes[shortcodes[name]]) 
+                local replacementByte = shortcodeBytes[shortcodes[name]]
+                if matchedTextStart then
+                    editControl:SetText(editControl:GetText():sub(1,matchedTextStart-1)..replacementByte)
+                end
             end)
         end
         
@@ -124,51 +118,11 @@ end
 
 
 
---[[
-function ZO_AutoComplete:OnCommit(commitBehavior, commitMethod)
-    if self:IsOpen() then
-        local selectedIndex = ZO_Menu_GetSelectedIndex()
-        if selectedIndex then
-            local name = ZO_Menu_GetSelectedText()
-            if self.useCallbacks then
-                self:FireCallbacks(self.ON_ENTRY_SELECTED, name, commitMethod)
-            else
-                self.editControl:SetText(name) 
-            end
-        end
-        if not commitBehavior or commitBehavior == COMMIT_BEHAVIOR_LOSE_FOCUS then
-            self.editControl:LoseFocus()
-        end
-
-        self:Hide()
-
-        if selectedIndex then
-            return self.dontCallHookedHandlers
-        else
-            return false
-        end
-    end
-end
-]]
-
-
 function sca:SetEditControl(editControl)
     if editControl then
         if self.automaticMode then
             ZO_PreHookHandler(editControl, "OnTextChanged", function() self:OnTextChanged() end)
         end
-
-        --[[
-        ZO_PreHookHandler(editControl, "OnEnter", function()
-            if self:IsOpen() then
-                if not self.keepFocusOnCommit and self.automaticMode then
-                    return self:OnCommit(COMMIT_BEHAVIOR_LOSE_FOCUS, AUTO_COMPLETION_SELECTED_BY_ENTER)
-                else
-                    return self:OnCommit(COMMIT_BEHAVIOR_KEEP_FOCUS, AUTO_COMPLETION_SELECTED_BY_ENTER)
-                end
-            end
-        end)
-        --]]
 
         ZO_PreHookHandler(editControl, "OnTab", function()
             if self:IsOpen() then
@@ -192,15 +146,27 @@ function sca:SetEditControl(editControl)
 end
 
 
-function sca:GetAutoCompletionResults(text)
-    if #text < 3 then
+function sca:GetAutoCompletionResults(parseText)
+    if #parseText < 3 then
         return
     end
-    local startChar = text:sub(1, 1)
-    if startChar ~= ":" then
+
+    if (string.match(parseText, "%|[hH]%d:.-%|[hH].-|[hH]")) then --> Match out any guild or achieve links
+        for link in string.gmatch(parseText, "%|[hH]%d:.-%|[hH].-|[hH]") do
+            linkList[#linkList+1] = link
+            parseText,_ = parseText:gsub(link, "þ" .. tostring(#linkList) .. "þ")
+        end
+    end
+
+    local matchedTextEnd = 1
+    
+    matchedTextStart, matchedTextEnd = string.find(parseText, ":[^:]*$") --> Match the last : in the message
+    if not matchedTextStart then
         return
     end
-    if text:find(" ", 1, true) then
+
+    local matchedText = string.sub(parseText, matchedTextStart, matchedTextEnd)
+    if #matchedText < 3 or matchedText:find(" ") then
         return
     end
 
@@ -210,7 +176,7 @@ function sca:GetAutoCompletionResults(text)
         end
     end
 
-    local results = GetTopMatchesByLevenshteinSubStringScore(self.possibleMatches, text, 2, self.maxResults)
+    local results = GetTopMatchesByLevenshteinSubStringScore(self.possibleMatches, matchedText, 2, self.maxResults)
     if results then
         return unpack(results)
     end
