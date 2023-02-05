@@ -299,7 +299,7 @@ local function Bytes2Unicode(bytes)
 	return uCode
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local function Unicode2Bytes(uCode)
+function ee.Unicode2Bytes(uCode)
 	local nBytes = 0
 	local cPoint = {
 		[0] = 0,
@@ -406,7 +406,7 @@ local function editSC(message, ntype)	--ntype is a 2-bit binary number indicatin
 				local result = ""
 				for uCode in string.gmatch(ee.emojiSCs[shortcode].unicode, "([%u%1%d]+)") do
 				--Encode
-					result = result .. Unicode2Bytes(uCode)
+					result = result .. ee.Unicode2Bytes(uCode)
 				end
 				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", result)
 			elseif ee.emojiSCs[shortcode].func and editCustom then -- Special shortcode, therefore it actually needs a function to return a string WIP
@@ -547,7 +547,7 @@ function ee:UndoEdit(message)			-- This does not yet work for custom emoji, only
 		local result = ""
 		for uCode in string.gmatch(emoji, "([%u%1%d]+)") do
 			--Encode
-			result = result .. Unicode2Bytes(uCode)
+			result = result .. ee.Unicode2Bytes(uCode)
 		end
 		local value,_ = emoji:gsub("%-", "%%%-")
 		unEditedMessage,_ = unEditedMessage:gsub("%|t%d%d%:%d%d%:" .. value .. "[%.][d][d][s]%|t", result)
@@ -693,6 +693,8 @@ function ee:Initialize()
 	-- Initialize submodules
 	Init_MainChat()		-- Main chat message editor
 	Init_TextInput()	-- Textbox entry message editor
+
+	ee.initauto()
 
 	ee.container:SetHidden(not ee.GetVars().showChatBar)
 end

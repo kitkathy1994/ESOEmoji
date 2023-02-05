@@ -21,4 +21,5 @@
 ESOEmoji.lua
 EmojiMap.lua
 Shortcodes.lua
+SCAutocomplete.lua
 ESOEmoji.xml
