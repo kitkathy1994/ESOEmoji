@@ -21,6 +21,11 @@ local DefaultSettings = { -- Default
 		StandardEnabled = true,
 	},
 }
+-- Scale factor for standard emoji discrepancies
+ee.PathScale = {
+	["ESOEmoji/icons/openmoji-72x72-colour-dds/"] = 1,
+	["ESOEmoji/icons/twemoji-72x72-colour-dds/"] = 2/3,
+}
 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -483,7 +488,8 @@ local function editStandard(message)
 		for i = 1, #eFoundZWJ do
 			local noFE0F,_ = eFoundZWJ[i].eCode:gsub("[%-][F][E][0][F]", "") -- Remove FE0Fs from final eCode (eBytes don't matter)
 			if ee.emojiMap[noFE0F] then -- If, for whatever reason, the final combo doesn't have an icon, skip it
-				textureLink = "|t" .. tostring(vars.emojiSettings.Size) .. ":" .. tostring(vars.emojiSettings.Size) .. ":" .. vars.emojiSettings.Path .. ee.emojiMap[noFE0F].texture .. "|t"
+				local t_size = tostring(vars.emojiSettings.Size*ee.PathScale[vars.emojiSettings.Path])
+				textureLink = "|t" .. t_size .. ":" .. t_size .. ":" .. vars.emojiSettings.Path .. ee.emojiMap[noFE0F].texture .. "|t"
 				message,_ = message:gsub(eFoundZWJ[i].eBytes, textureLink)
 			end
 		end
