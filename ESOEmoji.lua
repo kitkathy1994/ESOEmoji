@@ -488,7 +488,7 @@ local function editStandard(message)
 		for i = 1, #eFoundZWJ do
 			local noFE0F,_ = eFoundZWJ[i].eCode:gsub("[%-][F][E][0][F]", "") -- Remove FE0Fs from final eCode (eBytes don't matter)
 			if ee.emojiMap[noFE0F] then -- If, for whatever reason, the final combo doesn't have an icon, skip it
-				local t_size = tostring(vars.emojiSettings.Size*ee.PathScale[vars.emojiSettings.Path])
+				local t_size = tostring(math.floor(vars.emojiSettings.Size*ee.PathScale[vars.emojiSettings.Path]+0.5))
 				textureLink = "|t" .. t_size .. ":" .. t_size .. ":" .. vars.emojiSettings.Path .. ee.emojiMap[noFE0F].texture .. "|t"
 				message,_ = message:gsub(eFoundZWJ[i].eBytes, textureLink)
 			end
