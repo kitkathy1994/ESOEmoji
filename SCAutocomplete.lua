@@ -22,7 +22,14 @@ function ee.initauto()
             textureLink = "|t" .. tostring(size) .. ":" .. tostring(size) .. ":" .. path .. emotePath .. "|t"
             local text = textureLink.." - :"..i..":"
             shortcodes[i] = text
-            shortcodeBytes[text] = ee.Unicode2Bytes(v.unicode)
+            
+			local result = ""
+			for uCode in string.gmatch(v.unicode, "([%u%1%d]+)") do
+				--Encode
+				result = result .. ee.Unicode2Bytes(uCode)
+			end
+			shortcodeBytes[text] = result
+			
 		end
 	end
     ee.asc = ee.SCAutocomplete:New(CHAT_SYSTEM.textEntry.editControl, nil, nil, nil, 8, AUTO_COMPLETION_AUTOMATIC_MODE, AUTO_COMPLETION_DONT_USE_ARROWS)
