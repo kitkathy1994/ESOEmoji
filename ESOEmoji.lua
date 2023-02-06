@@ -583,22 +583,18 @@ function ee:UndoEdit(message)			-- This does not yet work for custom emoji, only
 	local unEditedMessage = message
 	local path = vars.emojiSettings.Path
 	local emoji = ""
-	local n = 1
 	path,_ = path:gsub("%/", "%%%/")
 	path,_ = path:gsub("%-", "%%%-")
-	
-	repeat
-		unEditedMessage,n = unEditedMessage:gsub(path, "", 1)
-	until n <= 0
 		
-	for emoji in string.gmatch(unEditedMessage, "%|t%d%d%:%d%d%:([%u%1%d%-]+)[%.][d][d][s]%|t") do
+	for emoji in string.gmatch(unEditedMessage, "%|[tT]%d-:%d-:" .. path .. "(.-)[%.]dds|[tT]") do
+		emoji,_ = emoji:gsub(path, "")
 		local result = ""
 		for uCode in string.gmatch(emoji, "([%u%1%d]+)") do
 			--Encode
 			result = result .. ee.Unicode2Bytes(uCode)
 		end
 		local value,_ = emoji:gsub("%-", "%%%-")
-		unEditedMessage,_ = unEditedMessage:gsub("%|t%d%d%:%d%d%:" .. value .. "[%.][d][d][s]%|t", result)
+		unEditedMessage,_ = unEditedMessage:gsub("%|[tT]%d-:%d-:" .. path .. value .. "[%.]dds|[tT]", result)
 	end
 	return unEditedMessage
 end
