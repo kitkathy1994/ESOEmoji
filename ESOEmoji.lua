@@ -5,10 +5,8 @@ ESOEmoji = {}
 local ee = ESOEmoji
 ee.version = "v0.4.0-Alpha"
 ee.name = "ESOEmoji"
-ee.previousText = nil
-ee.previousColour = nil
-ee.textBox = nil
-local vars = {} -- Settings
+
+local vars = {} -- User Settings
 local DefaultSettings = { -- Default
 	showChatBar = true,
 	previewString = true,
@@ -20,6 +18,12 @@ local DefaultSettings = { -- Default
 		CustomEnabled = false,
 		StandardEnabled = true,
 	},
+}
+local ChatBar = {	-- Chat Bar pieces access
+	control = displayTextEntry,
+	b_settings = displayTextEntryButton,
+	label = displayTextEntryLabel,
+	previewBox = displayTextEntryBox,
 }
 -- Scale factor for standard emoji discrepancies
 ee.PathScale = {
@@ -39,9 +43,16 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	UTILITY FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 function ee:GetVars()
 	return vars
+end
+
+function ee:GetChatBar()
+	return ChatBar
+end
+
+function ee.DisplayVersion()
+	d("ESO Emoji version: " .. ee.version)
 end
 
 function ee.GetTextureLinkIcon(icon, location, size, colour)
@@ -62,11 +73,6 @@ function ee.GetTextureLinkIcon(icon, location, size, colour)
 	end
 	
 	return textureLink
-end
-
-
-function ee.DisplayVersion()
-	d("ESO Emoji version: " .. ee.version)
 end
 
 function ee.test(extra)
@@ -100,7 +106,6 @@ function ee.test(extra)
 --	d(links)
 --	ee.GetVars().emojiSettings.Size = tonumber(extra)
 --	ee.GetVars().emojiSettings.CustomEnabled = false
-	ee.GetVars().realtimeEdit = true
 end
 
 function ee.Pop(num)
@@ -154,8 +159,13 @@ end -- |cFFD700|t150%:150%:esoui/art/campaign/campaignbrowser_fullpop.dds:inheri
 
 -- |t28:28:esoui/art/ava/ava_keepstatus_icon_food_aldmeri.dds|t
 
--- |t20:20:esoui/art/campaign/gamepad/gp_overview_allianceicon_aldmeri.dds|t
+-- |t28:28:esoui/art/charactercreate/charactercreate_bosmericon_down.dds|t
 
+--[[ 
+                 |t50:50:esoui/art/charactercreate/charactercreate_bosmericon_down.dds|t
+
+BOSMER ARE DA BEST! <3
+]]--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function CheckByte(myByte) -- TODO: I can prob optimise runtime of this (I was sleep deprived when I wrote this and I forgot how)
 	if myByte <= 255 then -- make sure its at most 8 bits
@@ -372,7 +382,7 @@ function ee.Unicode2Bytes(uCode)
 	
 	return result
 end
-
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function Num2Bool(num)
 	if num > 1 then
 		return -1
@@ -383,13 +393,45 @@ local function Num2Bool(num)
 		return false
 	end
 end
-
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function Bool2Num(bool)
 	if bool then
 		return 1
 	else
 		return 0
 	end
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function ee:HideChatBar()
+	if vars.showChatBar == false then	-- Do nothing if already hidden
+		return
+	end
+	vars.showChatBar = false
+	ChatBar.control:SetHidden(true)
+	for j=1, #ZO_ChatWindow.container.windows do
+			local chatBuffer = ZO_ChatWindow.container.windows[j]
+			local _,_,parentframe = chatBuffer:GetAnchor()
+			chatBuffer:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,0,0,0)
+	end
+	local scrollbar = ZO_ChatWindowScrollbar
+	local _,a,parentframe,b,x,y,z = scrollbar:GetAnchor(1)
+	scrollbar:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,x,y+27.5,z)
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function ee:ShowChatBar()
+	if vars.showChatBar == true then	-- Do nothing if already showing
+		return
+	end
+	vars.showChatBar = true
+	ChatBar.control:SetHidden(false)
+	for j=1, #ZO_ChatWindow.container.windows do
+			local chatBuffer = ZO_ChatWindow.container.windows[j]
+			local _,_,parentframe = chatBuffer:GetAnchor()
+			chatBuffer:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,0,-27.5,0)
+	end
+	local scrollbar = ZO_ChatWindowScrollbar
+	local _,a,parentframe,b,x,y,z = scrollbar:GetAnchor(1)
+	scrollbar:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,x,y-27.5,z)
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	STANDARD FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
@@ -421,7 +463,7 @@ local function editSC(message, ntype)	--ntype is a 2-bit binary number indicatin
 	end
 	return message
 end
-
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function editStandard(message)
 	local uCode = ""
 	local textureLink = ""
@@ -497,7 +539,7 @@ local function editStandard(message)
 	
 	return message
 end
-
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function ee:Edit(rawMessage)
 	local editedMessage = rawMessage
 	local settings = BitOr(BitLShift(Bool2Num(vars.emojiSettings.CustomEnabled),1), Bool2Num(vars.emojiSettings.SCEnabled)) -- For shortcodes
@@ -560,7 +602,34 @@ function ee:UndoEdit(message)			-- This does not yet work for custom emoji, only
 	end
 	return unEditedMessage
 end
-
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local function SetupAnchors()				-- Used to set up anchors for Chat Bar module
+	local originalControl = KEYBOARD_CHAT_SYSTEM:GetEditControl()
+	local originalParent = originalControl:GetParent():GetParent()
+	
+	ChatBar.control:ClearAnchors()
+	ChatBar.control:SetAnchor(TOPLEFT, originalParent, TOPLEFT, 0, -27.5)
+	ChatBar.control:SetAnchor(BOTTOMRIGHT, originalParent, BOTTOMRIGHT, 0, -27.5)
+	ChatBar.control:SetParent(originalParent)
+	
+	if ee.GetVars().showChatBar then			-- Only adjust chat anchors if enabled in the settings
+		for j=1, #ZO_ChatWindow.container.windows do
+			local chatBuffer = ZO_ChatWindow.container.windows[j]
+			local _,_,parentframe = chatBuffer:GetAnchor()
+			chatBuffer:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,0,-27.5,0)
+		end
+		
+		local scrollbar = ZO_ChatWindowScrollbar
+		local _,a,parentframe,b,x,y,z = scrollbar:GetAnchor(1)
+		scrollbar:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,x,y-27.5,z)
+	end
+	
+	ChatBar.previewBox:SetMaxInputChars(1000)
+	ChatBar.previewBox:SetAllowMarkupType(ALLOW_MARKUP_TYPE_ALL) -- Format links and stuff!!
+	ChatBar.previewBox:SetFont("$(CHAT_FONT)|$(KB_" .. GetChatFontSize() .. ")|shadow") -- Base font
+	
+	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_PLAYER_ACTIVATED)
+end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	HIJACKER FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -589,7 +658,7 @@ local function Hijack_OnTextChanged()
 	
 	originalControl:SetHandler("OnTextChanged", function(...)
 		local editedMessage = ee:Edit(originalControl:GetText())
-		ee.textBox:SetText(editedMessage)			-- Edit preview
+		ee.GetChatBar().previewBox:SetText(editedMessage)			-- Edit preview
 		
 		if ee.GetVars().realtimeEdit then			-- Only run this if user enabled realtimeEdit
 			originalControl:SetText(editedMessage)	-- Edit text entry in realtime
@@ -611,6 +680,7 @@ end
 --	//////////////////////////////////////////////////////////////////////////////////////////	EVENT REGISTRATIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 EVENT_MANAGER:RegisterForEvent(ee.name, EVENT_ADD_ON_LOADED, ee.OnAddOnLoaded)
+EVENT_MANAGER:RegisterForEvent(ee.name, EVENT_PLAYER_ACTIVATED, SetupAnchors)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	  SLASH COMMANDS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -627,81 +697,52 @@ local function Init_TextInput()
 	Hijack_OnTextChanged()
 	Hijack_GetText()
 end
-
-
-local function setupAnchors()
-	local originalControl = KEYBOARD_CHAT_SYSTEM:GetEditControl()
-	local originalParent = originalControl:GetParent():GetParent()
-
-	ee.container:ClearAnchors()
-	ee.container:SetAnchor(TOPLEFT, originalParent, TOPLEFT, 0, -27.5)
-	ee.container:SetAnchor(BOTTOMRIGHT, originalParent, BOTTOMRIGHT, 0, -27.5)
-	ee.container:SetParent(originalParent)
-
-	--[[
-	local chatBuffer = ZO_KeyboardChatWindowTemplate1Buffer
-	local _,_,parentframe = chatBuffer:GetAnchor()
-	chatBuffer:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,0,-27.5,0)
-	]]
-
-
-  for j=1, #ZO_ChatWindow.container.windows do
-  	local chatBuffer = ZO_ChatWindow.container.windows[j]
-    local _,_,parentframe = chatBuffer:GetAnchor()
-		chatBuffer:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,0,-27.5,0)
-  end
-
-
-	local scrollbar = ZO_ChatWindowScrollbar
-	local _,a,parentframe,b,x,y,z = scrollbar:GetAnchor(1)
-	scrollbar:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,x,y-27.5,z)
-
-	ee.textBox:SetMaxInputChars(1000)
-	ee.textBox:SetAllowMarkupType(ALLOW_MARKUP_TYPE_ALL) -- Format links and stuff!!
-	ee.textBox:SetFont("$(CHAT_FONT)|$(KB_" .. GetChatFontSize() .. ")|shadow") -- Base font
-
-	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_PLAYER_ACTIVATED)
-end
-
-EVENT_MANAGER:RegisterForEvent(ee.name, EVENT_PLAYER_ACTIVATED, setupAnchors)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-function ee:Initialize()
-	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_ADD_ON_LOADED)
-	vars = ZO_SavedVars:NewAccountWide("EEVars", 1, nil, DefaultSettings)
-	
+local function Init_AutoComplete()
+	ee.initauto()
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local function Init_ChatBar()
 	local originalControl = KEYBOARD_CHAT_SYSTEM:GetEditControl()
 
-	ee.textBox = displayTextEntryBox
-	ee.label = displayTextEntryLabel
-	ee.container = displayTextEntry
+	ChatBar.previewBox = displayTextEntryBox
+	ChatBar.label = displayTextEntryLabel
+	ChatBar.control = displayTextEntry
 
 	local o_SetFont = originalControl.SetFont
 	originalControl.SetFont = function(self, ...)
-		ee.textBox:SetFont(...)
-		ee.label:SetFont(...)
+		ChatBar.previewBox:SetFont(...)
+		ChatBar.label:SetFont(...)
 		o_SetFont(self, ...)
 	end
 	
 	local o_SetColour = originalControl.SetColor
 	originalControl.SetColor = function(self, ...)
-		ee.textBox:SetColor(...)
-		ee.label:SetColor(...)
+		ChatBar.previewBox:SetColor(...)
+		ChatBar.label:SetColor(...)
 		o_SetColour(self, ...)
 	end
 	
 	local o_SetHeight = originalControl.SetHeight
 	originalControl.SetHeight = function(self, ...)
-		ee.textBox:SetHeight(...)
-		ee.label:SetHeight(...)
+		ChatBar.previewBox:SetHeight(...)
+		ChatBar.label:SetHeight(...)
 		o_SetHeight(self, ...)
 	end
+	
+	ChatBar.control:SetHidden(not vars.showChatBar)
+end
 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function ee:Initialize()
+	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_ADD_ON_LOADED)
+	vars = ZO_SavedVars:NewAccountWide("EEVars", 1, nil, DefaultSettings)
+	
 	-- Initialize submodules
 	Init_MainChat()		-- Main chat message editor
 	Init_TextInput()	-- Textbox entry message editor
+	Init_AutoComplete()	-- Autocomplete text entry module
+	Init_ChatBar()		-- Chat bar module in the chat
 
-	ee.initauto()
-
-	ee.container:SetHidden(not ee.GetVars().showChatBar)
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
