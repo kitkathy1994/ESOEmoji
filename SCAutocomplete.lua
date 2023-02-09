@@ -1,8 +1,8 @@
 local ee = ESOEmoji
 
 
-ee.SCAutocomplete = ZO_AutoComplete:Subclass()
-local sca = ee.SCAutocomplete
+ee.SCAutoComplete = ZO_AutoComplete:Subclass()
+local sca = ee.SCAutoComplete
 local shortcodes = {}
 local shortcodeBytes = {}
 
@@ -12,14 +12,14 @@ local matchedTextStart = nil
 -- https://github.com/esoui/esoui/blob/master/esoui/libraries/utility/zo_autocomplete.lua
 -- https://github.com/esoui/esoui/blob/master/esoui/ingame/slashcommands/slashcommandautocomplete.lua
 
-function ee.initauto()
+function ee.SCAutoComplete_Init()
     local vars = ee:GetVars()
 	for i,v in pairs(ee.emojiSCs) do
 		if v.unicode and ee.emojiMap[v.unicode] then -- skip various unicode icons such as copyright which dont have a texture
-            local size = vars.emojiSettings.Size
-            local path = vars.emojiSettings.Path
-            local emotePath = ee.emojiMap[v.unicode].texture
-            textureLink = "|t" .. tostring(size) .. ":" .. tostring(size) .. ":" .. path .. emotePath .. "|t"
+            local emojiFile = ee.emojiMap[v.unicode].texture
+			
+			local size = tostring(math.floor(vars.emojiSettings.Size*ee.PathScale[vars.emojiSettings.Path]+0.5))
+			textureLink = "|t" .. size .. ":" .. size .. ":" .. vars.emojiSettings.Path .. emojiFile .. "|t"
             local text = textureLink.." - :"..i..":"
             shortcodes[i] = text
             
@@ -32,7 +32,7 @@ function ee.initauto()
 			
 		end
 	end
-    ee.asc = ee.SCAutocomplete:New(CHAT_SYSTEM.textEntry.editControl, nil, nil, nil, 8, AUTO_COMPLETION_AUTOMATIC_MODE, AUTO_COMPLETION_DONT_USE_ARROWS)
+    ee.asc = ee.SCAutoComplete:New(CHAT_SYSTEM.textEntry.editControl, nil, nil, nil, 8, AUTO_COMPLETION_AUTOMATIC_MODE, AUTO_COMPLETION_DONT_USE_ARROWS)
 end
 
 
