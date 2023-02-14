@@ -25,7 +25,7 @@
                 mouseOver="ESOEmoji/icons/openmoji-72x72-colour-dds/2699.dds"
                 disabled="ESOEmoji/icons/openmoji-72x72-colour-dds/1F604.dds"/>
               <OnClicked>
-                d("BUTOTN WAS PRESSEDED")
+                ESOEmoji.OpenSettings()
               </OnClicked>
             </Button>
 

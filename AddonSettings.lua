@@ -3,7 +3,8 @@ local ee = ESOEmoji
 local settings = ee.GetVars()
 local saveData = {}
 local panelName = "ESOEmojiSettings" -- TODO the name will be used to create a global variable, pick something unique or you may overwrite an existing variable!
- 
+local panel
+
 local panelData = {
     type = "panel",
     name = ee.name,
@@ -85,9 +86,12 @@ local optionsData = {
     },
 }
 
+function ee.OpenSettings()
+	LAM:OpenToPanel(panel)
+end
 
 function ee.InitSettingsMenu()
 	settings = ee.GetVars()
-	local panel = LAM:RegisterAddonPanel(panelName, panelData)
+	panel = LAM:RegisterAddonPanel(panelName, panelData)
 	LAM:RegisterOptionControls(panelName, optionsData)
 end
