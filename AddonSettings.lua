@@ -1,0 +1,93 @@
+local LAM = LibAddonMenu2
+local ee = ESOEmoji
+local settings = ee.GetVars()
+local saveData = {}
+local panelName = "ESOEmojiSettings" -- TODO the name will be used to create a global variable, pick something unique or you may overwrite an existing variable!
+ 
+local panelData = {
+    type = "panel",
+    name = ee.name,
+	displayName = "ESO Emoji |t28:28:ESOEmoji/icons/misc/1F60D.dds|t",
+    author = "|c800020@BosmeriPride|r and |c0DC1CF@M0R_Gaming|r",
+	version = ee.version,
+}
+
+local optionsData = {
+	{
+		type = "header",	-- General Options Header
+		name = "General",
+	},
+    {
+        type = "checkbox",	-- showChatBar
+        name = "Chat Bar",
+		tooltip = "The chat bar is a bar above your chat textbox that contains extra controls.",
+        getFunc = function() return settings.showChatBar end,
+        setFunc = function(value) if value then ee:ShowChatBar() else ee:HideChatBar() end end
+    },
+	{
+        type = "dropdown",	-- previewString only enabled if chat bar is enabled
+        name = "Chat Bar displays",
+		choices = {"preview", "favourites"},
+		tooltip = "Change what the Chat Bar shows above the chat textbox. \n - Preview Text: allows you to see what your message will look like with emojis without editing your messages in real time.\n - Favourites: allows you to choose your favourite emoji to be available for quick access above the chat.",
+        getFunc = function() return saveData.myValue end,
+        setFunc = function(value) saveData.myValue = value end
+    },
+	{
+        type = "checkbox",	-- realtimeEdit
+        name = "Show emoji in textbox while typing",
+		tooltip = "Automatically edits text message to show which emoji are being used.",
+		warning = "This feature EDITS your messages in real time before you send a message in chat. If you feel uncomfortable about this feature due to privacy or security concerns, you should leave it disabled.",
+        getFunc = function() return settings.realtimeEdit end,
+        setFunc = function(value) settings.realtimeEdit = value end
+    },
+	{
+		type = "header",	-- Emoji Settings Header
+		name = "Emoji Settings",
+	},
+	{
+		type = "texture",	-- Emoji Preview
+		image = "ESOEmoji/icons/openmoji-72x72-colour-dds/1F604.dds",
+		imageWidth = 50,
+		imageHeight = 50,
+	},
+	{
+        type = "dropdown",	-- Path of style (drop down?)
+        name = "Appearance",
+		choices = {"OpenMoji", "Twemoji"},
+		choicesValues = {"ESOEmoji/icons/openmoji-72x72-colour-dds/", "ESOEmoji/icons/twemoji-72x72-colour-dds/"},
+        getFunc = function() return settings.emojiSettings.Path end,
+        setFunc = function(value) settings.emojiSettings.Path = value end
+    },
+	{
+        type = "slider",	-- Size option
+        name = "Size",
+		min = 10,
+		max = 50,
+		step = 1,
+		tooltip = "Size of displayed emoji.\nThis setting is not retroactive.\nDefault = 28.",
+        getFunc = function() return settings.emojiSettings.Size end,
+        setFunc = function(value) settings.emojiSettings.Size = value end
+    },
+	{
+        type = "checkbox",	-- SCEnabled AND StandardEnabled
+        name = "Translate emoji shortcodes",
+		tooltip = "Enables shortcodes. Example: :smile: will be changed to a smile emoji.",
+        getFunc = function() return settings.emojiSettings.SCEnabled end,
+        setFunc = function(value) settings.emojiSettings.SCEnabled = value end
+    },
+	{
+        type = "checkbox",	-- CustomEnabled  should only be functional if shortcodes are enabled
+        name = "Translate non-Unicode custom shortcodes",
+		disabled = true,
+		tooltip = "Custom emoji are coming soon!",
+        getFunc = function() return settings.emojiSettings.CustomEnabled end,
+        setFunc = function(value) settings.emojiSettings.CustomEnabled = value end
+    },
+}
+
+
+function ee.InitSettingsMenu()
+	settings = ee.GetVars()
+	local panel = LAM:RegisterAddonPanel(panelName, panelData)
+	LAM:RegisterOptionControls(panelName, optionsData)
+end

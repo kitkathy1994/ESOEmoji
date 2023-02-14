@@ -52,7 +52,7 @@ function ee:GetChatBar()
 end
 
 function ee.DisplayVersion()
-	d("ESO Emoji version: " .. ee.version)
+	d("ESO Emoji: " .. ee.version)
 end
 
 function ee.GetTextureLinkIcon(icon, location, size, colour)
@@ -739,6 +739,8 @@ function ee:Initialize()
 	Init_TextInput()	-- Textbox entry message editor
 	Init_AutoComplete()	-- Autocomplete text entry module
 	Init_ChatBar()		-- Chat bar module in the chat
+	
+	ee.InitSettingsMenu()
 
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

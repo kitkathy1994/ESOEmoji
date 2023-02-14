@@ -20,9 +20,9 @@
             <Button name="$(parent)Button" inherits="ZO_ButtonBehaviorClickSound" verticalAlignment="1">
               <Dimensions x="26" y="26" />
               <Anchor point="TOPLEFT" relativeTo="$(parent)Divider" relativePoint="BOTTOMLEFT"/>
-              <Textures normal="ESOEmoji/icons/openmoji-72x72-colour-dds/1F604.dds"
-                pressed="ESOEmoji/icons/openmoji-72x72-colour-dds/1F604.dds"
-                mouseOver="ESOEmoji/icons/openmoji-72x72-colour-dds/1F604.dds"
+              <Textures normal="ESOEmoji/icons/openmoji-72x72-colour-dds/2699.dds"
+                pressed="ESOEmoji/icons/openmoji-72x72-colour-dds/2699.dds"
+                mouseOver="ESOEmoji/icons/openmoji-72x72-colour-dds/2699.dds"
                 disabled="ESOEmoji/icons/openmoji-72x72-colour-dds/1F604.dds"/>
               <OnClicked>
                 d("BUTOTN WAS PRESSEDED")
