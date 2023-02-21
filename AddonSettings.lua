@@ -84,6 +84,27 @@ local optionsData = {
         getFunc = function() return settings.emojiSettings.CustomEnabled end,
         setFunc = function(value) settings.emojiSettings.CustomEnabled = value end
     },
+	{
+		type = "header",	-- Emoji Settings Header
+		name = "Favourites",
+	},
+	{
+		type = "texture",	-- Emoji Preview
+		image = "ESOEmoji/icons/openmoji-72x72-colour-dds/1F604.dds",
+		imageWidth = 50,
+		imageHeight = 50,
+		width = "half",
+	},
+	{
+		type = "editbox",
+		name = "Favourites Search Box",
+		tooltip = "Enter the emote you would like to favourite here:",
+		getFunc = function() return "" end,
+		setFunc = function(value) d(value) end,
+		isMultiline = false,
+		reference = "EEFavSearch",
+		width = "half",
+	},
 }
 
 function ee.OpenSettings()

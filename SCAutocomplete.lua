@@ -6,8 +6,6 @@ local sca = ee.SCAutoComplete
 local shortcodes = {}
 local shortcodeBytes = {}
 
-local matchedTextStart = nil
-
 -- This file utilizes alot of code from the esoui. Below are some of the major files used:
 -- https://github.com/esoui/esoui/blob/master/esoui/libraries/utility/zo_autocomplete.lua
 -- https://github.com/esoui/esoui/blob/master/esoui/ingame/slashcommands/slashcommandautocomplete.lua
@@ -43,6 +41,9 @@ end
 function sca:Initialize(editControl, ...)
     ZO_AutoComplete.Initialize(self, editControl, ...)
 
+
+    self.matchedTextStart = nil
+
     self.possibleMatches = {}
 
     self:SetUseCallbacks(true)
@@ -52,9 +53,7 @@ function sca:Initialize(editControl, ...)
 
     local function OnAutoCompleteEntrySelected(selected, selectionMethod) -- EDIT THIS
         local replacementByte = shortcodeBytes[selected]
-        if matchedTextStart then
-            editControl:SetText(editControl:GetText():sub(1,matchedTextStart-1)..replacementByte)
-        end
+        self:autoFillEditbox(replacementByte)
     end
 
     self:RegisterCallback(ZO_AutoComplete.ON_ENTRY_SELECTED, OnAutoCompleteEntrySelected)
@@ -87,6 +86,12 @@ end
 
 
 
+function sca:autoFillEditbox(replacementByte)
+    if self.matchedTextStart then
+        self.editControl:SetText(self.editControl:GetText():sub(1,self.matchedTextStart-1)..replacementByte)
+    end
+end
+
 
 
 function sca:ApplyAutoCompletionResults(...)
@@ -99,9 +104,7 @@ function sca:ApplyAutoCompletionResults(...)
             local name = select(i, ...)
             AddMenuItem(shortcodes[name], function()
                 local replacementByte = shortcodeBytes[shortcodes[name]]
-                if matchedTextStart then
-                    editControl:SetText(editControl:GetText():sub(1,matchedTextStart-1)..replacementByte)
-                end
+                self:autoFillEditbox(replacementByte)
             end)
         end
         
@@ -167,12 +170,12 @@ function sca:GetAutoCompletionResults(parseText)
 
     local matchedTextEnd = 1
     
-    matchedTextStart, matchedTextEnd = string.find(parseText, ":[^:]*$") --> Match the last : in the message
-    if not matchedTextStart then
+    self.matchedTextStart, matchedTextEnd = string.find(parseText, ":[^:]*$") --> Match the last : in the message
+    if not self.matchedTextStart then
         return
     end
 
-    local matchedText = string.sub(parseText, matchedTextStart, matchedTextEnd)
+    local matchedText = string.sub(parseText, self.matchedTextStart, matchedTextEnd)
     if #matchedText < 3 or matchedText:find(" ") then
         return
     end
