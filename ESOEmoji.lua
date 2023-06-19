@@ -18,12 +18,13 @@ local DefaultSettings = { -- Default
 		CustomEnabled = false,
 		StandardEnabled = true,
 	},
+	favourites = {},
 }
 local ChatBar = {	-- Chat Bar pieces access
-	control = displayTextEntry,
-	b_settings = displayTextEntryButton,
-	label = displayTextEntryLabel,
-	previewBox = displayTextEntryBox,
+	control = ESOEmoji_ControlChatBar,
+	b_settings = ESOEmoji_ControlChatBarSettingsButton,
+	label = ESOEmoji_ControlChatBarLabel,
+	previewBox = ESOEmoji_ControlChatBarPreviewBox,
 }
 -- Scale factor for standard emoji discrepancies
 ee.PathScale = {
@@ -626,6 +627,45 @@ local function SetupAnchors()				-- Used to set up anchors for Chat Bar module
 	
 	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_PLAYER_ACTIVATED)
 end
+
+
+function ee.addFavourite(emoji)
+	if vars.favourites == {} then
+		vars.favourites[1] = emoji
+	else
+		vars.favourites[#vars.favourites+1] = emoji
+	end
+end
+
+function ee.removeFavourite(emoji)
+	if vars.favourites == {} then
+		return
+	end
+	
+	local indexToRemove = nil
+	
+    -- First, find the index of the favourite to remove
+    for i, val in ipairs(vars.favourites) do
+        if val == emoji then
+            indexToRemove = i
+            break
+        end
+    end
+
+    -- If the favourite was found, remove it
+    if indexToRemove then
+        -- Shift elements down, to fill the hole left by the removed element
+        for i = indexToRemove, #vars.favourites - 1 do
+            vars.favourites[i] = vars.favourites[i + 1]
+        end
+        -- Remove the last element
+        vars.favourites[#vars.favourites] = nil
+    end
+end
+
+function ee.InsertFave1()
+	KEYBOARD_CHAT_SYSTEM:GetEditControl():InsertText("test")
+end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	HIJACKER FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -701,9 +741,9 @@ end
 local function Init_ChatBar()
 	local originalControl = KEYBOARD_CHAT_SYSTEM:GetEditControl()
 
-	ChatBar.previewBox = displayTextEntryBox
-	ChatBar.label = displayTextEntryLabel
-	ChatBar.control = displayTextEntry
+	ChatBar.previewBox = ESOEmoji_ControlChatBarPreviewBox
+	ChatBar.label = ESOEmoji_ControlChatBarLabel
+	ChatBar.control = ESOEmoji_ControlChatBar
 
 	local o_SetFont = originalControl.SetFont
 	originalControl.SetFont = function(self, ...)
