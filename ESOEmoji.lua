@@ -671,13 +671,13 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function Hijack_MessageFormatter()
 	local original = CHAT_ROUTER.FormatAndAddChatMessage
-	CHAT_ROUTER.FormatAndAddChatMessage = function(self, eventCode, channelType, fromName, messageText, isCustomerService, fromDisplayName)
+	CHAT_ROUTER.FormatAndAddChatMessage = function(self, eventCode, channelType, fromName, messageText, ...) --isCustomerService, fromDisplayName)
 		if type(messageText) == "string" then
 			editedMessage = ee:Edit(messageText)
 		else
 			editedMessage = messageText
 		end
-		return original(self, eventCode, channelType, fromName, editedMessage, isCustomerService, fromDisplayName)
+		return original(self, eventCode, channelType, fromName, editedMessage, ...) --isCustomerService, fromDisplayName)
 	end
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
