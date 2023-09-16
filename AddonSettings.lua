@@ -84,9 +84,15 @@ local optionsData = {
         getFunc = function() return settings.emojiSettings.CustomEnabled end,
         setFunc = function(value) settings.emojiSettings.CustomEnabled = value end
     },
+    --[[
 	{
 		type = "header",	-- Emoji Settings Header
 		name = "Favourites",
+	},
+	{
+		type = "description",
+		title = "Work in Progress Feature",
+		text = "This feature is still being worked on, and will not be usable yet."
 	},
 	{
 		type = "texture",	-- Emoji Preview
@@ -105,6 +111,7 @@ local optionsData = {
 		reference = "EEFavSearch",
 		width = "half",
 	},
+	]]
 }
 
 function ee.OpenSettings()
