@@ -76,39 +76,6 @@ function ee.GetTextureLinkIcon(icon, location, size, colour)
 	return textureLink
 end
 
-function ee.test(extra)
-	--local textEntry = KEYBOARD_CHAT_SYSTEM:GetControl()
-	--local channelLabel = textEntry:GetNamedChild("Label")
-	--ee.previousColour = channelLabel.GetColour()
-	--d(ee.previousColour)
-	
---	local links = {}
---	extra = tostring(extra)
---	local text = {}
---	local noLinkText = ""
---	local link = ""
---	local linkend = ""
---	for link in string.gmatch(extra, "[%|][hH][%a%d%:]+[%|][hH][%|][hH]") do
---		links[#links+1] = link
---	end
---	noLinkText = extra:gsub("[%|][hH][%a%d%:]+[%|][hH][%|][hH]", "")
---	d(noLinkText)
---	d(links)
-	
---	local links = {}
---	local frag = string.match(extra, "[%|][hH][%a%d%:]+[%|][hH][%|][hH]")
---	d(frag)
---	local i = 1
---	repeat
---		local s, e = string.find(extra, "[%|][hH][%a%d%:]+[%|][hH][%|][hH]", i)
---		links[#links+1] = {sval = s, eval = e}
---		i = tonumber(e)
---	until sval == nil or eval == nil
---	d(links)
---	ee.GetVars().emojiSettings.Size = tonumber(extra)
---	ee.GetVars().emojiSettings.CustomEnabled = false
-end
-
 function ee.Pop(num)
 	local popDisplay = ""
 	local campaign = nil
@@ -722,7 +689,6 @@ EVENT_MANAGER:RegisterForEvent(ee.name, EVENT_PLAYER_ACTIVATED, SetupAnchors)
 --	//////////////////////////////////////////////////////////////////////////////////////////	  SLASH COMMANDS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 SLASH_COMMANDS["/ee_version"] = ee.DisplayVersion
-SLASH_COMMANDS["/ee_test"] = ee.test
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	////////////////////////////////////////////////////////////////////////////////////////// INITIALIZE FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
