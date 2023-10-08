@@ -735,7 +735,9 @@ local function Init_TextInput()
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function Init_AutoComplete()
-	ee.SCAutoComplete_Init() -- See SCAutoComplete.lua
+	if ee.GetVars().emojiSettings.SCEnabled then
+		ee.SCAutoComplete_Init() -- See SCAutoComplete.lua
+	end
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function Init_ChatBar()
