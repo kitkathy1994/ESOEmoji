@@ -28,10 +28,23 @@ local optionsData = {
 	{
         type = "dropdown",	-- previewString only enabled if chat bar is enabled
         name = "Chat Bar displays",
-		choices = {"preview", "favourites"},
+		disabled = true,
+		choices = {"Preview"},
 		tooltip = "Change what the Chat Bar shows above the chat textbox. \n - Preview Text: allows you to see what your message will look like with emojis without editing your messages in real time.\n - Favourites: allows you to choose your favourite emoji to be available for quick access above the chat.",
-        getFunc = function() return saveData.myValue end,
-        setFunc = function(value) saveData.myValue = value end
+        getFunc = function()
+			if settings.previewString then
+				return "Preview"
+			else
+				return "Favourites"
+			end
+		end,
+        setFunc = function(value)
+		if value == "Preview" then
+				settings.previewString = true
+			else
+				settings.previewString = false
+			end
+		end
     },
 	{
         type = "checkbox",	-- realtimeEdit
@@ -45,19 +58,24 @@ local optionsData = {
 		type = "header",	-- Emoji Settings Header
 		name = "Emoji Settings",
 	},
+	--[[ -- Preview isn't quite working as intended
 	{
 		type = "texture",	-- Emoji Preview
 		image = "ESOEmoji/icons/openmoji-72x72-colour-dds/1F604.dds",
 		imageWidth = 50,
 		imageHeight = 50,
 	},
+	--]]
 	{
         type = "dropdown",	-- Path of style (drop down?)
         name = "Appearance",
 		choices = {"OpenMoji", "Twemoji"},
 		choicesValues = {"ESOEmoji/icons/openmoji-72x72-colour-dds/", "ESOEmoji/icons/twemoji-72x72-colour-dds/"},
         getFunc = function() return settings.emojiSettings.Path end,
-        setFunc = function(value) settings.emojiSettings.Path = value end
+        setFunc = function(value) 
+			settings.emojiSettings.Path = value
+			--optionsData[6].image = value + "1F604.dds"
+		end
     },
 	{
         type = "slider",	-- Size option
@@ -73,6 +91,7 @@ local optionsData = {
         type = "checkbox",	-- SCEnabled AND StandardEnabled
         name = "Translate emoji shortcodes",
 		tooltip = "Enables shortcodes. Example: :smile: will be changed to a smile emoji.",
+		warning = "Requires UI Reload.",
         getFunc = function() return settings.emojiSettings.SCEnabled end,
         setFunc = function(value) settings.emojiSettings.SCEnabled = value end
     },
