@@ -628,7 +628,7 @@ local function SetupAnchors()				-- Used to set up anchors for Chat Bar module
 	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_PLAYER_ACTIVATED)
 end
 
-
+--[[
 function ee.addFavourite(emoji)
 	if vars.favourites == {} then
 		vars.favourites[1] = emoji
@@ -662,6 +662,7 @@ function ee.removeFavourite(emoji)
         vars.favourites[#vars.favourites] = nil
     end
 end
+--]]
 
 function ee.InsertFave1()
 	KEYBOARD_CHAT_SYSTEM:GetEditControl():InsertText("test")
