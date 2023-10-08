@@ -14,7 +14,7 @@
 ## APIVersion: 101036
 ## Version: 0.4.0
 ## AddOnVersion: 1
-## Description: [ALPHA VERSION] Emoji! In your own game! What are you going to do?
+## Description: Emoji! In your own game! What are you going to do?
 ## Author: |c800020@BosmeriPride|r and |c0DC1CF@M0R_Gaming|r
 ## SavedVariables: EEVars
 ## DependsOn: LibAddonMenu-2.0>=30
