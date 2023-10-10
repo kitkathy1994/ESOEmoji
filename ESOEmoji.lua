@@ -3,16 +3,35 @@
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ESOEmoji = {}
 local ee = ESOEmoji
-ee.version = "v0.4.0-Alpha"
+ee.version = "v0.4.0"
 ee.name = "ESOEmoji"
-ee.previousText = nil
-ee.previousColour = nil
-ee.emojiSize = 28
-ee.emojiPath = "ESOEmoji/icons/openmoji-72x72-colour-dds/"
-ee.emojiTESEnabled = true
-ee.emojiStandardEnabled = true
-ee.emojiAutoEnabled = true
-ee.textBox = nil
+
+local vars = {} -- User Settings
+local DefaultSettings = { -- Default
+	showChatBar = true,
+	previewString = true,
+	realtimeEdit = true,
+	emojiSettings = {
+		Size = 28,
+		Path = "ESOEmoji/icons/openmoji-72x72-colour-dds/",
+		SCEnabled = true,
+		CustomEnabled = false,
+		StandardEnabled = true,
+	},
+	favourites = {},
+}
+local ChatBar = {	-- Chat Bar pieces access
+	control = ESOEmoji_ControlChatBar,
+	b_settings = ESOEmoji_ControlChatBarSettingsButton,
+	label = ESOEmoji_ControlChatBarLabel,
+	previewBox = ESOEmoji_ControlChatBarPreviewBox,
+}
+-- Scale factor for standard emoji discrepancies
+ee.PathScale = {
+	["ESOEmoji/icons/openmoji-72x72-colour-dds/"] = 1,
+	["ESOEmoji/icons/twemoji-72x72-colour-dds/"] = 2/3,
+}
+
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	ON ADD-ON LOADED	//////////////////////////////////////////////////////////////////////////////////////////	--
@@ -25,6 +44,18 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	UTILITY FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function ee:GetVars()
+	return vars
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function ee:GetChatBar()
+	return ChatBar
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function ee.DisplayVersion()
+	d("ESO Emoji: " .. ee.version)
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function ee.GetTextureLinkIcon(icon, location, size, colour)
 	local path = ""
 	if location == 0 then -- Base game
@@ -32,10 +63,9 @@ function ee.GetTextureLinkIcon(icon, location, size, colour)
 	elseif location == 1 then -- Immersive custom icons
 		path = "ESOEmoji/icons/Immersive-dds/" .. icon
 	end
-	
-	local textureLink = "|t" .. tostring(ee.emojiSize) .. ":" .. tostring(ee.emojiSize) .. ":" .. path
+	local textureLink = "|t" .. tostring(vars.emojiSettings.Size) .. ":" .. tostring(vars.emojiSettings.Size) .. ":" .. path
 	if size ~= nil then
-		textureLink = "|t" .. tostring(size) .. ":" .. tostring(size) .. ":" .. path
+		textureLink = "|t" .. tostring(math.floor(size/28*vars.emojiSettings.Size + 0.5)) .. ":" .. tostring(math.floor(size/28*vars.emojiSettings.Size + 0.5)) .. ":" .. path
 	end
 	if colour == nil then
 		textureLink = textureLink .. "|t"
@@ -45,43 +75,7 @@ function ee.GetTextureLinkIcon(icon, location, size, colour)
 	
 	return textureLink
 end
-
-function ee.DisplayVersion()
-	d("ESO Emoji version: " .. ee.version)
-end
-
-function ee.test(extra)
-	--local textEntry = KEYBOARD_CHAT_SYSTEM:GetControl()
-	--local channelLabel = textEntry:GetNamedChild("Label")
-	--ee.previousColour = channelLabel.GetColour()
-	--d(ee.previousColour)
-	
---	local links = {}
---	extra = tostring(extra)
---	local text = {}
---	local noLinkText = ""
---	local link = ""
---	local linkend = ""
---	for link in string.gmatch(extra, "[%|][hH][%a%d%:]+[%|][hH][%|][hH]") do
---		links[#links+1] = link
---	end
---	noLinkText = extra:gsub("[%|][hH][%a%d%:]+[%|][hH][%|][hH]", "")
---	d(noLinkText)
---	d(links)
-	
---	local links = {}
---	local frag = string.match(extra, "[%|][hH][%a%d%:]+[%|][hH][%|][hH]")
---	d(frag)
---	local i = 1
---	repeat
---		local s, e = string.find(extra, "[%|][hH][%a%d%:]+[%|][hH][%|][hH]", i)
---		links[#links+1] = {sval = s, eval = e}
---		i = tonumber(e)
---	until sval == nil or eval == nil
---	d(links)
-	
-end
-
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function ee.Pop(num)
 	local popDisplay = ""
 	local campaign = nil
@@ -93,17 +87,17 @@ function ee.Pop(num)
 	}
 	local AD = {
 		["colour"] = "FFD700", -- gold colour
-		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_aldmeri.dds", 0),--ee.emojiSCs["ad"].func,
+		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_aldmeri.dds", 0, 25),--ee.emojiSCs["ad"].func,
 		["pop"] = "",
 	}
 	local EP = {
 		["colour"] = "FF2400", -- red colour
-		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_ebonheart.dds", 0),--ee.emojiSCs["ep"].func,
+		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_ebonheart.dds", 0, 25),--ee.emojiSCs["ep"].func,
 		["pop"] = "",
 	}
 	local DC = {
 		["colour"] = "0096FF", -- blue colour
-		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_daggerfall.dds", 0),--ee.emojiSCs["dc"].func,
+		["icon"] = ee.GetTextureLinkIcon("esoui/art/campaign/gamepad/gp_overview_allianceicon_daggerfall.dds", 0, 25),--ee.emojiSCs["dc"].func,
 		["pop"] = "",
 	}
 	
@@ -115,11 +109,11 @@ function ee.Pop(num)
 	end
 	
 	local temp = pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_ALDMERI_DOMINION)]
-	AD.pop = ee.GetTextureLinkIcon(temp, 1, nil, AD.colour)
+	AD.pop = ee.GetTextureLinkIcon(temp, 0, nil, AD.colour)
 	temp = pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_EBONHEART_PACT)]
-	EP.pop = ee.GetTextureLinkIcon(temp, 1, nil, EP.colour)
+	EP.pop = ee.GetTextureLinkIcon(temp, 0, nil, EP.colour)
 	temp = pop[GetSelectionCampaignPopulationData(campaign, ALLIANCE_DAGGERFALL_COVENANT)]
-	DC.pop = ee.GetTextureLinkIcon(temp, 1, nil, DC.colour)
+	DC.pop = ee.GetTextureLinkIcon(temp, 0, nil, DC.colour)
 	
 	popDisplay = AD.icon .. AD.pop .. EP.icon .. EP.pop .. DC.icon .. DC.pop
 	return popDisplay
@@ -128,12 +122,18 @@ end -- |cFFD700|t150%:150%:esoui/art/campaign/campaignbrowser_fullpop.dds:inheri
 -- |c8a0303|t28:28:esoui/art/campaign/overview_allianceicon_ebonheart.dds:inheritcolor|t|r
 -- |c000080|t28:28:esoui/art/campaign/overview_allianceicon_daggefall.dds:inheritcolor|t|r
 
--- |t100%:300%:ESOEmoji/icons/Immersive-dds/magdk.dds|t
+-- |cFFD700|t28:28:ESOEmoji/icons/Immersive-dds/stamplar.dds:inheritcolor|t|r
+--|t28:28:ESOEmoji/icons/Immersive-dds/magplar.dds|t
 
 -- |t28:28:esoui/art/ava/ava_keepstatus_icon_food_aldmeri.dds|t
 
--- |t20:20:esoui/art/campaign/gamepad/gp_overview_allianceicon_aldmeri.dds|t
+-- |t28:28:esoui/art/charactercreate/charactercreate_bosmericon_down.dds|t
 
+--[[ 
+                 |t50:50:esoui/art/charactercreate/charactercreate_bosmericon_down.dds|t
+
+BOSMER ARE DA BEST! <3
+]]--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function CheckByte(myByte) -- TODO: I can prob optimise runtime of this (I was sleep deprived when I wrote this and I forgot how)
 	if myByte <= 255 then -- make sure its at most 8 bits
@@ -278,11 +278,11 @@ local function Bytes2Unicode(bytes)
 		uCode =  uCode .. t[i]
 	end
 	uCode,_ = uCode:gsub('^(U%+)[0]+', "U+") -- Remove any pesky leading zeros.
-	uCode,_ = uCode:gsub('^(U%+)', "") -- Remove the U+, might change this dependsing on how useful the U+ is.
+	uCode,_ = uCode:gsub('^(U%+)', "") -- Remove the U+, might change this depending on how useful the U+ is.
 	return uCode
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local function Unicode2Bytes(uCode)
+function ee.Unicode2Bytes(uCode)
 	local nBytes = 0
 	local cPoint = {
 		[0] = 0,
@@ -351,29 +351,91 @@ local function Unicode2Bytes(uCode)
 	return result
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local function Num2Bool(num)
+	if num > 1 then
+		return -1
+	end
+	if num == 1 then
+		return true
+	elseif num == 0 then
+		return false
+	end
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local function Bool2Num(bool)
+	if bool then
+		return 1
+	else
+		return 0
+	end
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function ee:HideChatBar()
+	if vars.showChatBar == false then	-- Do nothing if already hidden
+		return
+	end
+	vars.showChatBar = false
+	ChatBar.control:SetHidden(true)
+	for j=1, #ZO_ChatWindow.container.windows do
+			local chatBuffer = ZO_ChatWindow.container.windows[j]
+			local _,_,parentframe = chatBuffer:GetAnchor()
+			chatBuffer:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,0,0,0)
+	end
+	local scrollbar = ZO_ChatWindowScrollbar
+	local _,a,parentframe,b,x,y,z = scrollbar:GetAnchor(1)
+	scrollbar:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,x,y+27.5,z)
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function ee:ShowChatBar()
+	if vars.showChatBar == true then	-- Do nothing if already showing
+		return
+	end
+	vars.showChatBar = true
+	ChatBar.control:SetHidden(false)
+	for j=1, #ZO_ChatWindow.container.windows do
+			local chatBuffer = ZO_ChatWindow.container.windows[j]
+			local _,_,parentframe = chatBuffer:GetAnchor()
+			chatBuffer:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,0,-27.5,0)
+	end
+	local scrollbar = ZO_ChatWindowScrollbar
+	local _,a,parentframe,b,x,y,z = scrollbar:GetAnchor(1)
+	scrollbar:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,x,y-27.5,z)
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	STANDARD FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-function ee:Edit(rawMessage)
-	local editedMessage = rawMessage
-	local uCode = ""
-	local textureLink = ""
-	
-	---- Shortcode emoji test (has to run before the other emoji stuff)
+local function editSC(message, ntype)	--ntype is a 2-bit binary number indicating whether shortcodes and custom emojis are enabled. example: 01 = Custom is disabled, shortcodes enabled
+	if ntype == 0 or ntype > 3 then		-- "but ma'am, can't you just use vars instead of sending a parameter?"
+		return message					-- yeap, and it probably should work that way, but I did it this way for some reason and I forgot what that reason was. I should probably change it to use vars
+	end
 	local shortcode = ""
-	for shortcode in string.gmatch(editedMessage, "[%:]([^%:%s]+)[%:]") do
+	local uCode
+	local editStandard =  Num2Bool(BitAnd(ntype, 1))
+	local editCustom =  Num2Bool(BitAnd(BitRShift(ntype, 1), 1))
+	
+	for shortcode in string.gmatch(message, "[%:]([^%:%s]+)[%:]") do
 		if ee.emojiSCs[shortcode] then
-			if ee.emojiSCs[shortcode].unicode then
-				textureLink = "|t" .. tostring(ee.emojiSize) .. ":" .. tostring(ee.emojiSize) .. ":" .. ee.emojiPath .. ee.emojiMap[ee.emojiSCs[shortcode].unicode].texture .. "|t"
-				editedMessage,_ = editedMessage:gsub("[%:]" .. shortcode .. "[%:]", textureLink)
-			elseif ee.emojiSCs[shortcode].func then -- Special shortcode, therefore it actually has a function returning a string
-				editedMessage,_ = editedMessage:gsub("[%:]" .. shortcode .. "[%:]", ee.emojiSCs[shortcode].func)
+			if ee.emojiSCs[shortcode].unicode and editStandard then
+				--textureLink = "|t" .. tostring(vars.emojiSettings.Size) .. ":" .. tostring(vars.emojiSettings.Size) .. ":" .. vars.emojiSettings.Path .. ee.emojiMap[ee.emojiSCs[shortcode].unicode].texture .. "|t"
+				--message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", textureLink)
+				local result = ""
+				for uCode in string.gmatch(ee.emojiSCs[shortcode].unicode, "([%u%1%d]+)") do
+				--Encode
+					result = result .. ee.Unicode2Bytes(uCode)
+				end
+				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", result)
+			elseif ee.emojiSCs[shortcode].func and editCustom then -- Special shortcode, therefore it actually needs a function to return a string WIP
+				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", ee.GetTextureLinkIcon(ee.emojiSCs[shortcode].func.icon, ee.emojiSCs[shortcode].func.location, ee.emojiSCs[shortcode].func.size, ee.emojiSCs[shortcode].func.colour))
 			end
 		end
 	end
-	---- test end
-	
-	
-	local itString = tostring(editedMessage)
+	return message
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local function editStandard(message)
+	local uCode = ""
+	local textureLink = ""
+	local itString = tostring(message)
 	local bytes = {}
 	local eFound = {}
 	local eFoundZWJ = {}
@@ -436,51 +498,154 @@ function ee:Edit(rawMessage)
 		for i = 1, #eFoundZWJ do
 			local noFE0F,_ = eFoundZWJ[i].eCode:gsub("[%-][F][E][0][F]", "") -- Remove FE0Fs from final eCode (eBytes don't matter)
 			if ee.emojiMap[noFE0F] then -- If, for whatever reason, the final combo doesn't have an icon, skip it
-				textureLink = "|t" .. tostring(ee.emojiSize) .. ":" .. tostring(ee.emojiSize) .. ":" .. ee.emojiPath .. ee.emojiMap[noFE0F].texture .. "|t"
-				editedMessage,_ = editedMessage:gsub(eFoundZWJ[i].eBytes, textureLink)
+				local t_size = tostring(math.floor(vars.emojiSettings.Size*ee.PathScale[vars.emojiSettings.Path]+0.5))
+				textureLink = "|t" .. t_size .. ":" .. t_size .. ":" .. vars.emojiSettings.Path .. ee.emojiMap[noFE0F].texture .. "|t"
+				message,_ = message:gsub(eFoundZWJ[i].eBytes, textureLink)
 			end
 		end
 	end
 	
+	return message
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function ee:Edit(rawMessage)
+	local editedMessage = rawMessage
+	local settings = BitOr(BitLShift(Bool2Num(vars.emojiSettings.CustomEnabled),1), Bool2Num(vars.emojiSettings.SCEnabled)) -- For shortcodes
+	
+	local rebuiltText = ""
+	local parseText = tostring(rawMessage)
+	local linkList = {}
+	
+	-- Filter links out of the message first for compatibility
+	if (string.match(parseText, "%|[hH]%d:.-%|[hH].-|[hH]")) then
+		-- There was a link present
+		for link in string.gmatch(parseText, "%|[hH]%d:.-%|[hH].-|[hH]") do
+			linkList[#linkList+1] = link
+			parseText,_ = parseText:gsub(link, "þ" .. tostring(#linkList) .. "þ")
+		end
+		
+		-- Do stuff here with the non link text
+		parseText = editSC(parseText, settings)	-- Shortcode emoji (has to run before the other emoji stuff)
+		parseText = editStandard(parseText)
+		
+		-- Rebuild string here
+		for link in string.gmatch(parseText, "%þ([%d]+)%þ") do
+			parseText,_ = parseText:gsub("þ" .. link .. "þ", linkList[tonumber(link)], 1)
+		end
+		rebuiltText = parseText
+	else
+		-- there was no link so we don't need to separate stuff
+		parseText = editSC(parseText, settings)	-- Shortcode emoji (has to run before the other emoji stuff)
+		parseText = editStandard(parseText)
+		rebuiltText = parseText
+	end
+	
+	
+	editedMessage = rebuiltText
+	
+	
 	return editedMessage
 end 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-function ee:UndoEdit(message)
+function ee:UndoEdit(message)			-- This does not yet work for custom emoji, only for standard
 	local unEditedMessage = message
-	local path = ee.emojiPath
+	local path = vars.emojiSettings.Path
 	local emoji = ""
-	local n = 1
 	path,_ = path:gsub("%/", "%%%/")
 	path,_ = path:gsub("%-", "%%%-")
-	
-	repeat
-		unEditedMessage,n = unEditedMessage:gsub(path, "", 1)
-	until n <= 0
 		
-	for emoji in string.gmatch(unEditedMessage, "%|t%d%d%:%d%d%:([%u%1%d%-]+)[%.][d][d][s]%|t") do
+	for emoji in string.gmatch(unEditedMessage, "%|[tT]%d-:%d-:" .. path .. "(.-)[%.]dds|[tT]") do
+		emoji,_ = emoji:gsub(path, "")
 		local result = ""
 		for uCode in string.gmatch(emoji, "([%u%1%d]+)") do
 			--Encode
-			result = result .. Unicode2Bytes(uCode)
+			result = result .. ee.Unicode2Bytes(uCode)
 		end
 		local value,_ = emoji:gsub("%-", "%%%-")
-		unEditedMessage,_ = unEditedMessage:gsub("%|t%d%d%:%d%d%:" .. value .. "[%.][d][d][s]%|t", result)
+		unEditedMessage,_ = unEditedMessage:gsub("%|[tT]%d-:%d-:" .. path .. value .. "[%.]dds|[tT]", result)
 	end
 	return unEditedMessage
 end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local function SetupAnchors()				-- Used to set up anchors for Chat Bar module
+	local originalControl = KEYBOARD_CHAT_SYSTEM:GetEditControl()
+	local originalParent = originalControl:GetParent():GetParent()
+	
+	ChatBar.control:ClearAnchors()
+	ChatBar.control:SetAnchor(TOPLEFT, originalParent, TOPLEFT, 0, -27.5)
+	ChatBar.control:SetAnchor(BOTTOMRIGHT, originalParent, BOTTOMRIGHT, 0, -27.5)
+	ChatBar.control:SetParent(originalParent)
+	
+	if ee.GetVars().showChatBar then			-- Only adjust chat anchors if enabled in the settings
+		for j=1, #ZO_ChatWindow.container.windows do
+			local chatBuffer = ZO_ChatWindow.container.windows[j]
+			local _,_,parentframe = chatBuffer:GetAnchor()
+			chatBuffer:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,0,-27.5,0)
+		end
+		
+		local scrollbar = ZO_ChatWindowScrollbar
+		local _,a,parentframe,b,x,y,z = scrollbar:GetAnchor(1)
+		scrollbar:SetAnchor(BOTTOMRIGHT,parentframe,BOTTOMRIGHT,x,y-27.5,z)
+	end
+	
+	ChatBar.previewBox:SetMaxInputChars(1000)
+	ChatBar.previewBox:SetAllowMarkupType(ALLOW_MARKUP_TYPE_ALL) -- Format links and stuff!!
+	ChatBar.previewBox:SetFont("$(CHAT_FONT)|$(KB_" .. GetChatFontSize() .. ")|shadow") -- Base font
+	
+	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_PLAYER_ACTIVATED)
+end
 
+--[[
+function ee.addFavourite(emoji)
+	if vars.favourites == {} then
+		vars.favourites[1] = emoji
+	else
+		vars.favourites[#vars.favourites+1] = emoji
+	end
+end
+
+function ee.removeFavourite(emoji)
+	if vars.favourites == {} then
+		return
+	end
+	
+	local indexToRemove = nil
+	
+    -- First, find the index of the favourite to remove
+    for i, val in ipairs(vars.favourites) do
+        if val == emoji then
+            indexToRemove = i
+            break
+        end
+    end
+
+    -- If the favourite was found, remove it
+    if indexToRemove then
+        -- Shift elements down, to fill the hole left by the removed element
+        for i = indexToRemove, #vars.favourites - 1 do
+            vars.favourites[i] = vars.favourites[i + 1]
+        end
+        -- Remove the last element
+        vars.favourites[#vars.favourites] = nil
+    end
+end
+--]]
+
+function ee.InsertFave1()
+	KEYBOARD_CHAT_SYSTEM:GetEditControl():InsertText("test")
+end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	HIJACKER FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function Hijack_MessageFormatter()
 	local original = CHAT_ROUTER.FormatAndAddChatMessage
-	CHAT_ROUTER.FormatAndAddChatMessage = function(self, eventCode, channelType, fromName, messageText, isCustomerService, fromDisplayName)
+	CHAT_ROUTER.FormatAndAddChatMessage = function(self, eventCode, channelType, fromName, messageText, ...) --isCustomerService, fromDisplayName)
 		if type(messageText) == "string" then
 			editedMessage = ee:Edit(messageText)
 		else
 			editedMessage = messageText
 		end
-		return original(self, eventCode, channelType, fromName, editedMessage, isCustomerService, fromDisplayName)
+		return original(self, eventCode, channelType, fromName, editedMessage, ...) --isCustomerService, fromDisplayName)
 	end
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -496,15 +661,22 @@ local function Hijack_OnTextChanged()
 	local originalHandler = originalControl:GetHandler("OnTextChanged")
 	
 	originalControl:SetHandler("OnTextChanged", function(...)
-	--	local oldCursorPos = originalControl:GetCursorPosition()
-	--	local rawText = originalControl:GetText()
-	--	if ee:Edit(rawText) ~= ee.previousText then
-	--		ee.previousText = ee:Edit(rawText)
-	--		originalControl:SetText(ee.previousText)
-	--		originalControl:SetCursorPosition(oldCursorPos)
-	--	end
-		ee.textBox:SetText(ee:Edit(originalControl:GetText()))
-		ee.textBox:SetCursorPosition(originalControl:GetCursorPosition())
+		local editedMessage = ee:Edit(originalControl:GetText())
+		ee.GetChatBar().previewBox:SetText(editedMessage)			-- Edit preview
+		
+		if ee.GetVars().realtimeEdit then			-- Only run this if user enabled realtimeEdit
+			originalControl:SetText(editedMessage)	-- Edit text entry in realtime
+		
+			local count = 350						-- For every emoji texture link found, increase maximum text entry char number (since the texture links are massive, but the emoji sent only uses a few characters)
+			for emoji in string.gmatch(editedMessage, "%|[tT]%d-:%d-:.-|[tT]") do
+				count = count + 55
+			end
+			if count >= 1500 then
+				count = 1500
+			end
+			originalControl:SetMaxInputChars(count)
+		end
+
 		originalHandler(...)
 	end)
 end
@@ -512,11 +684,11 @@ end
 --	//////////////////////////////////////////////////////////////////////////////////////////	EVENT REGISTRATIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 EVENT_MANAGER:RegisterForEvent(ee.name, EVENT_ADD_ON_LOADED, ee.OnAddOnLoaded)
+EVENT_MANAGER:RegisterForEvent(ee.name, EVENT_PLAYER_ACTIVATED, SetupAnchors)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	//////////////////////////////////////////////////////////////////////////////////////////	  SLASH COMMANDS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 SLASH_COMMANDS["/ee_version"] = ee.DisplayVersion
-SLASH_COMMANDS["/ee_test"] = ee.test
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --	////////////////////////////////////////////////////////////////////////////////////////// INITIALIZE FUNCTIONS	//////////////////////////////////////////////////////////////////////////////////////////	--
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -526,59 +698,58 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local function Init_TextInput()
 	Hijack_OnTextChanged()
-	--Hijack_GetText()
+	Hijack_GetText()
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-function ee:Initialize()
-	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_ADD_ON_LOADED)
-	
-	Init_MainChat()
-	
+local function Init_AutoComplete()
+	if ee.GetVars().emojiSettings.SCEnabled then
+		ee.SCAutoComplete_Init() -- See SCAutoComplete.lua
+	end
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local function Init_ChatBar()
 	local originalControl = KEYBOARD_CHAT_SYSTEM:GetEditControl()
-	ee.textBox = displayTextBox
-	ee.textBox.GetCursorPosition = originalControl.GetCursorPosition
-	ee.textBox:ClearAnchors()
-	ee.textBox:SetAnchor(TOPLEFT, originalControl, TOPLEFT, 0, 25)
-	ee.textBox:SetAnchor(BOTTOMRIGHT, originalControl, BOTTOMRIGHT, 0, 25)
-	ee.textBox:SetMaxInputChars(1000)
-	ee.textBox:SetAllowMarkupType(ALLOW_MARKUP_TYPE_ALL) -- Format links and stuff!!
-	ee.textBox:SetFont("$(CHAT_FONT)|$(KB_" .. GetChatFontSize() .. ")|shadow") -- Base font
-	
+
+	ChatBar.previewBox = ESOEmoji_ControlChatBarPreviewBox
+	ChatBar.label = ESOEmoji_ControlChatBarLabel
+	ChatBar.control = ESOEmoji_ControlChatBar
+
 	local o_SetFont = originalControl.SetFont
 	originalControl.SetFont = function(self, ...)
-		ee.textBox:SetFont(...)
+		ChatBar.previewBox:SetFont(...)
+		ChatBar.label:SetFont(...)
 		o_SetFont(self, ...)
 	end
 	
 	local o_SetColour = originalControl.SetColor
 	originalControl.SetColor = function(self, ...)
-		ee.textBox:SetColor(...)
+		ChatBar.previewBox:SetColor(...)
+		ChatBar.label:SetColor(...)
 		o_SetColour(self, ...)
 	end
 	
 	local o_SetHeight = originalControl.SetHeight
 	originalControl.SetHeight = function(self, ...)
-		ee.textBox:SetHeight(...)
+		ChatBar.previewBox:SetHeight(...)
+		ChatBar.label:SetHeight(...)
 		o_SetHeight(self, ...)
 	end
-	local o_SetWidth = originalControl.SetWidth
-	originalControl.SetWidth = function(self, ...)
-		ee.textBox:SetWidth(...)
-		o_SetWidth(self, ...)
-	end
 	
-	local o_SetDimensions = originalControl.SetDimensions
-	originalControl.SetDimensions = function(self, ...)
-		ee.textBox:SetDimensions(...)
-		o_SetDimensions(self, ...)
-	end
-	--
-	local o_SetCursorPos = originalControl.SetCursorPosition
-	originalControl.SetCursorPosition = function(self, ...)
-		ee.textBox:SetCursorPosition(...)
-		o_SetCursorPos(self, ...)
-	end
+	ChatBar.control:SetHidden(not vars.showChatBar)
+end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function ee:Initialize()
+	EVENT_MANAGER:UnregisterForEvent(ee.name, EVENT_ADD_ON_LOADED)
+	vars = ZO_SavedVars:NewAccountWide("EEVars", 1, nil, DefaultSettings)
 	
-	Init_TextInput()
+	-- Initialize submodules
+	Init_MainChat()		-- Main chat message editor
+	Init_TextInput()	-- Textbox entry message editor
+	Init_AutoComplete()	-- Autocomplete text entry module
+	Init_ChatBar()		-- Chat bar module in the chat
+	
+	ee.InitSettingsMenu()
+
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
