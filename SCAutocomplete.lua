@@ -175,7 +175,7 @@ function sca:GetAutoCompletionResults(parseText)
         return
     end
 
-    local matchedText = string.sub(parseText, self.matchedTextStart, matchedTextEnd)
+    local matchedText = string.sub(parseText, self.matchedTextStart+1, matchedTextEnd)
     if #matchedText < 3 or matchedText:find(" ") then
         return
     end
