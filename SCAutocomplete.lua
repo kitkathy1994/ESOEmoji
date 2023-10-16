@@ -156,10 +156,12 @@ function sca:SetEditControl(editControl)
 end
 
 
-function sca:GetAutoCompletionResults(parseText)
-    if #parseText < 3 then
+function sca:GetAutoCompletionResults(text)
+    if #text < 3 then
         return
     end
+	
+	local parseText = string.sub(text, 1, KEYBOARD_CHAT_SYSTEM.textEntry:GetCursorPosition())
 
     if (string.match(parseText, "%|[hH]%d:.-%|[hH].-|[hH]")) then --> Match out any guild or achieve links
         for link in string.gmatch(parseText, "%|[hH]%d:.-%|[hH].-|[hH]") do
