@@ -737,6 +737,38 @@ local function Init_ChatBar()
 	
 	ChatBar.control:SetHidden(not vars.showChatBar)
 end
+--/script d(GetControl(WINDOW_MANAGER:GetMouseOverControl():GetName()))
+local function Init_Mail()
+	----[[
+	-- SetText edit for labels
+	local originalSubjectSetText = ZO_MailInboxMessageSubject.SetText
+	local originalBodySetText = ZO_MailInboxMessageBody.SetText
+	
+	ZO_MailInboxMessageSubject.SetText = function(self, aText)
+		return originalSubjectSetText(self, ee:Edit(aText))
+	end
+	
+	ZO_MailInboxMessageBody.SetText = function(self, aText)
+		return originalBodySetText(self, ee:Edit(aText))
+	end
+	--]]
+
+
+	---[[
+	-- GetText undo edit for labels
+	local originalSubjectGetText = ZO_MailInboxMessageSubject.GetText
+	local originalBodyGetText = ZO_MailInboxMessageBody.GetText
+	
+	ZO_MailInboxMessageSubject.GetText = function(self, ...)
+		return ee:UndoEdit(originalSubjectGetText(self, ...))
+	end
+	
+	ZO_MailInboxMessageBody.GetText = function(self, ...)
+		return ee:UndoEdit(originalBodyGetText(self, ...))
+	end
+	--]]
+end
+
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function ee:Initialize()
@@ -748,6 +780,8 @@ function ee:Initialize()
 	Init_TextInput()	-- Textbox entry message editor
 	Init_AutoComplete()	-- Autocomplete text entry module
 	Init_ChatBar()		-- Chat bar module in the chat
+	
+	Init_Mail() -- Testing mailbox module
 	
 	ee.InitSettingsMenu()
 
