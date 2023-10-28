@@ -415,6 +415,8 @@ local function editSC(message, ntype)	--ntype is a 2-bit binary number indicatin
 	
 	for shortcode in string.gmatch(message, "[%:]([^%:%s]+)[%:]") do
 		if ee.emojiSCs[shortcode] then
+			-- Handle any special characters within shortcode variable and put it into an escaped shortcode variable
+			esc_shortcode = shortcode:gsub("([%(%)%.%%%+%-%*%?%[%^%$])", "%%%1")
 			if ee.emojiSCs[shortcode].unicode and editStandard then
 				--textureLink = "|t" .. tostring(vars.emojiSettings.Size) .. ":" .. tostring(vars.emojiSettings.Size) .. ":" .. vars.emojiSettings.Path .. ee.emojiMap[ee.emojiSCs[shortcode].unicode].texture .. "|t"
 				--message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", textureLink)
@@ -423,9 +425,9 @@ local function editSC(message, ntype)	--ntype is a 2-bit binary number indicatin
 				--Encode
 					result = result .. ee.Unicode2Bytes(uCode)
 				end
-				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", result)
+				message,_ = message:gsub("[%:]" .. esc_shortcode .. "[%:]", result)
 			elseif ee.emojiSCs[shortcode].func and editCustom then -- Special shortcode, therefore it actually needs a function to return a string WIP
-				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", ee.GetTextureLinkIcon(ee.emojiSCs[shortcode].func.icon, ee.emojiSCs[shortcode].func.location, ee.emojiSCs[shortcode].func.size, ee.emojiSCs[shortcode].func.colour))
+				message,_ = message:gsub("[%:]" .. esc_shortcode .. "[%:]", ee.GetTextureLinkIcon(ee.emojiSCs[shortcode].func.icon, ee.emojiSCs[shortcode].func.location, ee.emojiSCs[shortcode].func.size, ee.emojiSCs[shortcode].func.colour))
 			end
 		end
 	end
