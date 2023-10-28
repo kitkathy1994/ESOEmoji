@@ -767,6 +767,14 @@ local function Init_Mail()
 		return ee:UndoEdit(originalBodyGetText(self, ...))
 	end
 	--]]
+	
+	-- ZO_MailSendSubjectField
+	-- ZO_MailSendBodyField
+	-- These two are the edit boxes for when sending mail. Will need a similar setup to the main chat editbox
+	-- TODO: Move mail module to separate file
+	
+	
+	
 end
 
 
