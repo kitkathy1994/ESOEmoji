@@ -87,8 +87,9 @@ end
 
 
 function sca:autoFillEditbox(replacementByte)
-    if self.matchedTextStart then
-        self.editControl:SetText(self.editControl:GetText():sub(1,self.matchedTextStart-1)..replacementByte)
+    if self.matchedTextStart and self.matchedTextEnd then
+		-- Insert Emoji into text message
+        self.editControl:SetText(self.editControl:GetText():sub(1,self.matchedTextStart-1) .. replacementByte .. self.editControl:GetText():sub(self.matchedTextEnd+1))
     end
 end
 
@@ -157,10 +158,9 @@ end
 
 
 function sca:GetAutoCompletionResults(text)
-    function sca:GetAutoCompletionResults(text)
-        if #text < 3 then
-            return
-        end
+    if #text < 3 then
+        return
+    end
     
     local parseText = string.sub(text, 1, KEYBOARD_CHAT_SYSTEM.textEntry:GetCursorPosition())
     local escapedParseText = parseText:gsub("([^%w])", "%%%1");
@@ -176,12 +176,13 @@ function sca:GetAutoCompletionResults(text)
 
     local matchedTextEnd = 1
     
-    self.matchedTextStart, matchedTextEnd = string.find(parseText, "%:[^:]*$") --> Match the last : in the message
+    self.matchedTextStart, self.matchedTextEnd = string.find(parseText, ":[^:]*$") --> Match the last : in the message
+
     if not self.matchedTextStart then
         return
     end
 
-    local matchedText = string.sub(parseText, self.matchedTextStart+1, matchedTextEnd)
+    local matchedText = string.sub(parseText, self.matchedTextStart+1, self.matchedTextEnd)
     if #matchedText < 3 or matchedText:find(" ") then
         return
     end
