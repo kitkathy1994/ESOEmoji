@@ -523,13 +523,10 @@ function ee:Edit(rawMessage)
 	if (string.match(escapedParseText, "%%|[hH]%d%%:.-%%|[hH].-%%|[hH]")) then
 		-- There was a link present
 		for link in string.gmatch(escapedParseText, "%%|[hH]%d%%:.-%%|[hH].-%%|[hH]") do
-			d("link found!: ", link)
 			linkList[#linkList+1] = link
 			escapedParseText,_ = escapedParseText:gsub(link, "þ" .. tostring(#linkList) .. "þ")
 		end
 		parseText = escapedParseText:gsub("%%([^%w])", "%1"); -- Unescape the text after the guild links are gone to avoid issues with the main edit
-		d("escaped: ", escapedParseText)
-		d("unescaped: ", parseText)
 
 		-- Do stuff here with the non link text
 		parseText = editSC(parseText, settings)	-- Shortcode emoji (has to run before the other emoji stuff)
