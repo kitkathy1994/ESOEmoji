@@ -161,19 +161,23 @@ function sca:GetAutoCompletionResults(text)
     if #text < 3 then
         return
     end
-	
-	local parseText = string.sub(text, 1, self.editControl:GetCursorPosition())
+    
+    local parseText = string.sub(text, 1, KEYBOARD_CHAT_SYSTEM.textEntry:GetCursorPosition())
+    local escapedParseText = parseText:gsub("([^%w])", "%%%1");
 
-    if (string.match(parseText, "%|[hH]%d:.-%|[hH].-|[hH]")) then --> Match out any guild or achieve links
-        for link in string.gmatch(parseText, "%|[hH]%d:.-%|[hH].-|[hH]") do
+    if (string.match(escapedParseText, "%%|[hH]%d%%:.-%%|[hH].-%%|[hH]")) then --> Match out any guild or achieve links
+        for link in string.gmatch(escapedParseText, "%%|[hH]%d%%:.-%%|[hH].-%%|[hH]") do
             replacementString = string.format("%-"..#link.."s","")
-            parseText,_ = parseText:gsub(link, replacementString)
+            escapedParseText,_ = escapedParseText:gsub(link, replacementString)
         end
     end
+
+    parseText = escapedParseText:gsub("%%([^%w])", "%1")
 
     local matchedTextEnd = 1
     
     self.matchedTextStart, self.matchedTextEnd = string.find(parseText, ":[^:]*$") --> Match the last : in the message
+
     if not self.matchedTextStart then
         return
     end
