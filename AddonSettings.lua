@@ -7,7 +7,7 @@ local panel
 
 local panelData = {
     type = "panel",
-    name = ee.name,
+    name = ee.name .. " |t28:28:ESOEmoji/icons/misc/1F60D.dds|t",
 	displayName = "ESO Emoji |t28:28:ESOEmoji/icons/misc/1F60D.dds|t",
     author = "|c800020@BosmeriPride|r and |c0DC1CF@M0R_Gaming|r",
 	version = ee.version,

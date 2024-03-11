@@ -3,7 +3,7 @@
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ESOEmoji = {}
 local ee = ESOEmoji
-ee.version = "v0.4.0"
+ee.version = "v0.4.1"
 ee.name = "ESOEmoji"
 
 local vars = {} -- User Settings
@@ -415,6 +415,8 @@ local function editSC(message, ntype)	--ntype is a 2-bit binary number indicatin
 	
 	for shortcode in string.gmatch(message, "[%:]([^%:%s]+)[%:]") do
 		if ee.emojiSCs[shortcode] then
+			-- Handle any special characters within shortcode variable and put it into an escaped shortcode variable
+			esc_shortcode = shortcode:gsub("([%(%)%.%%%+%-%*%?%[%^%$])", "%%%1")
 			if ee.emojiSCs[shortcode].unicode and editStandard then
 				--textureLink = "|t" .. tostring(vars.emojiSettings.Size) .. ":" .. tostring(vars.emojiSettings.Size) .. ":" .. vars.emojiSettings.Path .. ee.emojiMap[ee.emojiSCs[shortcode].unicode].texture .. "|t"
 				--message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", textureLink)
@@ -423,9 +425,9 @@ local function editSC(message, ntype)	--ntype is a 2-bit binary number indicatin
 				--Encode
 					result = result .. ee.Unicode2Bytes(uCode)
 				end
-				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", result)
+				message,_ = message:gsub("[%:]" .. esc_shortcode .. "[%:]", result)
 			elseif ee.emojiSCs[shortcode].func and editCustom then -- Special shortcode, therefore it actually needs a function to return a string WIP
-				message,_ = message:gsub("[%:]" .. shortcode .. "[%:]", ee.GetTextureLinkIcon(ee.emojiSCs[shortcode].func.icon, ee.emojiSCs[shortcode].func.location, ee.emojiSCs[shortcode].func.size, ee.emojiSCs[shortcode].func.colour))
+				message,_ = message:gsub("[%:]" .. esc_shortcode .. "[%:]", ee.GetTextureLinkIcon(ee.emojiSCs[shortcode].func.icon, ee.emojiSCs[shortcode].func.location, ee.emojiSCs[shortcode].func.size, ee.emojiSCs[shortcode].func.colour))
 			end
 		end
 	end
@@ -514,16 +516,18 @@ function ee:Edit(rawMessage)
 	
 	local rebuiltText = ""
 	local parseText = tostring(rawMessage)
+	local escapedParseText = parseText:gsub("([^%w])", "%%%1");
 	local linkList = {}
 	
 	-- Filter links out of the message first for compatibility
-	if (string.match(parseText, "%|[hH]%d:.-%|[hH].-|[hH]")) then
+	if (string.match(escapedParseText, "%%|[hH]%d%%:.-%%|[hH].-%%|[hH]")) then
 		-- There was a link present
-		for link in string.gmatch(parseText, "%|[hH]%d:.-%|[hH].-|[hH]") do
+		for link in string.gmatch(escapedParseText, "%%|[hH]%d%%:.-%%|[hH].-%%|[hH]") do
 			linkList[#linkList+1] = link
-			parseText,_ = parseText:gsub(link, "þ" .. tostring(#linkList) .. "þ")
+			escapedParseText,_ = escapedParseText:gsub(link, "þ" .. tostring(#linkList) .. "þ")
 		end
-		
+		parseText = escapedParseText:gsub("%%([^%w])", "%1"); -- Unescape the text after the guild links are gone to avoid issues with the main edit
+
 		-- Do stuff here with the non link text
 		parseText = editSC(parseText, settings)	-- Shortcode emoji (has to run before the other emoji stuff)
 		parseText = editStandard(parseText)
