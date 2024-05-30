@@ -524,7 +524,8 @@ function ee:Edit(rawMessage)
 		-- There was a link present
 		for link in string.gmatch(escapedParseText, "%%|[hH]%d%%:.-%%|[hH].-%%|[hH]") do
 			linkList[#linkList+1] = link
-			escapedParseText,_ = escapedParseText:gsub(link, "þ" .. tostring(#linkList) .. "þ")
+			local escapedLink = link:gsub("([^%w])", "%%%1")
+			escapedParseText,_ = escapedParseText:gsub(escapedLink, "þ" .. tostring(#linkList) .. "þ")
 		end
 		parseText = escapedParseText:gsub("%%([^%w])", "%1"); -- Unescape the text after the guild links are gone to avoid issues with the main edit
 
@@ -534,7 +535,8 @@ function ee:Edit(rawMessage)
 		
 		-- Rebuild string here
 		for link in string.gmatch(parseText, "%þ([%d]+)%þ") do
-			parseText,_ = parseText:gsub("þ" .. link .. "þ", linkList[tonumber(link)], 1)
+			local replacementString = linkList[tonumber(link)]
+			parseText,_ = parseText:gsub("þ" .. link .. "þ", replacementString, 1)
 		end
 		rebuiltText = parseText
 	else
