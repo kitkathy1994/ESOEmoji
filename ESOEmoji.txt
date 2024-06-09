@@ -11,7 +11,7 @@
 ; Please read the full licence at http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 
 ## Title: ESO Emoji |t28:28:ESOEmoji/icons/misc/1F60D.dds|t
-## APIVersion: 101041
+## APIVersion: 101042
 ## Version: 0.4.1
 ## AddOnVersion: 1
 ## Description: Emoji! In your own game! What are you going to do?
